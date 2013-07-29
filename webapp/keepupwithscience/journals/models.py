@@ -7,14 +7,10 @@
 """
 
 from ..core import db
-from ..helpers import JsonSerializer
 
 journals_categories = db.Table('journals_categories', db.Column('journal_id', db.Integer(), db.ForeignKey('journals.id')), db.Column('category_id', db.Integer(), db.ForeignKey('categories.id')))
 
-class CategoryJsonSerializer(JsonSerializer):
-    __json_hidden__ = ['journals']
-
-class Category(CategoryJsonSerializer, db.Model):
+class Category(db.Model):
     __tablename__ = 'categories'
 
     id = db.Column(db.Integer(), primary_key=True)
@@ -24,10 +20,7 @@ class Category(CategoryJsonSerializer, db.Model):
     def __str__(self):
             return self.name
 
-class JournalJsonSerializer(JsonSerializer):
-    pass
-
-class Journal(JournalJsonSerializer, db.Model):
+class Journal(db.Model):
     __tablename__ = 'journals'
 
     id = db.Column(db.Integer, primary_key = True)

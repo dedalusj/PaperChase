@@ -6,8 +6,8 @@ Flask-Mail
 MySQL-python
 feedparser
 redis
-flask-admin
 pytz
 requests
 lxml
 flask-script
+flask-restless

@@ -7,12 +7,8 @@
 """
 
 from ..core import db
-from ..helpers import JsonSerializer
 
-class PaperJsonSerializer(JsonSerializer):
-    pass
-
-class Paper(PaperJsonSerializer, db.Model):
+class Paper(db.Model):
     __tablename__ = 'papers'
     
     id = db.Column(db.Integer, primary_key = True)
