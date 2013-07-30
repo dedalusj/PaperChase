@@ -21,8 +21,8 @@ def create_app(settings_override=None, register_security_blueprint=False):
 
     manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)	
 
-    manager.create_api(Journal)
-    manager.create_api(Category)
-    manager.create_api(Paper)
+    manager.create_api(Journal, include_columns=['id', 'url', 'title', 'short_title', 'last_checked', 'categories', 'categories.id', 'categories.name'])
+    manager.create_api(Category, include_columns=['id', 'name', 'description', 'journals', 'journals.id', 'journals.title', 'journals.url', 'journals.short_title', 'journals.last_checked'])
+    manager.create_api(Paper, results_per_page=50, include_columns=['id', 'title', 'abstract', 'authors', 'url', 'doi', 'journal', 'journal.title'])
     
     return app
