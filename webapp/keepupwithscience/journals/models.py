@@ -7,6 +7,7 @@
 """
 
 from ..core import db
+from ..papers import Paper
 
 journals_categories = db.Table('journals_categories', db.Column('journal_id', db.Integer(), db.ForeignKey('journals.id')), db.Column('category_id', db.Integer(), db.ForeignKey('categories.id')))
 
@@ -18,8 +19,21 @@ class Category(db.Model):
     description = db.Column(db.String(255))
     
     def __str__(self):
-            return self.name
-
+        return self.name
+        
+    def papers(self):
+        results = Paper.query.join(journals_categories, (journals_categories.c.journal_id == Paper.journal_id)).filter(journals_categories.c.category_id == self.id).order_by(Paper.created.desc()).all()
+        json_results = []
+        for result in results:
+            d = {'id'      : result.id,
+                 'title'   : result.title,
+                 'abstract': result.abstract,
+                 'authors' : result.authors,
+                 'url'     : result.url,
+                 'doi'     : result.doi}
+            json_results.append(d)
+        return json_results
+            
 class Journal(db.Model):
     __tablename__ = 'journals'
 

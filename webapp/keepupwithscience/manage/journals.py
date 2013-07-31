@@ -155,3 +155,16 @@ class DeleteCategoryFromJournalCommand(Command):
         journal.categories.remove(category)
         journals.save(journal)
         print 'Category remove from journal succesfully'
+        
+class ListPapersForCategoryCommand(Command):
+
+    def run(self):
+        name = prompt('Category name')
+        category = categories.first(name=name)
+        if not category:
+            print 'Invalid category'
+            return
+            
+        papers = category.papers()
+        print papers
+        print type(papers)
