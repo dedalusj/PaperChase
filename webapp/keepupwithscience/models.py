@@ -8,3 +8,4 @@
 
 from .journals.models import *
 from .papers.models import *
+from .users.models import *

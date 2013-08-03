@@ -8,6 +8,7 @@
 
 from .papers import PapersService
 from .journals import JournalsService, CategoryService
+from .users import UsersService
 
 #: An instance of the :class:`PapersService` class
 papers = PapersService()
@@ -17,3 +18,6 @@ journals = JournalsService()
 
 #: An instance of the :class:`CategoriesService` class
 categories = CategoryService()
+
+#: An instance of the :class:`UsersService` class
+users = UserService()

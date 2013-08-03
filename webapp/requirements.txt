@@ -11,3 +11,6 @@ requests
 lxml
 flask-script
 flask-restless
+flask-security
+flask-assets
+py-bcrypt

@@ -10,14 +10,15 @@ import os
 
 from celery import Celery
 from flask import Flask
+from flask_security import SQLAlchemyUserDatastore
 
 from datetime import date
 
-from .core import db, mail
+from .core import db, mail, security
 from .helpers import register_blueprints
+from .models import User, Role
 
-def create_app(package_name, package_path, settings_override=None,
-               register_security_blueprint=True):
+def create_app(package_name, package_path, settings_override=None, register_security_blueprint=True):
     """Returns a :class:`Flask` application instance configured with common
     functionality for the KeepUpWithScience platform.
 
@@ -36,6 +37,10 @@ def create_app(package_name, package_path, settings_override=None,
 
     db.init_app(app)
     mail.init_app(app)
+
+    security.init_app(app, SQLAlchemyUserDatastore(db, User, Role),
+	                      register_blueprint=register_security_blueprint)
+	
 
     register_blueprints(app, package_name, package_path)
 

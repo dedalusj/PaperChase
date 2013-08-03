@@ -9,7 +9,7 @@
 from flask.ext.script import Manager
 
 from keepupwithscience.api import create_app
-from keepupwithscience.manage import CreateJournalCommand, DeleteJournalCommand, ResetJournalCommand, ListJournalsCommand, CreateCategoryCommand, DeleteCategoryCommand, ListCategoriesCommand, ListJournalCategoriesCommand, AddCategoriesToJournalCommand, DeleteCategoryFromJournalCommand,    ListPapersForCategoryCommand
+from keepupwithscience.manage import CreateJournalCommand, DeleteJournalCommand, ResetJournalCommand, ListJournalsCommand, CreateCategoryCommand, DeleteCategoryCommand, ListCategoriesCommand, ListJournalCategoriesCommand, AddCategoriesToJournalCommand, DeleteCategoryFromJournalCommand
 
 manager = Manager(create_app())
 manager.add_command('create_journal', CreateJournalCommand())
@@ -22,8 +22,6 @@ manager.add_command('list_categories', ListCategoriesCommand())
 manager.add_command('list_journal_categories', ListJournalCategoriesCommand())
 manager.add_command('add_categories_to_journal', AddCategoriesToJournalCommand())
 manager.add_command('delete_category_from_journal', DeleteCategoryFromJournalCommand())
-
-manager.add_command('listpaperforcategory', ListPapersForCategoryCommand())
 
 if __name__ == "__main__":
     manager.run()
