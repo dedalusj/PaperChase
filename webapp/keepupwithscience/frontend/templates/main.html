@@ -1,8 +1,9 @@
 {% extends "layouts/boilerplate.html" %}
 
 {% block body %}
-  <h1>Test</h1>
-<!--  <div class="stores">
-    <a href="#" class="btn-add-store btn btn-primary">Add Store</a>
-  </div>-->
+  {% if current_user.is_authenticated() -%}
+    <h1>This should be the app itself</h1>
+  {%- else -%}
+    <h1>This should be the homepage</h1>
+  {%- endif %}
 {% endblock %}
