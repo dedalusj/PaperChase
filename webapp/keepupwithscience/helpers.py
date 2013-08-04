@@ -9,7 +9,19 @@
 import pkgutil
 import importlib
 
-from flask import Blueprint
+from flask import Blueprint, request
+from flask.ext.restless import ProcessingException
+from flask_security.utils import verify_and_update_password
+
+from .services import users
+
+def http_auth_func(**kwargs):
+    auth = request.authorization
+    user = users.first(email=auth.username)
+    if not user:
+        raise ProcessingException(message='Unauthorized Access')
+    if not verify_and_update_password(auth.password, user):
+        raise ProcessingException(message='Unauthorized Access')
 
 def register_blueprints(app, package_name, package_path):
     """Register all Blueprint instances on the specified Flask application found

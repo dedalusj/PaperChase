@@ -20,4 +20,4 @@ journals = JournalsService()
 categories = CategoryService()
 
 #: An instance of the :class:`UsersService` class
-users = UserService()
+users = UsersService()
