@@ -20,8 +20,10 @@ def create_app(settings_override=None):
 
     manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)	
 
-    manager.create_api(Journal, include_columns=['id', 'url', 'title', 'short_title', 'last_checked', 'categories', 'categories.id', 'categories.name'], preprocessors=dict(GET_SINGLE=[http_auth_func],GET_MANY=[http_auth_func]), url_prefix=None)
-    manager.create_api(Category, include_columns=['id', 'name', 'description', 'journals', 'journals.id', 'journals.title', 'journals.url', 'journals.short_title', 'journals.last_checked'], preprocessors=dict(GET_SINGLE=[http_auth_func],GET_MANY=[http_auth_func]), url_prefix=None)
-    manager.create_api(Paper, results_per_page=50, include_columns=['id', 'title', 'abstract', 'authors', 'url', 'doi', 'journal', 'journal.title'], preprocessors=dict(GET_SINGLE=[http_auth_func],GET_MANY=[http_auth_func]), url_prefix=None)
+    common_configurations = dict(preprocessors=dict(GET_SINGLE=[http_auth_func],GET_MANY=[http_auth_func]), url_prefix=None)
+
+    manager.create_api(Journal, include_columns=['id', 'url', 'title', 'short_title', 'last_checked', 'categories', 'categories.id', 'categories.name'], **common_configurations)
+    manager.create_api(Category, include_columns=['id', 'name', 'description', 'journals', 'journals.id', 'journals.title', 'journals.url', 'journals.short_title', 'journals.last_checked'], **common_configurations)
+    manager.create_api(Paper, results_per_page=50, include_columns=['id', 'title', 'abstract', 'authors', 'url', 'doi', 'journal', 'journal.title'], **common_configurations)
     
     return app
