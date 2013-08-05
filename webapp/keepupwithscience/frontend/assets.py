@@ -22,6 +22,7 @@ css_all = Bundle("css/bootstrap.min.css",
 #: vendor js bundle
 js_vendor = Bundle("js/vendor/jquery-1.10.1.min.js",
                    "js/vendor/bootstrap.min.js",
+                   "js/vendor/knockout-2.3.0.js",
                    filters="jsmin", output="js/vendor.min.js")
 
 #: application js bundle
