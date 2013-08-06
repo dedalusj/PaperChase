@@ -56,6 +56,19 @@ def days_since(t1, t2):
         timedelta = t1 - t2
         return timedelta.days
 
+def deltatime(period, frequency):
+    if period is 'hourly':
+        return timedelta(hours=1/frequency)
+    elif period is 'daily':
+        return timedelta(days=1/frequency)
+    elif period is 'weekly':
+        return timedelta(weeks=1/frequency)
+    elif period is 'monthly':
+        return timedelta(days=30/frequency)
+    elif period is 'yearly':
+        return timedelta(days=365/frequency)
+    return None
+
 def bozo_checker(bozo_exception):
     """
     This function checks if the bozo exception is a critical exception or
