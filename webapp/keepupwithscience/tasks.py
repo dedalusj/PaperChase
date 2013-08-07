@@ -20,7 +20,7 @@ from .core import mail
 from .factory import create_celery_app
 from .models import Journal, Paper
 from .services import journals, papers
-from .helpers import bozo_checker, days_since, parser_by_name
+from .helpers import bozo_checker, days_since
 from .settings import scraper_config
 
 celery = create_celery_app()
@@ -72,7 +72,6 @@ def get_journals():
     journals_list = journals.filter(Journal.last_checked <= update_time).all()
     for journal in journals_list:
         get_papers.delay(journal.id)
-        journals.update(journal, last_checked = datetime.datetime.utcnow())
         logger.debug("Updating journal last_checked: {0}".format(journal.title))
 
 @celery.task
@@ -138,7 +137,10 @@ def add_article(entry, journal_id, parser_function):
     if stored_paper is not None:
         return
         
-    paper = parser_function(entry)
+    paper = default_parser(entry)
+    journal = journals.get(journal_id)
+    paths = journal.paths.all()
+    extract_elements(paper, paths)
     papers.create(created=paper.get("created"),
         title = paper.get("title"),
         abstract = paper.get("abstract"),

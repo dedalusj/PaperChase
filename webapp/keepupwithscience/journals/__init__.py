@@ -7,7 +7,7 @@
 """
 
 from ..core import Service, KeepUpWithScienceError
-from .models import Journal, Category
+from .models import Journal, Category, Path
 
 class CategoryService(Service):
     __model__ = Category
@@ -26,3 +26,5 @@ class JournalsService(Service):
             kwargs['categories'] = self.categories.get_all(*categories)
         return kwargs
     
+class PathService(Service):
+    __model__ = Path

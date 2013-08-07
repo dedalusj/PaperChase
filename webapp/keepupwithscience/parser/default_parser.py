@@ -43,17 +43,17 @@ def extract_elements(article, paths):
         return
     
     tree = etree.HTML(r.content)
-    for key, value in paths.iteritems():
+    for path in paths:
         try:
-            elements = tree.xpath(value)
+            elements = tree.xpath(path.path)
             if len(elements) is 0:
-                logger.warning("Article at URL {0} has no element {1}".format(article.get("url"),value))
+                logger.warning("Article at URL {0} has no element {1}".format(article.get("url"),path.path))
                 continue  
             element = elements[0]
             clean_element(element)
-            article[key] = content(element)
+            article[path.type] = content(element)
         except Exception:
-            logger.error("Something went wrong while extracting path {0} from URL ".format(value,article.get("url")))
+            logger.error("Something went wrong while extracting path {0} from URL ".format(path.path,article.get("url")))
             continue
 
 def default_parser(entry):

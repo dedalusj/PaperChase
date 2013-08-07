@@ -20,19 +20,6 @@ class Category(db.Model):
     
     def __str__(self):
         return self.name
-        
-    def papers(self):
-        results = Paper.query.join(journals_categories, (journals_categories.c.journal_id == Paper.journal_id)).filter(journals_categories.c.category_id == self.id).order_by(Paper.created.desc()).all()
-        json_results = []
-        for result in results:
-            d = {'id'      : result.id,
-                 'title'   : result.title,
-                 'abstract': result.abstract,
-                 'authors' : result.authors,
-                 'url'     : result.url,
-                 'doi'     : result.doi}
-            json_results.append(d)
-        return json_results
             
 class Journal(db.Model):
     __tablename__ = 'journals'
@@ -42,13 +29,21 @@ class Journal(db.Model):
     short_title = db.Column(db.String(50))
     url = db.Column(db.String(200), index = True, unique = True)
     last_checked = db.Column(db.DateTime)
-    update_frequency = db.Column(db.Integer)
+    next_check = db.Column(db.DateTime)
     metadata_update = db.Column(db.DateTime)
     papers = db.relationship('Paper', backref = 'journal', lazy = 'dynamic')
-    parser_function = db.Column(db.String(50))
+    paths = db.relationship('Path', backref = 'journal', lazy = 'dynamic')
     favicon = db.Column(db.String(1024))
     color = db.Column(db.String(7))
     categories = db.relationship('Category', secondary=journals_categories, backref=db.backref('journals', lazy='dynamic'), lazy = 'dynamic')
     
     def __str__(self):
             return self.title
+            
+class Path(db.Model):
+    __tablename__ = 'paths'
+    
+    id = db.Column(db.Integer, primary_key = True)
+    journal_id = db.Column(db.Integer, db.ForeignKey('journals.id'))
+    type = db.Column(db.String(15))
+    path = db.Column(db.String(300))

@@ -86,13 +86,3 @@ def bozo_checker(bozo_exception):
         return_val = True
 
     return return_val
-    
-def parser_by_name(name):
-    if (name is not None) and (name != ""):
-        module_path = ".".join(("keepupwithscience", "parser", name))
-        module = importlib.import_module(module_path)
-        f = getattr(module,name)
-    else:
-        from app.scraper.parser import default_parser
-        f = getattr(default_parser,"default_parser")
-    return f
