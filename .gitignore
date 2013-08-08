@@ -1,3 +1,5 @@
 webapp/kuws
 
 *.pyc
+
+*.log
