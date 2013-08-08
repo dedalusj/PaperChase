@@ -8,6 +8,7 @@
 
 import pkgutil
 import importlib
+from datetime import timedelta
 
 from flask import Blueprint, request
 from flask.ext.restless import ProcessingException
@@ -57,18 +58,19 @@ def days_since(t1, t2):
         return timedelta.days
 
 def deltatime(period, frequency):
-    if period is 'hourly':
+    frequency = int(frequency)
+    if period == 'hourly':
         return timedelta(hours=1/frequency)
-    elif period is 'daily':
+    elif period == 'daily':
         return timedelta(days=1/frequency)
-    elif period is 'weekly':
+    elif period == 'weekly':
         return timedelta(weeks=1/frequency)
-    elif period is 'monthly':
+    elif period == 'monthly':
         return timedelta(days=30/frequency)
-    elif period is 'yearly':
+    elif period == 'yearly':
         return timedelta(days=365/frequency)
     return None
-
+    
 def bozo_checker(bozo_exception):
     """
     This function checks if the bozo exception is a critical exception or
