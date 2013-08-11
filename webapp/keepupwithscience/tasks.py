@@ -7,6 +7,7 @@
 """
 
 import datetime
+import time
 import logging
 import dateutil.parser
 from pytz import utc
@@ -120,19 +121,18 @@ def default_parser(entry):
     
         :return: It returns a dictionary for the article with all the keys necessary to instantiate a new article object for the database
     """
-    if entry.get("updated_parsed"):
-        created = datetime.datetime.fromtimestamp(time.mktime(entry.get("updated_parsed")))
-    else:
-        created = datetime.datetime.utcnow()
-        
-    article = { "title": entry.get("title", "No title"),
+    
+    article = { "title": entry.get("dc_title", "No title"),
                 "url": entry.get("link", "#"),
-                "created": created,
-                "doi": entry.get("prism_doi",""),
+                "created": entry.get("dc_date",datetime.datetime.utcnow()),
+                "doi": entry.get("dc_identifier",""),
+                "ref": entry.get("dc_source",""),
                 "abstract": entry.get("summary",""),
-                "authors": entry.get("author","")
+                "authors": entry.get("authors","")
                 }
-                    
+    article['doi'] = article['doi'][4:]  
+    authors = [authors[i]['name'] for i in range(len(authors))]
+    authors = ', '.join(authors)           
     return article
 
 @celery.task    

@@ -17,6 +17,7 @@ class Paper(db.Model):
     authors = db.Column(db.String(1024))
     url = db.Column(db.String(150), unique = True)
     doi = db.Column(db.String(100))
+    ref = db.Column(db.String(100))
     created = db.Column(db.DateTime)
     journal_id = db.Column(db.Integer, db.ForeignKey('journals.id'))
     
