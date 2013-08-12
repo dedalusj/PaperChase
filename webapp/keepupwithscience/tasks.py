@@ -6,16 +6,16 @@
     keepupwithscience tasks module
 """
 
-import datetime
-import time
 import logging
 import dateutil.parser
 from pytz import utc
+import time
+import datetime
 from datetime import timedelta, date
 from celery.utils.log import get_task_logger
-from xml.sax import SAXException
 import feedparser
 import requests
+from xml.sax import SAXException
 from lxml import etree
 from xml.etree import ElementTree as ET
 
@@ -191,7 +191,15 @@ def update_metadata(journal_id, feed_data):
     :param feed_data The resulting dict from a feed_requester call.
     """
     journal = journals.get(journal_id)
-    # Actually update the metadata
+    try:
+        paper_url = papers.first(journal_id=journal_id).url
+        paper_page = requests.get(paper_url)
+        tree = etree.html(paper_page.content)
+        favicon_url = tree.xpath('//link[@rel="icon" or @rel="shortcut icon"]/@href')
+        journals.update(journal, favicon = favicon_url[0])
+    except Exception:
+        logger.error("The journal {0} at URL {1} does not have a favicon".format(jorunal.title,paper_url))
+        
     journals.update(journal, metadata_update = datetime.datetime.utcnow())
 	
         
@@ -218,6 +226,7 @@ def add_article(entry, journal_id):
         title = paper.get("title"),
         abstract = paper.get("abstract"),
         doi = paper.get("doi"),
+        ref = paper.get("ref"), 
         url = paper.get("url"),
         authors = paper.get("authors"),
         journal_id = journal_id
