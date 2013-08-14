@@ -18,6 +18,8 @@ import requests
 from xml.sax import SAXException
 from lxml import etree
 from xml.etree import ElementTree as ET
+from HTMLParser import HTMLParser
+import urlparse
 
 from .core import mail
 from .factory import create_celery_app
@@ -38,6 +40,28 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 fh.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(fh)
+
+class MLStripper(HTMLParser):
+    def __init__(self):
+        self.reset()
+        self.fed = []
+    def handle_data(self, d):
+        self.fed.append(d)
+    def get_data(self):
+        return ''.join(self.fed)
+
+def strip_tags(html):
+    s = MLStripper()
+    s.feed(html)
+    return s.get_data()
+    
+def is_absolute(url):
+    return bool(urlparse.urlparse(url).scheme)
+    
+def make_absolute_url(relative_url, page_url):
+    parsed_uri = urlparse.urlparse(page_url)
+    domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+    return urlparse.urljoin(domain, relative_url)
 
 def feed_requester(feed_url):
     """ 
@@ -63,34 +87,28 @@ def feed_requester(feed_url):
 
     return feed_data
 
-def content(tag):
-    return tag.text + ''.join(ET.tostring(e) for e in tag)
-
 def clean_element(tree_element):
     """
-    Format an xml node element. It makes the node a paragraph node, remove all link tags (for now later maybe more) and remove all attributes  
-        
+    Format an xml node element. It makes the node a paragraph node, remove all link tags (for now, later maybe more) and remove all attributes  
     :param tree_element: The element to format. tree_element must be an instance of etree._Element
-
-    :return: This function does not return anything.
+    :return: This function return a string repreesnting the element or None if the a non ElementTree type is passed
     """
     try:
-        tree_element.tag = 'p'
         # remove link tags from an element and maybe other things in the future
         etree.strip_tags(tree_element,'a')
-        for attr in tree_element.keys():
-            del tree_element.attrib[attr]
-    except Exception:
-        logger.error("Something went wrong while cleaning element: {0}".format(tree_element))
+    except TypeError:
+        logger.error("Wrong type passed to clen_element. Element: {0} Type: {1}".format(tree_element, type(tree_element)))
+        return None
+        
+    for attr in tree_element.keys():
+        del tree_element.attrib[attr]
+    return tree_element.text + ''.join(ET.tostring(e) for e in tree_element)
     
 def extract_elements(article, paths):
     """
     Scrape elements from the article webpage and insert them into the article dictionary  
-        
     :param article: The article to add.
-    
     :param paths: Paths is a dictionary containing the name of the element to parse from the webpage of the article as key and the xpath corresponding to it as value
-    
     :return: This function does not return anything.
     """
     try:
@@ -100,29 +118,23 @@ def extract_elements(article, paths):
         return
     
     tree = etree.HTML(r.content)
+    
     for path in paths:
-        try:
-            elements = tree.xpath(path.path)
-            if len(elements) is 0:
-                logger.warning("Article at URL {0} has no element {1}".format(article.get("url"),path.path))
-                continue  
-            element = elements[0]
-            clean_element(element)
-            article[path.type] = content(element)
-        except Exception:
-            logger.error("Something went wrong while extracting path {0} from URL ".format(path.path,article.get("url")))
-            continue
+        elements = tree.xpath(path.path)
+        if len(elements) is 0:
+            logger.warning("Article at URL {0} has no element {1}".format(article.get("url"),path.path))
+            continue  
+        element_string = clean_element(elements[0])
+        article[path.type] = element_string.strip(' \n')
 
 def default_parser(entry):
     """
         Parse a raw entry from the feed, as extracted by feedparser, and fill it with the correct information we want to keep as journal entry
-                    
         :param entry: The feed entry from feedparser
-    
         :return: It returns a dictionary for the article with all the keys necessary to instantiate a new article object for the database
     """
     
-    article = { "title": entry.get("dc_title", "No title"),
+    article = { "title": entry.get("title", "No title"),
                 "url": entry.get("link", "#"),
                 "created": entry.get("dc_date",datetime.datetime.utcnow()),
                 "doi": entry.get("dc_identifier",""),
@@ -131,8 +143,13 @@ def default_parser(entry):
                 "authors": entry.get("authors","")
                 }
     article['doi'] = article['doi'][4:]  
+    authors = article['authors']
     authors = [authors[i]['name'] for i in range(len(authors))]
-    authors = ', '.join(authors)           
+    authors = ', '.join(authors)
+    # let's sanitize authors from unwanted html tags
+    authors = strip_tags(authors)
+    article['authors'] = authors.strip(' \n')
+      
     return article
 
 @celery.task    
@@ -143,11 +160,11 @@ def get_journals():
     journals_list = journals.filter(Journal.next_check <= datetime.datetime.utcnow()).all()
     for journal in journals_list:
         get_papers.delay(journal.id)
-        logger.debug("Updating journal last_checked: {0}".format(journal.title))
 
 @celery.task
 def get_papers(journal_id):
     journal = journals.get(journal_id)
+    logger.debug("Getting papers for journal: {0}".format(journal.title))
     feed_url = journal.url
     feed_data = feed_requester(feed_url)
     if feed_data is not None and feed_data.get("entries"):
@@ -160,6 +177,9 @@ def get_papers(journal_id):
 @celery.task   
 def update_check(journal_id, feed_data):
     journal = journals.get(journal_id)
+    logger.debug("Updating last_checked for journal: {0}".format(journal.title))
+    journals.update(journal, last_checked = datetime.datetime.utcnow())
+    
     updateBase = feed_data.feed.get("sy_updatebase", None)
     if not updateBase:
         journals.update(journal, next_check = datetime.datetime.utcnow() - datetime.timedelta(seconds=scraper_config.get("update_frequency") * 60))
@@ -180,7 +200,6 @@ def update_check(journal_id, feed_data):
     seconds_from_updateBase = datetime.datetime.utcnow() - updateBase
     seconds_to_next_update = time_between_updates.total_seconds() - seconds_from_updateBase.total_seconds() % time_between_updates.total_seconds()
     journals.update(journal, next_check = datetime.datetime.utcnow() + timedelta(seconds=seconds_to_next_update))
-    journals.update(journal, last_checked = datetime.datetime.utcnow())
 
 @celery.task         
 def update_metadata(journal_id, feed_data):
@@ -191,17 +210,21 @@ def update_metadata(journal_id, feed_data):
     :param feed_data The resulting dict from a feed_requester call.
     """
     journal = journals.get(journal_id)
-    try:
-        paper_url = papers.first(journal_id=journal_id).url
-        paper_page = requests.get(paper_url)
-        tree = etree.html(paper_page.content)
+    logger.debug("Updating metadata for journal: {0}".format(journal.title))
+    paper_url = papers.first(journal_id=journal_id).url
+    if paper_url:
+        paper_page_request = requests.get(paper_url)
+        tree = etree.HTML(paper_page_request.content)
+        #try:
         favicon_url = tree.xpath('//link[@rel="icon" or @rel="shortcut icon"]/@href')
-        journals.update(journal, favicon = favicon_url[0])
-    except Exception:
-        logger.error("The journal {0} at URL {1} does not have a favicon".format(jorunal.title,paper_url))
+        favicon_url = favicon_url[0]
+        if not is_absolute(favicon_url):
+            favicon_url = make_absolute_url(favicon_url, paper_page_request.url)
+        journals.update(journal, favicon = favicon_url)
+#        except Exception:
+#            logger.error("The journal {0} at URL {1} does not have a favicon".format(journal.title,paper_url))
         
     journals.update(journal, metadata_update = datetime.datetime.utcnow())
-	
         
 @celery.task
 def add_article(entry, journal_id):
