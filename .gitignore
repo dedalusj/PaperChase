@@ -3,3 +3,7 @@ webapp/kuws
 *.pyc
 
 *.log
+
+*.espressostorage
+
+*.db
