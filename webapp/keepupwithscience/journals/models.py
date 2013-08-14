@@ -15,8 +15,9 @@ class Category(db.Model):
     __tablename__ = 'categories'
 
     id = db.Column(db.Integer(), primary_key=True)
-    name = db.Column(db.String(255))
-    description = db.Column(db.String(255))
+    name = db.Column(db.String(50))
+    parent_id = db.Column(db.Integer(), db.ForeignKey('categories.id'))
+    subcategories = db.relationship('Category', lazy = 'dynamic', backref=db.backref('parent', remote_side=[id]))
     
     def __str__(self):
         return self.name
