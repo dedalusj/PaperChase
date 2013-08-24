@@ -10,7 +10,7 @@ pytz
 requests
 lxml
 flask-script
-flask-restless
+flask-restful
 flask-security
 flask-assets
 py-bcrypt
