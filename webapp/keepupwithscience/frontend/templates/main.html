@@ -2,7 +2,15 @@
 
 {% block body %}
   {% if current_user.is_authenticated() -%}
-    <h1>This should be the app itself</h1>
+  <div class="container main-frame" ng-app="KUWSApp" ng-controller="mainController" ng-init="init()">
+    <div class="row">
+      <div class="col-md-4">
+        <ul class="list-group">
+          <li ng-repeat="category in categories" class="list-group-item">{{ '{{' }} category.name {{ '}}' }} <span class="badge"> {{ '{{' }} category.subcategories.length {{ '}}' }} </span></li>
+        </ul>
+      </div>  
+    </div>  
+  </div>
   {%- else -%}
     <h1>This should be the homepage</h1>
   {%- endif %}

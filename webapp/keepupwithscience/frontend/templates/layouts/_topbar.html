@@ -1,5 +1,5 @@
 <div class="navbar navbar-fixed-top navbar-inverse">
-  <a class="navbar-brand" href="#">KUWS</a>
+  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='favicon.ico') }}" alt="KUWS" width="20" height="20"></a>
   <ul class="nav navbar-nav">
     <li {% if 'main.index' == request.endpoint %} class="active"{% endif %}><a href="#">Home</a></li>
   </ul>
