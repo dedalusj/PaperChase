@@ -33,8 +33,7 @@ class CreateJournalCommand(Command):
         title = prompt('Title')
         short_title = prompt('Short title')
         url = prompt('URL')
-        parser = prompt('Parser function')
-        journal = journals.create( title = title, short_title = short_title, url = url, parser_function = parser, last_checked = datetime.datetime.utcnow(), update_frequency = 2, metadata_update = datetime.datetime.utcnow() )
+        journal = journals.create( title = title, short_title = short_title, url = url, last_checked = datetime.datetime.utcnow(), next_check = datetime.datetime.utcnow(), metadata_update = datetime.datetime.utcnow() )
         print '\nJournal created successfully'
         print 'Journal(id=%s title=%s)' % (journal.id, journal.title)
 

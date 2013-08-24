@@ -59,6 +59,9 @@ def is_absolute(url):
     return bool(urlparse.urlparse(url).scheme)
     
 def make_absolute_url(relative_url, page_url):
+    """ 
+    Create an absolute url for the relative_url by extracting the domain from the page_url
+    """
     parsed_uri = urlparse.urlparse(page_url)
     domain = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
     return urlparse.urljoin(domain, relative_url)
@@ -66,7 +69,6 @@ def make_absolute_url(relative_url, page_url):
 def feed_requester(feed_url):
     """ 
     This function handles the requesting and parsing of the journal feed. The feed is requested and parsed using feedparser. If the function is successful it will return a list of dicts for each article in the feed. If the function is not successful it shall return None.
-
     :param feed_url The url of the feed to retrieve.
     """
     feed_data = None
@@ -137,7 +139,7 @@ def default_parser(entry):
     article = { "title": entry.get("title", "No title"),
                 "url": entry.get("link", "#"),
                 "created": entry.get("dc_date",datetime.datetime.utcnow()),
-                "doi": entry.get("dc_identifier",""),
+                "doi": entry.get("prism_doi",""),
                 "ref": entry.get("dc_source",""),
                 "abstract": entry.get("summary",""),
                 "authors": entry.get("authors","")
@@ -148,7 +150,8 @@ def default_parser(entry):
     authors = ', '.join(authors)
     # let's sanitize authors from unwanted html tags
     authors = strip_tags(authors)
-    article['authors'] = authors.strip(' \n')
+    authors = authors.strip(' \n')
+    article['authors'] = (authors[:900] + '..') if len(authors) > 900 else authors
       
     return article
 
@@ -170,9 +173,9 @@ def get_papers(journal_id):
     if feed_data is not None and feed_data.get("entries"):
         for entry in feed_data.entries:
             add_article.delay(entry, journal.id)
-        update_check.delay(journal.id, feed_data)
-        if days_since(datetime.datetime.utcnow(), journal.metadata_update) >= scraper_config.get("metadata_update"):
-            update_metadata.delay(journal.id, feed_data) 
+    update_check.delay(journal.id, feed_data)
+    if days_since(datetime.datetime.utcnow(), journal.metadata_update) >= scraper_config.get("metadata_update"):
+        update_metadata.delay(journal.id, feed_data) 
    
 @celery.task   
 def update_check(journal_id, feed_data):
@@ -211,18 +214,19 @@ def update_metadata(journal_id, feed_data):
     """
     journal = journals.get(journal_id)
     logger.debug("Updating metadata for journal: {0}".format(journal.title))
-    paper_url = papers.first(journal_id=journal_id).url
-    if paper_url:
+    paper = papers.first(journal_id=journal_id)
+    if paper:
+        paper_url = paper.url
         paper_page_request = requests.get(paper_url)
         tree = etree.HTML(paper_page_request.content)
-        #try:
         favicon_url = tree.xpath('//link[@rel="icon" or @rel="shortcut icon"]/@href')
-        favicon_url = favicon_url[0]
-        if not is_absolute(favicon_url):
-            favicon_url = make_absolute_url(favicon_url, paper_page_request.url)
-        journals.update(journal, favicon = favicon_url)
-#        except Exception:
-#            logger.error("The journal {0} at URL {1} does not have a favicon".format(journal.title,paper_url))
+        if favicon_url:
+            favicon_url = favicon_url[0]
+            if not is_absolute(favicon_url):
+                favicon_url = make_absolute_url(favicon_url, paper_page_request.url)
+            journals.update(journal, favicon = favicon_url)
+        else:
+            logger.error("The journal {0} at URL {1} does not have a favicon".format(journal.title,paper_url))
         
     journals.update(journal, metadata_update = datetime.datetime.utcnow())
         
