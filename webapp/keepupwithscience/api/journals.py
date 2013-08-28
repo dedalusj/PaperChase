@@ -23,7 +23,7 @@ class CategoryListAPI(Resource):
     decorators = [http_auth_required]
     def get(self):
         categoryList = categories.filter(Category.parent_id == None)
-        return { 'categories': map(lambda c: marshal(c, category_fields), categoryList) }
+        return map(lambda c: marshal(c, category_fields), categoryList)
 
 class CategoryAPI(Resource):
     decorators = [http_auth_required]
