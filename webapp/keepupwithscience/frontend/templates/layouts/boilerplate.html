@@ -1,16 +1,12 @@
 <html>
   <head>
     <title>{% block page_title %}Keep Up With Science{% endblock %}</title>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
     {% assets "css_all" -%}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
     {%- endassets %}
     {% assets "js_vendor" -%}
     <script src="{{ ASSET_URL }}"></script>
     {% endassets %}
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
     {% assets "js_main" -%}
     <script src="{{ ASSET_URL }}"></script>
     {% endassets %}

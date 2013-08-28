@@ -15,11 +15,16 @@ from flask_assets import Environment, Bundle
 
 #: consolidated css bundle
 css_all = Bundle("css/kuws.css",
+                 "css/bootstrap.css",
+                 "css/bootstrap-theme.css",
                  filters="cssmin", output="css/kuws.min.css")
 
 #: vendor js bundle
 js_vendor = Bundle("js/vendor/jquery-1.10.1.min.js",
+                   "js/vendor/angular.min.js",
+                   "js/vendor/angular-resource.min.js",
                    "js/vendor/base64.js",
+                   "js/vendor/bootstrap.js",
                    filters="jsmin", output="js/vendor.min.js")
 
 #: application js bundle
