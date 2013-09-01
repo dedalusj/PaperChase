@@ -5,12 +5,14 @@ from flask_security import http_auth_required
 
 subcategory_fields = {
     'name': fields.String,
-    'uri': fields.Url('category')
+#    'uri': fields.Url('category'),
+    'id': fields.Integer
 }
 
 category_fields = {
     'name': fields.String,
-    'uri': fields.Url('category'),
+#    'uri': fields.Url('category'),
+    'id': fields.Integer,
     'subcategories' : fields.List(fields.Nested(subcategory_fields))
 }
 
@@ -40,7 +42,7 @@ class SubcategoryListAPI(Resource):
         if category is None:
             abort(404)
         subcategoryList = category.subcategories
-        return { 'subcategories': map(lambda c: marshal(c, subcategory_fields), subcategoryList) }
+        return map(lambda c: marshal(c, subcategory_fields), subcategoryList)
         
 class CategoryJournalsAPI(Resource):
     decorators = [http_auth_required]
@@ -48,8 +50,9 @@ class CategoryJournalsAPI(Resource):
         category = categories.get(id)
         if category is None:
             abort(404)
+        # TODO: grab the journals from the parents category too if any
         journalList = category.journals
-        return { 'journals': map(lambda j: marshal(j, journal_fields), journalList) }
+        return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalListAPI(Resource):
     decorators = [http_auth_required]
