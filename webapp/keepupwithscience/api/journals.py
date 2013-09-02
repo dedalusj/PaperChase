@@ -1,24 +1,25 @@
 from flask.ext.restful import Resource, fields, marshal
 from ..services import categories, journals
-from ..models import Category, Journal
+from ..models import *
 from flask_security import http_auth_required
+from sqlalchemy import or_
+
+from flask import current_app
 
 subcategory_fields = {
     'name': fields.String,
-#    'uri': fields.Url('category'),
     'id': fields.Integer
 }
 
 category_fields = {
     'name': fields.String,
-#    'uri': fields.Url('category'),
     'id': fields.Integer,
     'subcategories' : fields.List(fields.Nested(subcategory_fields))
 }
 
 journal_fields = {
     'title': fields.String,
-    'uri': fields.Url('journal'),
+    'id': fields.Integer
 }
 
 class CategoryListAPI(Resource):
@@ -50,8 +51,8 @@ class CategoryJournalsAPI(Resource):
         category = categories.get(id)
         if category is None:
             abort(404)
-        # TODO: grab the journals from the parents category too if any
-        journalList = category.journals
+        # every request for the journals of a category should return the journals of the parent category as well
+        journalList = Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == category.id, journals_categories.c.category_id == category.parent_id))
         return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalListAPI(Resource):
