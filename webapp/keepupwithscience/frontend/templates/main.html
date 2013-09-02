@@ -35,7 +35,7 @@
           <div class="col-md-4">
             <h4 class="text-center">Categories</h4>
             <div class="list-group">
-              <a href="#" class="list-group-item" ng-repeat="category in categories" ng-click="updateSubcategories($event, category.id)">{{ category.name }}</a>
+              <a href="#" class="list-group-item" ng-repeat="category in categories" ng-click="updateSubcategories($event, category.id);" ng-class="categoryClass(category.id)">{{ category.name }}</a>
             </div>
           </div>
           
@@ -43,7 +43,7 @@
             <h4 class="text-center">Subcategories</h4>
             <p class="text-center" ng-hide="subcategories.length"> Please select a category </p>
             <div class="list-group" ng-show="subcategories.length">
-              <a href="#" class="list-group-item" ng-repeat="subcategory in subcategories" ng-click="updateJournals($event, subcategory.id)">{{ subcategory.name }} </a>
+              <a href="#" class="list-group-item" ng-repeat="subcategory in subcategories" ng-click="updateJournals($event, subcategory.id);" ng-class="subcategoryClass(subcategory.id)">{{ subcategory.name }} </a>
             </div>
           </div>
           
