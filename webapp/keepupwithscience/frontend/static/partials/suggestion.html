@@ -1,0 +1,16 @@
+<div class="row" ng-init="init()">   
+  <div class="col-lg-3">
+    <div class="form-group">
+      <label>Category</label>
+      <select class="form-control" ng-model="category" ng-change="updateSubcategories()" ng-options="c.name for c in categories">
+          <option value="">-- choose category --</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Subcategory</label>
+      <select class="form-control" ng-model="subcategory" ng-options="s.name for s in subcategories">
+        <option value="">-- choose subcategory --</option>
+      </select>
+    </div>
+  </div>
+</div>

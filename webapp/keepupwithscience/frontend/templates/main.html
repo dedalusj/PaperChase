@@ -9,14 +9,14 @@
     <script src="/static/js/vendor/angular-resource.min.js"></script>
     <script src="/static/js/vendor/base64.js"></script>
     <script src="/static/js/vendor/bootstrap.js"></script>
-    <script src="/static/js/main/main.js"></script>
-    <script src="/static/js/main/controllers/mainController.js"></script>
-    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/js/app.js"></script>
+    <script src="/static/js/controllers/controllers.js"></script>
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
   </head>
   <body>
     <div class="container">
      <div class="navbar navbar-fixed-top navbar-inverse">
-        <a class="navbar-brand" href="#"><img src="/static/favicon.ico" alt="KUWS" width="20" height="20"></a>
+        <a class="navbar-brand" href="#"><img src="/static/img/favicon.ico" alt="KUWS" width="20" height="20"></a>
         <ul class="nav navbar-nav">
           <li class="active"><a href="#">Home</a></li>
         </ul>
@@ -29,33 +29,8 @@
         </ul>
       </div>
     
-      <div class="container main-frame" ng-app="KUWSApp" ng-controller="mainController" ng-init="init()">
-        <div class="row">   
-               
-          <div class="col-md-4">
-            <h4 class="text-center">Categories</h4>
-            <div class="list-group">
-              <a href="#" class="list-group-item" ng-repeat="category in categories" ng-click="updateSubcategories($event, category.id);" ng-class="categoryClass(category.id)">{{ category.name }}</a>
-            </div>
-          </div>
-          
-          <div class="col-md-4">
-            <h4 class="text-center">Subcategories</h4>
-            <p class="text-center" ng-hide="subcategories.length"> Please select a category </p>
-            <div class="list-group" ng-show="subcategories.length">
-              <a href="#" class="list-group-item" ng-repeat="subcategory in subcategories" ng-click="updateJournals($event, subcategory.id);" ng-class="subcategoryClass(subcategory.id)">{{ subcategory.name }} </a>
-            </div>
-          </div>
-          
-          <div class="col-md-4">
-            <h4 class="text-center">Journals</h4>
-            <p class="text-center" ng-hide="journals.length"> Please select a subcategory </p>
-            <div class="list-group" ng-show="journals.length">
-              <a href="#" class="list-group-item" ng-repeat="journal in journals">{{ journal.title }} <button type="button" class="btn btn-primary btn-xs pull-right">Follow</button></a>
-            </div>
-          </div> 
-           
-        </div>  
+      <div class="container main-frame" ng-app="KUWSApp" ng-controller="mainController">
+		<ng-view>Loading...</ng-view>  
       </div>
     </div>
     </body>
