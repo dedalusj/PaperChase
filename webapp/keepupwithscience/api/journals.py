@@ -1,8 +1,11 @@
 from flask.ext.restful import Resource, fields, marshal
+from flask_security import http_auth_required
+from flask import request
+from sqlalchemy import or_
+from flask.ext.mail import Message
 from ..services import categories, journals
 from ..models import *
-from flask_security import http_auth_required
-from sqlalchemy import or_
+from ..core import mail
 
 from flask import current_app
 
@@ -68,3 +71,12 @@ class JournalAPI(Resource):
         if journal is None:
             abort(404)
         return { 'journal': marshal(journal, journal_fields) }
+        
+class SuggestionAPI(Resource):
+    decorators = [http_auth_required]
+    def post(self):
+        # this should be shipped to celery
+        msg = Message('Journal suggestion', sender='dedalusj@gmail.com', recipients=['dedalusj@gmail.com'])
+        msg.body = """{0}""".format(str(request.json))
+        mail.send(msg)      
+        return 201

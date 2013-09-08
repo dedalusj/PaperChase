@@ -10,7 +10,7 @@ from functools import wraps
 
 from .. import factory
 from flask.ext.restful import Api
-from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI
+from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
 
 def create_app(settings_override=None):
     """Returns the KeepUpWithScience API application instance"""
@@ -24,5 +24,7 @@ def create_app(settings_override=None):
     api.add_resource(CategoryJournalsAPI, '/categories/<int:id>/journals', endpoint = 'categoryJournal')
     api.add_resource(JournalListAPI, '/journals', endpoint = 'journals')
     api.add_resource(JournalAPI, '/journals/<int:id>', endpoint = 'journal')
+    
+    api.add_resource(SuggestionAPI, '/suggestion')
     
     return app
