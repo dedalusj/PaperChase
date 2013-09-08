@@ -1,55 +1,91 @@
+app.factory('CategoryAPI', function($http, $resource){
+    // Define the resource for the category API to be shared by all other services and controllers
+    
+    // TODO: this http header line for authentication should be probably moved to its own service
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('dedalusj@gmail.com:idathik');
+	
+	return $resource('http://localhost\\:5000/api/categories/:categoryId/:resource', {categoryId:'@id', resource: '@res'});
+});
+
+app.factory('CategoryServices', function(CategoryAPI) {
+    // defines a categories service that can load the list from the backend and can cache it 
+    var data;
+    var categories = function(callback) {
+        data = CategoryAPI.query(callback);
+        return data;
+    }
+    return {
+        getCategories: function(callback) {
+            if(data) {
+                return data;
+            } else {
+                return categories(callback); 
+            }
+        }
+    };
+});
+
+app.factory('SubcategoryServices', function(CategoryAPI) {
+    // defines a subcategories service that can load the list from the backend or returned cached data if the id of the category is unchanged 
+    var data;
+    var categoryId;
+    var subcategories = function(parentId, callback) {
+        categoryId = parentId;
+        data = CategoryAPI.query({categoryId: parentId, resource: 'subcategories'},callback);
+        return data;
+    }
+    return {
+        getSubcategories: function(parentId, callback) {
+            if (data && parentId === categoryId) {
+                return data;
+            } else {
+                return subcategories(parentId, callback); 
+            }
+        }
+    };
+});
+
 app.controller("mainController", function($scope){
 
 });
 
-app.controller("categoryController", function($scope, $http, $resource){
- 
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('dedalusj@gmail.com:idathik');
-    
-    $scope.categories = [];
+app.controller("categoryController", function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+
+    $scope.categories = CategoryServices.getCategories();
     $scope.subcategories = [];
     $scope.journals = [];
-    var Category = $resource('http://localhost\\:5000/api/categories/:categoryId/:resource', {categoryId:'@id', resource: '@res'});
     
-    $scope.selectedCategoryIndex = -1;
-    $scope.categoryClass = function(categoryId) {
-        return categoryId === $scope.selectedCategoryIndex ? 'active' : undefined;
+    $scope.selectedCategoryId = -1;
+    $scope.selectedSubcategoryId = -1;
+    $scope.isActive = function(categoryId, isSubcategory) {
+        // Return the class for an element of a list (active.clicked state or not) given an index and a kind
+        var selectedId = isSubcategory ? $scope.selectedSubcategoryId : $scope.selectedCategoryId;
+        return categoryId === selectedId ? 'active' : undefined;
     };
+    
     $scope.updateSubcategories = function($event, categoryId) {
-        $scope.subcategories = Category.query({categoryId: categoryId, resource: 'subcategories'});
+        $scope.subcategories = SubcategoryServices.getSubcategories(categoryId);
         $scope.journals = [];
-        $scope.selectedCategoryIndex = categoryId;
-        $scope.selectedSubcategoryIndex = -1;
+        $scope.selectedCategoryId = categoryId;
+        $scope.selectedSubcategoryId = -1;
     };
     
-    $scope.selectedSubcategoryIndex = -1;
-    $scope.subcategoryClass = function(categoryId) {
-        return categoryId === $scope.selectedSubcategoryIndex ? 'active' : undefined;
-    };
     $scope.updateJournals = function($event, categoryId) {
-        $scope.journals = Category.query({categoryId: categoryId, resource: 'journals'});
-        $scope.selectedSubcategoryIndex = categoryId;
-    };
-    
-    $scope.init = function() {
-        $scope.categories = Category.query();
+        $scope.journals = CategoryAPI.query({categoryId: categoryId, resource: 'journals'});
+        $scope.selectedSubcategoryId = categoryId;
     };
 });
 
-app.controller("suggestionController", function($scope, $http, $resource){
- 
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + Base64.encode('dedalusj@gmail.com:idathik');
+app.controller("suggestionController", function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
     
-    $scope.categories = [];
+    $scope.categories = CategoryServices.getCategories();
     $scope.category = [];
     
     $scope.subcategories = [];
     $scope.subcategory = [];
     
-    var Category = $resource('http://localhost\\:5000/api/categories/:categoryId/:resource', {categoryId:'@id', resource: '@res'});
-    
     $scope.updateSubcategories = function() {
-        $scope.subcategories = Category.query({categoryId: $scope.category.id, resource: 'subcategories'});
+        $scope.subcategories = SubcategoryServices.getSubcategories($scope.category.id);
     };
     
     $scope.formatAndSubmit = function(suggestion) {
@@ -72,9 +108,5 @@ app.controller("suggestionController", function($scope, $http, $resource){
 //            do we need this?
             });
         }
-    };
-            
-    $scope.init = function() {
-        $scope.categories = Category.query();
     };
 });
