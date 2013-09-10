@@ -19,24 +19,21 @@
     
   </head>
   <body>
-    <div class="container">
-     <div class="navbar navbar-fixed-top navbar-inverse">
-        <a class="navbar-brand" href="#"><img src="/static/img/favicon.ico" alt="KUWS" width="20" height="20"></a>
+    <div class="container" ng-app="KUWSApp" ng-controller="mainController">
+      <div class="navbar navbar-fixed-top navbar-inverse">
+        <a class="navbar-brand" href="#/home"><img src="/static/img/favicon.ico" alt="KUWS" width="20" height="20"></a>
         <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
+          <li  ng-class="{active:isActive('/home')}"><a href="#/home">Home</a></li>
         </ul>
         <ul class="nav navbar-nav pull-right">
-        	<!--
-        	  <li ><a href="/logout">Logout</a></li>
-        	-->
-        	  <li class="active"><a href="/login">Login</a></li>
-        	  <li><a style="color: orange;" href="/register">Sign Up</a></li>
+          <li href="" ng-show="isLogged()"><a ng-click="logoutKUWS()">Logout</a></li>
+          <li ng-show="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li>
+          <li ng-show="!isLogged()"><a style="color: orange;" href="/register">Sign Up</a></li>
         </ul>
       </div>
-    
-      <div class="container main-frame" ng-app="KUWSApp" ng-controller="mainController">
-		<ng-view>Loading...</ng-view>  
+      <div class="main-frame">
+        <ng-view>Loading...</ng-view>  
       </div>
     </div>
-    </body>
+  </body>
 </html>
