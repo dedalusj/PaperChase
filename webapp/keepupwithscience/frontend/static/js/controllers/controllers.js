@@ -1,4 +1,4 @@
-app.controller("mainController", function($scope){
+app.controller("mainController", function($scope) {
 
 });
 
@@ -61,5 +61,28 @@ app.controller("suggestionController", function($scope, CategoryAPI, CategorySer
 //            do we need this?
             });
         }
+    };
+});
+
+app.controller("loginController", function($scope, $http){
+    $scope.init = function() {
+        var postData = {email: 'dedalusj@gmail.com'};
+        $http({
+            url: 'http://localhost:5000/login',
+            method: "GET",
+            params: postData,
+            data: '',
+            headers: {'Content-Type': 'application/json'}
+        }).success(function (data, status, headers, config) {
+            console.log(headers());
+            console.log(status);
+            console.log(data);
+            console.log(config);
+        }).error(function (data, status, headers, config) {
+            console.log(headers());
+            console.log(status);
+            console.log(data);
+            console.log(config);
+        });
     };
 });
