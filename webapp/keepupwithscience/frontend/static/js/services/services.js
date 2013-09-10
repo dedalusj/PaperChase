@@ -83,29 +83,39 @@ app.factory('Base64', function() {
     };
 });
 
-app.factory('Auth', function ($http, Base64) {
+app.factory('UserServices', function ($http, Base64) {
 //app.factory('Auth', function ($cookieStore, $http) {
 //    initialize to whatever is in the cookie, if anything
 //    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
+    
+    var user = { isLogged: false,
+    		     username: ''};
     
     return {
         setCredentials: function (username, password) {
             var encoded = Base64.encode(username + ':' + password);
             $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
+            user.isLogged = true;
+            user.username = username;
 //            $cookieStore.put('authdata', encoded);
         },
         clearCredentials: function () {
             document.execCommand("ClearAuthenticationCache");
             $http.defaults.headers.common.Authorization = 'Basic ';
+            user.isLogged = false;
+            user.username = '';
 //            $cookieStore.remove('authdata');
+        },
+        isLogged: function() {
+            return user.isLogged;
         }
     };
 });
 
-app.factory('CategoryAPI', function($http, $resource, Auth){
+app.factory('CategoryAPI', function($http, $resource) {
     // Define the resource for the category API to be shared by all other services and controllers
     
-    Auth.setCredentials('dedalusj@gmail.com','idathik');
+//    Auth.setCredentials('dedalusj@gmail.com','idathik');
 	
 	return $resource('http://localhost\\:5000/api/categories/:categoryId/:resource', {categoryId:'@id', resource: '@res'});
 });

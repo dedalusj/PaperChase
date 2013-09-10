@@ -1,5 +1,14 @@
-app.controller("mainController", function($scope) {
-
+app.controller("mainController", function($scope, $location, UserServices) {
+    $scope.isLogged = function() {
+        return UserServices.isLogged();
+    };
+    $scope.logoutKUWS = function() {
+        UserServices.clearCredentials();
+        $location.path( "/login" );
+    };
+    $scope.isActive = function(route) {
+        return route === $location.path();
+    };
 });
 
 app.controller("categoryController", function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
@@ -64,25 +73,9 @@ app.controller("suggestionController", function($scope, CategoryAPI, CategorySer
     };
 });
 
-app.controller("loginController", function($scope, $http){
-    $scope.init = function() {
-        var postData = {email: 'dedalusj@gmail.com'};
-        $http({
-            url: 'http://localhost:5000/login',
-            method: "GET",
-            params: postData,
-            data: '',
-            headers: {'Content-Type': 'application/json'}
-        }).success(function (data, status, headers, config) {
-            console.log(headers());
-            console.log(status);
-            console.log(data);
-            console.log(config);
-        }).error(function (data, status, headers, config) {
-            console.log(headers());
-            console.log(status);
-            console.log(data);
-            console.log(config);
-        });
+app.controller("loginController", function($scope, $http, $location, UserServices) {
+    $scope.loginKUWS = function() {
+        UserServices.setCredentials($scope.email,$scope.password);
+        $location.path( "/home" );
     };
 });
