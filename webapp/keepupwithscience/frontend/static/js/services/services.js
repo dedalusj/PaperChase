@@ -83,6 +83,10 @@ app.factory('Base64', function() {
     };
 });
 
+app.factory('Address',function() {
+    return 'http://localhost\\:5000/api';
+});
+
 app.factory('UserServices', function ($http, Base64) {
 //app.factory('Auth', function ($cookieStore, $http) {
 //    initialize to whatever is in the cookie, if anything
@@ -112,12 +116,10 @@ app.factory('UserServices', function ($http, Base64) {
     };
 });
 
-app.factory('CategoryAPI', function($http, $resource) {
+app.factory('CategoryAPI', function($http, $resource, Address) {
     // Define the resource for the category API to be shared by all other services and controllers
-    
-//    Auth.setCredentials('dedalusj@gmail.com','idathik');
-	
-	return $resource('http://localhost\\:5000/api/categories/:categoryId/:resource', {categoryId:'@id', resource: '@res'});
+    var resourceAddress = Address.concat('/categories/:categoryId/:resource');
+    return $resource(resourceAddress,{categoryId:'@id', resource: '@res'});
 });
 
 app.factory('CategoryServices', function(CategoryAPI) {
