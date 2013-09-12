@@ -7,8 +7,6 @@ from ..services import categories, journals
 from ..models import *
 from ..core import mail
 
-from flask import current_app
-
 subcategory_fields = {
     'name': fields.String,
     'id': fields.Integer
