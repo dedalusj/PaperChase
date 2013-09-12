@@ -1,4 +1,4 @@
-app.controller("mainController", function($scope, $location, UserServices) {
+app.controller("mainController", ['$scope', '$location', 'UserServices', function($scope, $location, UserServices) {
     $scope.isLogged = function() {
         return UserServices.isLogged();
     };
@@ -9,9 +9,9 @@ app.controller("mainController", function($scope, $location, UserServices) {
     $scope.isActive = function(route) {
         return route === $location.path();
     };
-});
+}]);
 
-app.controller("categoryController", function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+app.controller("categoryController", ['$scope', 'CategoryAPI', 'CategoryServices',' SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
 
     $scope.categories = CategoryServices.getCategories();
     $scope.subcategories = [];
@@ -36,9 +36,9 @@ app.controller("categoryController", function($scope, CategoryAPI, CategoryServi
         $scope.journals = CategoryAPI.query({categoryId: categoryId, resource: 'journals'});
         $scope.selectedSubcategoryId = categoryId;
     };
-});
+}]);
 
-app.controller("suggestionController", function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServices',' SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
     
     $scope.categories = CategoryServices.getCategories();
     $scope.category = [];
@@ -71,11 +71,11 @@ app.controller("suggestionController", function($scope, CategoryAPI, CategorySer
             });
         }
     };
-});
+}]);
 
-app.controller("loginController", function($scope, $http, $location, UserServices) {
+app.controller("loginController", ['$scope', '$http', '$location', 'UserServices', function($scope, $http, $location, UserServices) {
     $scope.loginKUWS = function() {
         UserServices.setCredentials($scope.email,$scope.password);
         $location.path( "/home" );
     };
-});
+}]);

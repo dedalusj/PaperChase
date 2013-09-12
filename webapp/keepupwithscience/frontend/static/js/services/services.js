@@ -83,11 +83,7 @@ app.factory('Base64', function() {
     };
 });
 
-app.factory('Address',function() {
-    return 'http://localhost\\:5000/api';
-});
-
-app.factory('UserServices', function ($http, Base64, Address) {
+app.factory('UserServices', ['$http', 'Base64', function ($http, Base64) {
 //app.factory('Auth', function ($cookieStore, $http) {
 //    initialize to whatever is in the cookie, if anything
 //    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
@@ -124,13 +120,12 @@ app.factory('UserServices', function ($http, Base64, Address) {
             return user.isLogged;
         }
     };
-});
+}]);
 
-app.factory('CategoryAPI', function($http, $resource, Address) {
+app.factory('CategoryAPI', ['$http', '$resource', function($http, $resource) {
     // Define the resource for the category API to be shared by all other services and controllers
-    var resourceAddress = Address.concat('/categories/:categoryId/:resource');
-    return $resource(resourceAddress,{categoryId:'@id', resource: '@res'});
-});
+    return $resource('http://localhost\\:5000/api/categories/:categoryId/:resource',{categoryId:'@id', resource: '@res'});
+}]);
 
 app.factory('CategoryServices', function(CategoryAPI) {
     // defines a categories service that can load the list from the backend and can cache it 
@@ -150,7 +145,7 @@ app.factory('CategoryServices', function(CategoryAPI) {
     };
 });
 
-app.factory('SubcategoryServices', function(CategoryAPI) {
+app.factory('SubcategoryServices', ['CategoryAPI', function(CategoryAPI) {
     // defines a subcategories service that can load the list from the backend or returned cached data if the id of the category is unchanged 
     var data;
     var categoryId;
@@ -168,4 +163,4 @@ app.factory('SubcategoryServices', function(CategoryAPI) {
             }
         }
     };
-});
+}]);
