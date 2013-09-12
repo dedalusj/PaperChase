@@ -87,7 +87,7 @@ app.factory('Address',function() {
     return 'http://localhost\\:5000/api';
 });
 
-app.factory('UserServices', function ($http, Base64) {
+app.factory('UserServices', function ($http, Base64, Address) {
 //app.factory('Auth', function ($cookieStore, $http) {
 //    initialize to whatever is in the cookie, if anything
 //    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
@@ -98,9 +98,19 @@ app.factory('UserServices', function ($http, Base64) {
     return {
         setCredentials: function (username, password) {
             var encoded = Base64.encode(username + ':' + password);
-            $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
-            user.isLogged = true;
-            user.username = username;
+            var escaped_email = encodeURIComponent(username);
+            var api_address = 'http://localhost:5000/api/users/'.concat(escaped_email);
+            $http({method: 'GET', url: api_address, headers: {'Authorization': 'Basic '.concat(encoded)}
+            }).success(function (data, status, headers, config) {
+                $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
+                user.isLogged = true;
+                user.username = username;
+            }).error(function (data, status, headers, config) {
+                document.execCommand("ClearAuthenticationCache");
+                $http.defaults.headers.common.Authorization = 'Basic ';
+                user.isLogged = false;
+                user.username = '';
+            });
 //            $cookieStore.put('authdata', encoded);
         },
         clearCredentials: function () {
