@@ -11,7 +11,11 @@ app.controller("mainController", ['$scope', '$location', 'UserServices', functio
     };
 }]);
 
-app.controller("categoryController", ['$scope', 'CategoryAPI', 'CategoryServices',' SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+app.controller("homeController", ['$scope', function($scope) {
+
+}]);
+
+app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'CategoryServices', 'SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
 
     $scope.categories = CategoryServices.getCategories();
     $scope.subcategories = [];
@@ -38,7 +42,7 @@ app.controller("categoryController", ['$scope', 'CategoryAPI', 'CategoryServices
     };
 }]);
 
-app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServices',' SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServices', 'SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
     
     $scope.categories = CategoryServices.getCategories();
     $scope.category = [];
@@ -64,10 +68,6 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServic
                 method: "POST",
                 data: angular.toJson(postData),
                 headers: {'Content-Type': 'application/json'}
-            }).success(function (data, status, headers, config) {
-//            do something with success
-            }).error(function (data, status, headers, config) {
-//            do we need this?
             });
         }
     };
@@ -75,7 +75,9 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServic
 
 app.controller("loginController", ['$scope', '$http', '$location', 'UserServices', function($scope, $http, $location, UserServices) {
     $scope.loginKUWS = function() {
-        UserServices.setCredentials($scope.email,$scope.password);
-        $location.path( "/home" );
+        UserServices.verifyCredentials($scope.email,$scope.password).then(function() { 
+            UserServices.setCredentials($scope.email,$scope.password);
+            $location.path( "/home" ); 
+        });
     };
 }]);

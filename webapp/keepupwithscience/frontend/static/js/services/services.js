@@ -92,21 +92,17 @@ app.factory('UserServices', ['$http', 'Base64', function ($http, Base64) {
     		     username: ''};
     
     return {
-        setCredentials: function (username, password) {
+        verifyCredentials: function(username, password) {
             var encoded = Base64.encode(username + ':' + password);
             var escaped_email = encodeURIComponent(username);
             var api_address = 'http://localhost:5000/api/users/'.concat(escaped_email);
-            $http({method: 'GET', url: api_address, headers: {'Authorization': 'Basic '.concat(encoded)}
-            }).success(function (data, status, headers, config) {
-                $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
-                user.isLogged = true;
-                user.username = username;
-            }).error(function (data, status, headers, config) {
-                document.execCommand("ClearAuthenticationCache");
-                $http.defaults.headers.common.Authorization = 'Basic ';
-                user.isLogged = false;
-                user.username = '';
-            });
+            return $http({method: 'GET', url: api_address, headers: {'Authorization': 'Basic '.concat(encoded)}});
+        },
+        setCredentials: function (username, password) {
+            var encoded = Base64.encode(username + ':' + password);
+            $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
+            user.isLogged = true;
+            user.username = username;
 //            $cookieStore.put('authdata', encoded);
         },
         clearCredentials: function () {
@@ -127,7 +123,7 @@ app.factory('CategoryAPI', ['$http', '$resource', function($http, $resource) {
     return $resource('http://localhost\\:5000/api/categories/:categoryId/:resource',{categoryId:'@id', resource: '@res'});
 }]);
 
-app.factory('CategoryServices', function(CategoryAPI) {
+app.factory('CategoryServices', ['CategoryAPI', function(CategoryAPI) {
     // defines a categories service that can load the list from the backend and can cache it 
     var data;
     var categories = function(callback) {
@@ -136,6 +132,7 @@ app.factory('CategoryServices', function(CategoryAPI) {
     }
     return {
         getCategories: function(callback) {
+//            console.log('Get categories call');
             if(data) {
                 return data;
             } else {
@@ -143,7 +140,7 @@ app.factory('CategoryServices', function(CategoryAPI) {
             }
         }
     };
-});
+}]);
 
 app.factory('SubcategoryServices', ['CategoryAPI', function(CategoryAPI) {
     // defines a subcategories service that can load the list from the backend or returned cached data if the id of the category is unchanged 
