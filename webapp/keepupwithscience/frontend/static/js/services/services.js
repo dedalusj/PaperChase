@@ -83,10 +83,9 @@ app.factory('Base64', function() {
     };
 });
 
-app.factory('UserServices', ['$http', 'Base64', function ($http, Base64) {
-//app.factory('Auth', function ($cookieStore, $http) {
+app.factory('UserServices', ['$http', '$cookieStore', 'Base64', function ($http, $cookieStore, Base64) {
 //    initialize to whatever is in the cookie, if anything
-//    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
+    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
     
     var user = { isLogged: false,
     		     username: ''};
@@ -103,14 +102,14 @@ app.factory('UserServices', ['$http', 'Base64', function ($http, Base64) {
             $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
             user.isLogged = true;
             user.username = username;
-//            $cookieStore.put('authdata', encoded);
+            $cookieStore.put('authdata', encoded);
         },
         clearCredentials: function () {
             document.execCommand("ClearAuthenticationCache");
             $http.defaults.headers.common.Authorization = 'Basic ';
             user.isLogged = false;
             user.username = '';
-//            $cookieStore.remove('authdata');
+            $cookieStore.remove('authdata');
         },
         isLogged: function() {
             return user.isLogged;

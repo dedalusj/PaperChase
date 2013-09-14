@@ -1,4 +1,4 @@
-var app = angular.module('KUWSApp',["ngResource"]).
+var app = angular.module('KUWSApp',["ngResource","ngCookies"]).
   config(['$routeProvider', '$locationProvider', '$httpProvider',
           function($routeProvider, $locationProvider, $httpProvider) {
               $routeProvider.
