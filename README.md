@@ -16,5 +16,13 @@ Details
 
 The core of the project is a backend server built using the [Flask](http://flask.pocoo.org/) microframework for Python and serving a REST-like API for clients to connect to.
 
+Requirements
+------------
+
+* Mac OS X
+* MySQL 5.6.12
+* Redis
+* Python 2.7
+
 Status
 ------
