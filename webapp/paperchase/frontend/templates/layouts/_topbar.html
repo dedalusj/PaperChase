@@ -1,0 +1,14 @@
+<div class="navbar navbar-fixed-top navbar-inverse">
+  <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='favicon.ico') }}" alt="PC" width="20" height="20"></a>
+  <ul class="nav navbar-nav">
+    <li {% if 'main.index' == request.endpoint %} class="active"{% endif %}><a href="#">Home</a></li>
+  </ul>
+  <ul class="nav navbar-nav pull-right">
+  	{% if current_user.is_authenticated() -%}
+  	  <li {% if 'security.logout' == request.endpoint %} class="active"{% endif %}><a href="{{ url_for('security.logout') }}">Logout</a></li>
+  	{%- else -%}
+  	  <li {% if 'security.login' == request.endpoint %} class="active"{% endif %}><a href="{{ url_for('security.login') }}">Login</a></li>
+  	  <li {% if 'security.register' == request.endpoint %} class="active"{% endif %}><a style="color: orange;" href="{{ url_for('security.register') }}">Sign Up</a></li>
+  	{%- endif %}
+  </ul>
+</div>

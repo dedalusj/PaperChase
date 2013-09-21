@@ -8,8 +8,8 @@
 
 from flask.ext.script import Manager
 
-from keepupwithscience.api import create_app
-from keepupwithscience.manage import CreateJournalCommand, DeleteJournalCommand, ResetJournalCommand, ListJournalsCommand, CreateCategoryCommand, DeleteCategoryCommand, ListCategoriesCommand, ListJournalCategoriesCommand, AddCategoriesToJournalCommand, DeleteCategoryFromJournalCommand
+from paperchase.api import create_app
+from paperchase.manage import CreateJournalCommand, DeleteJournalCommand, ResetJournalCommand, ListJournalsCommand, CreateCategoryCommand, DeleteCategoryCommand, ListCategoriesCommand, ListJournalCategoriesCommand, AddCategoriesToJournalCommand, DeleteCategoryFromJournalCommand
 
 manager = Manager(create_app())
 manager.add_command('create_journal', CreateJournalCommand())

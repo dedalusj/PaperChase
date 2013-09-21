@@ -8,9 +8,9 @@ from alembic import context
 from sqlalchemy import engine_from_config, pool
 from logging.config import fileConfig
 
-from keepupwithscience.models import *
-from keepupwithscience.core import db
-from keepupwithscience.api import create_app
+from paperchase.models import *
+from paperchase.core import db
+from paperchase.api import create_app
 
 app = create_app()
 

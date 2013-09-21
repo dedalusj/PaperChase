@@ -1,9 +1,9 @@
-#!kuws/bin/python
+#!PC/bin/python
 
 from werkzeug.serving import run_simple
 from werkzeug.wsgi import DispatcherMiddleware
 
-from keepupwithscience import api, frontend
+from paperchase import api, frontend
 
 application = DispatcherMiddleware(frontend.create_app(), {
     '/api': api.create_app()
