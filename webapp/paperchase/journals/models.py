@@ -39,7 +39,7 @@ class Journal(db.Model):
     categories = db.relationship('Category', secondary=journals_categories, backref=db.backref('journals', lazy='dynamic'), lazy = 'dynamic')
     
     def __str__(self):
-            return self.title
+        return self.title
             
 class Path(db.Model):
     __tablename__ = 'paths'

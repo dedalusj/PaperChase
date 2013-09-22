@@ -2,10 +2,13 @@ from flask.ext.restful import Resource, fields, marshal
 from flask_security import http_auth_required
 from flask import request
 from sqlalchemy import or_
+from sqlalchemy.orm import eagerload
 from flask.ext.mail import Message
-from ..services import categories, journals
+from ..services import categories, journals, users
 from ..models import *
 from ..core import mail
+
+from flask import current_app
 
 subcategory_fields = {
     'name': fields.String,
@@ -20,7 +23,8 @@ category_fields = {
 
 journal_fields = {
     'title': fields.String,
-    'id': fields.Integer
+    'id': fields.Integer,
+    'subscribed': fields.Boolean
 }
 
 class CategoryListAPI(Resource):
@@ -35,7 +39,7 @@ class CategoryAPI(Resource):
         category = categories.get(id)
         if category is None:
             abort(404)
-        return { 'category': marshal(category, category_fields) }
+        return marshal(category, category_fields)
         
 class SubcategoryListAPI(Resource):
     decorators = [http_auth_required]
@@ -52,15 +56,19 @@ class CategoryJournalsAPI(Resource):
         category = categories.get(id)
         if category is None:
             abort(404)
+        user = users.first(email = request.authorization.username)
+        user_subscriptions = user.subscriptions.all()
         # every request for the journals of a category should return the journals of the parent category as well
-        journalList = Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == category.id, journals_categories.c.category_id == category.parent_id))
+        journalList = Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == category.id, journals_categories.c.category_id == category.parent_id)).all()
+        for j in journalList:
+            j.subscribed = (j in user_subscriptions)
         return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalListAPI(Resource):
     decorators = [http_auth_required]
     def get(self):
         journalList = journals.all()
-        return { 'journals': map(lambda j: marshal(j, journal_fields), journalList) }
+        return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalAPI(Resource):
     decorators = [http_auth_required]
@@ -68,7 +76,7 @@ class JournalAPI(Resource):
         journal = journals.get(id)
         if journal is None:
             abort(404)
-        return { 'journal': marshal(journal, journal_fields) }
+        return marshal(journal, journal_fields)
         
 class SuggestionAPI(Resource):
     decorators = [http_auth_required]

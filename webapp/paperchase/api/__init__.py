@@ -11,7 +11,7 @@ from functools import wraps
 from .. import factory
 from flask.ext.restful import Api
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
-from .users import UserAPI
+from .users import UserAPI, SubscriptionListAPI
 
 def create_app(settings_override=None):
     """Returns the paperchase API application instance"""
@@ -29,5 +29,6 @@ def create_app(settings_override=None):
     api.add_resource(SuggestionAPI, '/suggestion')
     
     api.add_resource(UserAPI, '/users/<string:email>')
+    api.add_resource(SubscriptionListAPI, '/subscriptions')
     
     return app
