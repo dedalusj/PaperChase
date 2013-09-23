@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+"""
+    paperchase.settings
+    ~~~~~~~~~~~~~~~
+
+    paperchase settings module
+"""
+
+from datetime import timedelta
+import logging
+
+scraper_config = {
+    "User-agent":   "scraper-v{0}".format(0.01),
+
+    # How often to look for updates in minutes
+    "update_frequency": 5,
+
+    # How often to update the metadata information about a feed in days.
+    "metadata_update": 1,
+    
+    "log_level": logging.DEBUG,
+}
+
+DEBUG = True
+CSRF_ENABLED = True
+SECRET_KEY = 'SECRET_KEY'
+
+SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost:3306/development?charset=utf8'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERYBEAT_SCHEDULE = {
+    'refresh-journals': {
+        'task': 'paperchase.tasks.get_journals',
+        'schedule': timedelta(minutes=scraper_config.get("update_frequency"))
+    },
+}
+
+#CELERY_TIMEZONE = 'UTC'
+
+SECURITY_REGISTERABLE = True
+SECURITY_PASSWORD_HASH = 'bcrypt'
+SECURITY_TRACKABLE = True
+SECURITY_PASSWORD_SALT = '$blahblah'
+
+MAIL_DEFAULT_SENDER = 'your.email@goes.here'
+MAIL_SERVER='smtp.email.com'
+MAIL_PORT=465
+MAIL_USE_SSL=True
+MAIL_USERNAME = 'your.email@goes.here'
+MAIL_PASSWORD = 'password'
