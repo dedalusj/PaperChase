@@ -77,3 +77,8 @@ The backend API is still rapidly evolving and as such is currently undocumented.
 * Setting articles attributes (read/unread, scores, etc.) on the backend through API post requests.
 * Keywords tuning view.
 * Main view with articles.
+
+#### Other Clients
+
+* iOS client
+* Mac OS X client
