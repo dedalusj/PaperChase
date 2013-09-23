@@ -58,3 +58,16 @@ class User(UserMixin, db.Model):
     
     def __str__(self):
         return self.email
+    
+    def subscribe(self, journal):
+        if not self.is_subscribed(journal):
+            self.subscriptions.append(journal)
+            return self
+        
+    def unsubscribed(self, journal):
+        if self.is_subscribed(journal):
+            self.subscriptions.remove(journal)
+            return self
+        
+    def is_subscribed(self, journal):
+        return self.subscriptions.filter(subscriptions_users.c.journal_id == journal.id).count() > 0
