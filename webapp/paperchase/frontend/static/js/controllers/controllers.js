@@ -15,7 +15,8 @@ app.controller("homeController", ['$scope', function($scope) {
 
 }]);
 
-app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'CategoryServices', 'SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+//app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'CategoryServices', function($scope, CategoryAPI, CategoryServices){
+app.controller("subscriptionsController", ['$scope', 'CategoryServices', function($scope, CategoryServices){
 
     $scope.categories = CategoryServices.getCategories();
     $scope.subcategories = [];
@@ -30,19 +31,27 @@ app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'CategorySer
     };
     
     $scope.updateSubcategories = function($event, categoryId) {
-        $scope.subcategories = SubcategoryServices.getSubcategories(categoryId);
+        $scope.subcategories = CategoryServices.getSubcategories(categoryId);
         $scope.journals = [];
         $scope.selectedCategoryId = categoryId;
         $scope.selectedSubcategoryId = -1;
     };
     
     $scope.updateJournals = function($event, categoryId) {
-        $scope.journals = CategoryAPI.query({categoryId: categoryId, resource: 'journals'});
+        $scope.journals = CategoryServices.getJournals(categoryId);//   CategoryAPI.query({categoryId: categoryId, resource: 'journals'});
         $scope.selectedSubcategoryId = categoryId;
+    };
+    
+    $scope.subscribe = function($event, journalId) {
+        console.log('subscribe to ' + journalId.toString());
+    };
+    
+    $scope.unsubscribe = function($event, journalId) {
+        console.log('unsubscribe from ' + journalId.toString());
     };
 }]);
 
-app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServices', 'SubcategoryServices', function($scope, CategoryAPI, CategoryServices, SubcategoryServices){
+app.controller("suggestionController", ['$scope', 'CategoryServices', function($scope, CategoryServices){
     
     $scope.categories = CategoryServices.getCategories();
     $scope.category = [];
@@ -51,7 +60,7 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', 'CategoryServic
     $scope.subcategory = [];
     
     $scope.updateSubcategories = function() {
-        $scope.subcategories = SubcategoryServices.getSubcategories($scope.category.id);
+        $scope.subcategories = CategoryServices.getSubcategories($scope.category.id);
     };
     
     $scope.formatAndSubmit = function(suggestion) {

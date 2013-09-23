@@ -124,38 +124,48 @@ app.factory('CategoryAPI', ['$http', '$resource', function($http, $resource) {
 
 app.factory('CategoryServices', ['CategoryAPI', function(CategoryAPI) {
     // defines a categories service that can load the list from the backend and can cache it 
-    var data;
+    var categoriesData;
     var categories = function(callback) {
-        data = CategoryAPI.query(callback);
-        return data;
+        categoriesData = CategoryAPI.query(callback);
+        return categoriesData;
     }
+
+    var subcategoriesData;
+    var mainCategoryId;
+    var subcategories = function(parentId, callback) {
+        mainCategoryId = parentId;
+        subcategoriesData = CategoryAPI.query({categoryId: parentId, resource: 'subcategories'},callback);
+        return subcategoriesData;
+    }
+    
+    var journalsData;
+    var categoryId;
+    var journals = function(catId, callback) {
+        categoryId = catId;
+        journalsData = CategoryAPI.query({categoryId: catId, resource: 'journals'},callback);
+        return journalsData;
+    }
+
     return {
         getCategories: function(callback) {
-//            console.log('Get categories call');
-            if(data) {
-                return data;
+            if(categoriesData) {
+                return categoriesData;
             } else {
                 return categories(callback); 
             }
-        }
-    };
-}]);
-
-app.factory('SubcategoryServices', ['CategoryAPI', function(CategoryAPI) {
-    // defines a subcategories service that can load the list from the backend or returned cached data if the id of the category is unchanged 
-    var data;
-    var categoryId;
-    var subcategories = function(parentId, callback) {
-        categoryId = parentId;
-        data = CategoryAPI.query({categoryId: parentId, resource: 'subcategories'},callback);
-        return data;
-    }
-    return {
+        },
         getSubcategories: function(parentId, callback) {
-            if (data && parentId === categoryId) {
-                return data;
+            if (subcategoriesData && parentId === mainCategoryId) {
+                return subcategoriesData;
             } else {
                 return subcategories(parentId, callback); 
+            }
+        },
+        getJournals: function(catId, callback) {
+            if (journalsData && catId === categoryId) {
+                return journalsData;
+            } else {
+                return journals(catId, callback); 
             }
         }
     };
