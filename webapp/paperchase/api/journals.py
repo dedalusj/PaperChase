@@ -1,6 +1,6 @@
 from flask.ext.restful import Resource, fields, marshal
 from flask_security import http_auth_required
-from flask import request
+from flask import request, abort
 from sqlalchemy import or_
 from sqlalchemy.orm import eagerload
 from flask.ext.mail import Message
