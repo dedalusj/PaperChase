@@ -20,8 +20,8 @@
     <p class="text-center" ng-hide="journals.length"> Please select a subcategory </p>
     <div class="list-group" ng-show="journals.length">
       <a href="#/subscriptions" class="list-group-item" ng-repeat="journal in journals">{{ journal.title }}
-      <button ng-show="!journal.subscribed" type="button" class="btn btn-xs pull-right btn-primary">Subscribe</button>
-      <button ng-show="journal.subscribed" type="button" class="btn btn-xs pull-right btn-danger">Unsubscribe</button>
+      <button ng-show="!journal.subscribed" type="button" class="btn btn-xs pull-right btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
+      <button ng-show="journal.subscribed" type="button" class="btn btn-xs pull-right btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
       </a>
     </div>
     <p class="text-center" ng-show="journals.length"><a href="#/suggestion">Suggest a new journal</a></p>

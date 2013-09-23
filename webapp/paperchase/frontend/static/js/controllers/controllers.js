@@ -16,7 +16,7 @@ app.controller("homeController", ['$scope', function($scope) {
 }]);
 
 //app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'CategoryServices', function($scope, CategoryAPI, CategoryServices){
-app.controller("subscriptionsController", ['$scope', 'CategoryServices', function($scope, CategoryServices){
+app.controller("subscriptionsController", ['$scope', 'CategoryServices', 'SubscriptionAPI', function($scope, CategoryServices, SubscriptionAPI){
 
     $scope.categories = CategoryServices.getCategories();
     $scope.subcategories = [];
@@ -43,10 +43,14 @@ app.controller("subscriptionsController", ['$scope', 'CategoryServices', functio
     };
     
     $scope.subscribe = function($event, journalId) {
-        console.log('subscribe to ' + journalId.toString());
+        var newSubscription = new SubscriptionAPI({journal_id: journalId});
+        newSubscription.$save();
     };
     
     $scope.unsubscribe = function($event, journalId) {
+        var newSubscription = new SubscriptionAPI({journal_id: journalId});
+        console.log(newSubscription);
+        newSubscription.$delete();
         console.log('unsubscribe from ' + journalId.toString());
     };
 }]);
