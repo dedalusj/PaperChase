@@ -82,7 +82,7 @@ class SuggestionAPI(Resource):
     decorators = [http_auth_required]
     def post(self):
         # this should be shipped to celery
-        msg = Message('Journal suggestion', sender='dedalusj@gmail.com', recipients=['dedalusj@gmail.com'])
+        msg = Message('Journal suggestion', sender='youremail@goes.here', recipients=['youremail@goes.here'])
         msg.body = """{0}""".format(str(request.json))
         mail.send(msg)      
         return 201
