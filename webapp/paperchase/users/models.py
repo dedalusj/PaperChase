@@ -64,7 +64,7 @@ class User(UserMixin, db.Model):
             self.subscriptions.append(journal)
             return self
         
-    def unsubscribed(self, journal):
+    def unsubscribe(self, journal):
         if self.is_subscribed(journal):
             self.subscriptions.remove(journal)
             return self

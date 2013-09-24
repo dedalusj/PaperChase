@@ -28,10 +28,10 @@ class SubscriptionListAPI(Resource):
         users.save(user.subscribe(journal))
         return '', 201
     
-    def delete(self):
-        current_app.logger.debug(request.headers)
-#        journal_id = request.json['journal_id']
-#        current_app.logger.debug('Deleted subscription with id: {0}'.format(journal_id))
-    #        abort_if_todo_doesnt_exist(todo_id)
-    #        del TODOS[todo_id]
+class SubscriptionAPI(Resource):
+    decorators = [http_auth_required]
+    def delete(self,id):
+        journal = journals.get(id)
+        user = request_user()
+        users.save(user.unsubscribe(journal))
         return '', 204

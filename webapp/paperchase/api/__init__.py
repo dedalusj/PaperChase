@@ -12,7 +12,7 @@ from .. import factory
 from flask.ext.restful import Api
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
 from .users import UserAPI
-from .subscriptions import SubscriptionListAPI
+from .subscriptions import SubscriptionListAPI, SubscriptionAPI
 
 def create_app(settings_override=None):
     """Returns the paperchase API application instance"""
@@ -31,5 +31,6 @@ def create_app(settings_override=None):
     
     api.add_resource(UserAPI, '/users/<string:email>')
     api.add_resource(SubscriptionListAPI, '/subscriptions')
+    api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
     
     return app
