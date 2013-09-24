@@ -167,6 +167,15 @@ app.factory('CategoryServices', ['CategoryAPI', function(CategoryAPI) {
             } else {
                 return journals(catId, callback); 
             }
+        },
+        clearCategories: function() {
+            categforiesData = undefined; 
+        },
+        clearSubcategories: function() {
+            subcategoriesData = undefined;
+        },
+        clearJournals: function() {
+            journalsData = undefined;
         }
     };
 }]);
