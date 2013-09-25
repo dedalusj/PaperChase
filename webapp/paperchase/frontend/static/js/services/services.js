@@ -84,11 +84,15 @@ app.factory('Base64', function() {
 });
 
 app.factory('UserServices', ['$http', '$cookieStore', 'Base64', function ($http, $cookieStore, Base64) {
-//    initialize to whatever is in the cookie, if anything
-    $http.defaults.headers.common['Authorization'] = 'Basic ' + $cookieStore.get('authdata');
     
-    var user = { isLogged: false,
-    		     username: ''};
+    var user = { isLogged: false };
+    authData = $cookieStore.get('authdata');
+    
+    if (authData) {
+        // initialize to whatever is in the cookie, if anything
+        $http.defaults.headers.common['Authorization'] = 'Basic ' + authData;
+        user.isLogged = true;
+    }
     
     return {
         verifyCredentials: function(username, password) {
@@ -101,14 +105,12 @@ app.factory('UserServices', ['$http', '$cookieStore', 'Base64', function ($http,
             var encoded = Base64.encode(username + ':' + password);
             $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
             user.isLogged = true;
-            user.username = username;
             $cookieStore.put('authdata', encoded);
         },
         clearCredentials: function () {
             document.execCommand("ClearAuthenticationCache");
             $http.defaults.headers.common.Authorization = 'Basic ';
             user.isLogged = false;
-            user.username = '';
             $cookieStore.remove('authdata');
         },
         isLogged: function() {
