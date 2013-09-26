@@ -11,6 +11,8 @@ import importlib
 from datetime import timedelta
 import feedparser
 from flask import Blueprint, request
+from passlib.hash import bcrypt
+from flask import current_app
 
 from .core import auth
 from .services import users
@@ -21,6 +23,10 @@ def get_pw(username):
     if user:
         return user.password
     return None
+
+@auth.hash_password
+def hash_pw(password):
+    return bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
 
 def register_blueprints(app, package_name, package_path):
     """Register all Blueprint instances on the specified Flask application found

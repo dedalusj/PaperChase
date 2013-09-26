@@ -13,3 +13,4 @@ flask-script
 flask-restful
 flask-assets
 flash-httpauth
+passlib
