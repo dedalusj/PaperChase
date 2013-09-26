@@ -10,8 +10,17 @@ import pkgutil
 import importlib
 from datetime import timedelta
 import feedparser
-
 from flask import Blueprint, request
+
+from .core import auth
+from .services import users
+
+@auth.get_password
+def get_pw(username):
+    user = users.first(email = username)
+    if user:
+        return user.password
+    return None
 
 def register_blueprints(app, package_name, package_path):
     """Register all Blueprint instances on the specified Flask application found

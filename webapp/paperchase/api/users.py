@@ -1,7 +1,7 @@
 from flask.ext.restful import Resource, fields, marshal
-from flask_security import http_auth_required
 from flask import request
 from ..services import users
+from ..core import auth
 
 user_fields = {
     'email': fields.String,
@@ -10,7 +10,7 @@ user_fields = {
 }
 
 class UserAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self, email):
         user = users.first(email = email)
         return marshal(user, user_fields)

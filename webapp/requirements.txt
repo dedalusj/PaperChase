@@ -11,6 +11,5 @@ requests
 lxml
 flask-script
 flask-restful
-flask-security
 flask-assets
-py-bcrypt
+flash-httpauth

@@ -1,7 +1,7 @@
 from flask.ext.restful import Resource, fields, marshal
-from flask_security import http_auth_required
 from flask import request, abort
 from ..services import users, journals
+from ..core import auth
 
 from flask import current_app
 
@@ -15,7 +15,7 @@ journal_fields = {
 }
 
 class SubscriptionListAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self):
         user = request_user()
         subscriptionsList = user.subscriptions
@@ -29,7 +29,7 @@ class SubscriptionListAPI(Resource):
         return '', 201
     
 class SubscriptionAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def delete(self,id):
         journal = journals.get(id)
         user = request_user()

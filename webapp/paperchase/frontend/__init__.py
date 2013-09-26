@@ -9,7 +9,6 @@
 from functools import wraps
 
 from flask import render_template
-from flask_security import login_required
 
 from .. import factory
 from . import assets
@@ -30,14 +29,3 @@ def create_app(settings_override=None):
 
 def handle_error(e):
     return render_template('errors/%s.html' % e.code), e.code
-
-def route(bp, *args, **kwargs):
-    def decorator(f):
-        @bp.route(*args, **kwargs)
-        @login_required
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            return f(*args, **kwargs)
-        return f
-
-    return decorator

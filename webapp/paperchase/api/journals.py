@@ -1,12 +1,11 @@
 from flask.ext.restful import Resource, fields, marshal
-from flask_security import http_auth_required
 from flask import request, abort
 from sqlalchemy import or_
 from sqlalchemy.orm import eagerload
 from flask.ext.mail import Message
 from ..services import categories, journals, users
 from ..models import *
-from ..core import mail
+from ..core import mail, auth
 
 from flask import current_app
 
@@ -28,13 +27,13 @@ journal_fields = {
 }
 
 class CategoryListAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self):
         categoryList = categories.filter(Category.parent_id == None)
         return map(lambda c: marshal(c, category_fields), categoryList)
 
 class CategoryAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self, id):
         category = categories.get(id)
         if category is None:
@@ -42,7 +41,7 @@ class CategoryAPI(Resource):
         return marshal(category, category_fields)
         
 class SubcategoryListAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self, id):
         category = categories.get(id)
         if category is None:
@@ -51,7 +50,7 @@ class SubcategoryListAPI(Resource):
         return map(lambda c: marshal(c, subcategory_fields), subcategoryList)
         
 class CategoryJournalsAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self, id):
         category = categories.get(id)
         if category is None:
@@ -65,13 +64,13 @@ class CategoryJournalsAPI(Resource):
         return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalListAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self):
         journalList = journals.all()
         return map(lambda j: marshal(j, journal_fields), journalList)
         
 class JournalAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def get(self, id):
         journal = journals.get(id)
         if journal is None:
@@ -79,7 +78,7 @@ class JournalAPI(Resource):
         return marshal(journal, journal_fields)
         
 class SuggestionAPI(Resource):
-    decorators = [http_auth_required]
+    decorators = [auth.login_required]
     def post(self):
         # this should be shipped to celery
         msg = Message('Journal suggestion', sender='youremail@goes.here', recipients=['youremail@goes.here'])

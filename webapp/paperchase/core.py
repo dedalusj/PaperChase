@@ -8,7 +8,7 @@
 
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security
+from flask.ext.httpauth import HTTPBasicAuth
 
 #: Flask-SQLAlchemy extension instance
 db = SQLAlchemy()
@@ -16,8 +16,8 @@ db = SQLAlchemy()
 #: Flask-Mail extension instance
 mail = Mail()
 
-#: Flask-Security extension instance
-security = Security()
+#: Basic authentication provider for the API
+auth = HTTPBasicAuth()
 
 class paperchaseError(Exception):
     """Base application error class."""
@@ -31,7 +31,6 @@ class paperchaseFormError(Exception):
 
     def __init__(self, errors=None):
         self.errors = errors
-
 
 class Service(object):
     """A :class:`Service` instance encapsulates common SQLAlchemy model
