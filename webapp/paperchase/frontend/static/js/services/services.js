@@ -83,7 +83,11 @@ app.factory('Base64', function() {
     };
 });
 
-app.factory('UserServices', ['$http', '$cookieStore', 'Base64', function ($http, $cookieStore, Base64) {
+app.factory('CRSFService', ['$cookies', function ($cookies) {
+    return $cookies['_csrf_token'];
+}]);
+
+app.factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', function ($http, $cookieStore, Base64, $cookies) {
     
     var user = { isLogged: false };
     authData = $cookieStore.get('authdata');
@@ -93,6 +97,9 @@ app.factory('UserServices', ['$http', '$cookieStore', 'Base64', function ($http,
         $http.defaults.headers.common['Authorization'] = 'Basic ' + authData;
         user.isLogged = true;
     }
+    
+    $http.defaults.headers.post['X-CSRFToken'] = $cookies['_csrf_token'];
+    $http.defaults.headers.delete = { 'X-CSRFToken' : $cookies['_csrf_token'] };
     
     return {
         verifyCredentials: function(username, password) {

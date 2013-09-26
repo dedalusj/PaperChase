@@ -10,7 +10,7 @@ import os
 
 from celery import Celery
 from flask import Flask
-from flask.ext.httpauth import HTTPBasicAuth
+from flask.ext.seasurf import SeaSurf
 
 from datetime import date
 
@@ -36,6 +36,7 @@ def create_app(package_name, package_path, settings_override=None, register_secu
 
     db.init_app(app)
     mail.init_app(app)
+    csrf = SeaSurf(app)
 	
     register_blueprints(app, package_name, package_path)
 
