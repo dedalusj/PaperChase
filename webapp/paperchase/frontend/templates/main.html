@@ -16,6 +16,7 @@
     <script src="/static/js/app.js"></script>
     <script src="/static/js/controllers/controllers.js"></script>
     <script src="/static/js/services/services.js"></script>
+    <script src="/static/js/directives/directives.js"></script>
     <link rel="shortcut icon" href="/static/img/favicon.ico">
     
   </head>
@@ -30,7 +31,7 @@
         <ul class="nav navbar-nav pull-right">
           <li href="" ng-show="isLogged()"><a ng-click="logoutPC()">Logout</a></li>
           <li ng-show="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li>
-          <li ng-show="!isLogged()"><a style="color: orange;" href="/register">Sign Up</a></li>
+          <li ng-show="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li>
         </ul>
       </div>
       <div class="main-frame">

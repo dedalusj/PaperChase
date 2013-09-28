@@ -6,6 +6,7 @@ var app = angular.module('PCApp',["ngResource","ngCookies"]).
                   when('/subscriptions', {templateUrl: 'static/partials/subscriptions.html', controller: 'subscriptionsController'}).
                   when('/suggestion', {templateUrl: 'static/partials/suggestion.html', controller: 'suggestionController'}).
                   when('/login', {templateUrl: 'static/partials/login.html', controller: 'loginController'}).
+                  when('/register', {templateUrl: 'static/partials/register.html', controller: 'registerController'}).
                   otherwise({redirectTo: '/home'});
               
               var interceptor = ['$location', '$q', function($location, $q) {

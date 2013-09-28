@@ -11,7 +11,7 @@ from functools import wraps
 from .. import factory
 from flask.ext.restful import Api
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
-from .users import UserAPI
+from .users import UserAPI, RegisterAPI
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
 
 def create_app(settings_override=None):
@@ -30,6 +30,8 @@ def create_app(settings_override=None):
     api.add_resource(SuggestionAPI, '/suggestion')
     
     api.add_resource(UserAPI, '/users/<string:email>')
+    api.add_resource(RegisterAPI, '/register')
+    
     api.add_resource(SubscriptionListAPI, '/subscriptions')
     api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
     

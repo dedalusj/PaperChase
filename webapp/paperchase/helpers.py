@@ -10,9 +10,8 @@ import pkgutil
 import importlib
 from datetime import timedelta
 import feedparser
-from flask import Blueprint, request
+from flask import Blueprint, request, current_app
 from passlib.hash import bcrypt
-from flask import current_app
 
 from .core import auth
 from .services import users
