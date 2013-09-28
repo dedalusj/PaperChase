@@ -7,4 +7,4 @@
 """
 
 from .journals import *
-from .papers import *
+from .users import *

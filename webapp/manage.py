@@ -9,19 +9,23 @@
 from flask.ext.script import Manager
 
 from paperchase.api import create_app
-from paperchase.manage import CreateJournalCommand, DeleteJournalCommand, ResetJournalCommand, ListJournalsCommand, CreateCategoryCommand, DeleteCategoryCommand, ListCategoriesCommand, ListJournalCategoriesCommand, AddCategoriesToJournalCommand, DeleteCategoryFromJournalCommand
+from paperchase.manage import *
 
 manager = Manager(create_app())
-manager.add_command('create_journal', CreateJournalCommand())
-manager.add_command('delete_journal', DeleteJournalCommand())
-manager.add_command('reset_journal', ResetJournalCommand())
-manager.add_command('list_journals', ListJournalsCommand())
-manager.add_command('create_category', CreateCategoryCommand())
-manager.add_command('delete_category', DeleteCategoryCommand())
-manager.add_command('list_categories', ListCategoriesCommand())
-manager.add_command('list_journal_categories', ListJournalCategoriesCommand())
-manager.add_command('add_categories_to_journal', AddCategoriesToJournalCommand())
-manager.add_command('delete_category_from_journal', DeleteCategoryFromJournalCommand())
+
+manager.add_command('create_user', CreateUser())
+manager.add_command('delete_user', DeleteUser())
+
+manager.add_command('create_journal',CreateJournal())
+manager.add_command('delete_journal',DeleteJournal())
+manager.add_command('reset_journal',ResetJournal())
+
+manager.add_command('create_category',CreateCategory())
+manager.add_command('delete_category',DeleteCategory())
+manager.add_command('add_category',AddCategoryToJournal())
+manager.add_command('remove_category',DeleteCategoryFromJournal())
+        
+manager.add_command('create_path',CreatePath())
 
 if __name__ == "__main__":
     manager.run()
