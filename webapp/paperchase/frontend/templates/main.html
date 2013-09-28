@@ -1,26 +1,25 @@
 <html>
   <head>
-    <title>Keep Up With Science</title>
-    <link rel="stylesheet" href="/static/css/PC.css">
+    <title>PaperChase</title>
+    {% assets "css_all" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
+    {% endassets %}
     
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-    <script src="/static/js/vendor/angular-resource.min.js"></script>
-    <script src="/static/js/vendor/angular-cookies.min.js"></script>
+    {% assets "js_all" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
     
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    
-    <script src="/static/js/app.js"></script>
-    <script src="/static/js/controllers/controllers.js"></script>
-    <script src="/static/js/services/services.js"></script>
-    <script src="/static/js/directives/directives.js"></script>
     <link rel="shortcut icon" href="/static/img/favicon.ico">
     
   </head>
   <body>
+    {% raw %}
     <div class="container" ng-app="PCApp" ng-controller="mainController">
       <div class="navbar navbar-fixed-top navbar-inverse">
         <a class="navbar-brand" href="#/home"><img src="/static/img/favicon.ico" alt="PC" width="20" height="20"></a>
@@ -38,5 +37,6 @@
         <ng-view>Loading...</ng-view>  
       </div>
     </div>
+    {% endraw %}
   </body>
 </html>
