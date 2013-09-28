@@ -6,9 +6,8 @@
     frontend application asset "pipeline"
 """
 
-import os
 from flask_assets import Environment, Bundle
-from ..helpers import splitall, assetsList
+from ..helpers import assetsList
 
 main_js_filename = "main.min.js"
 
