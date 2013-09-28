@@ -8,6 +8,7 @@
 
 import pkgutil
 import importlib
+import os
 from datetime import timedelta
 import feedparser
 from flask import Blueprint, request, current_app
@@ -86,3 +87,30 @@ def bozo_checker(bozo_exception):
         return_val = True
 
     return return_val
+    
+def splitall(path):
+    allparts = []
+    while 1:
+        parts = os.path.split(path)
+        if parts[0] == path:  # sentinel for absolute paths
+            allparts.insert(0, parts[0])
+            break
+        elif parts[1] == path: # sentinel for relative paths
+            allparts.insert(0, parts[1])
+            break
+        else:
+            path = parts[0]
+            allparts.insert(0, parts[1])
+    return allparts
+    
+def assetsList(app, folder = 'js', extension = 'js', exclusions = []):
+    files_list = []
+    for root, dirs, files in os.walk(os.path.join(app.static_folder,folder)):
+        for file in files:
+            if file.endswith("."+extension) and all(file != s for s in exclusions):
+                path_parts = splitall(root)
+                static_index = path_parts.index("static")
+                path_parts = path_parts[static_index+1:]
+                path_parts.append(file)
+                files_list.append('/'.join(path_parts))
+    return files_list

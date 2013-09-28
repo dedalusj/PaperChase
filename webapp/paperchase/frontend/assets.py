@@ -6,25 +6,22 @@
     frontend application asset "pipeline"
 """
 
+import os
 from flask_assets import Environment, Bundle
+from ..helpers import splitall, assetsList
 
-#: consolidated css bundle
-css_all = Bundle("css/PC.css",
-                 filters="cssmin", output="css/PC.min.css")
-
-#: application js bundle
-js_all = Bundle("js/vendor/angular-cookies.min.js",
-                "js/vendor/angular-resource.min.js",
-                "js/app.js",
-                "js/controllers/controllers.js",
-				"js/directives/directives.js",
-				"js/services/services.js",
-				filters="uglifyjs", output="js/main.min.js")
+main_js_filename = "main.min.js"
 
 def init_app(app):
     webassets = Environment(app)
+    
+    css_all = Bundle("css/PC.css", filters="cssmin", output="css/PC.min.css")
     webassets.register('css_all', css_all)
+    
+    js_list = assetsList(app, exclusions = [main_js_filename])
+    js_all = Bundle(*js_list, filters="uglifyjs", output="js/main.min.js")
     webassets.register('js_all', js_all)
+    
     webassets.manifest = 'cache' if not app.debug else False
     webassets.cache = not app.debug
     webassets.debug = app.debug
