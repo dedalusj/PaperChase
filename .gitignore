@@ -9,3 +9,7 @@ webapp/PC
 *.db
 
 settings.py
+
+.webassets-cache
+
+main.min.js
