@@ -13,3 +13,4 @@ settings.py
 .webassets-cache
 
 main.min.js
+PC.min.css
