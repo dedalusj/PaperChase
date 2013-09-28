@@ -17,7 +17,7 @@ from .subscriptions import SubscriptionListAPI, SubscriptionAPI
 def create_app(settings_override=None):
     """Returns the paperchase API application instance"""
 
-    app = factory.create_app(__name__, __path__, settings_override, register_security_blueprint=False)
+    app = factory.create_app(__name__, __path__, settings_override)
     api = Api(app)
     
     api.add_resource(CategoryListAPI, '/categories', endpoint = 'categories')
