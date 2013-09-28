@@ -7,7 +7,7 @@
 """
 
 import datetime
-from flask.ext.script import Command, prompt, prompt_pass
+from flask.ext.script import Command, prompt
 from werkzeug.datastructures import MultiDict
 
 from ..services import journals, categories, paths

@@ -26,6 +26,9 @@ manager.add_command('add_category',AddCategoryToJournal())
 manager.add_command('remove_category',DeleteCategoryFromJournal())
         
 manager.add_command('create_path',CreatePath())
+        
+manager.add_command('run_app',RunApp())
+manager.add_command('run_debug',RunDebug())
 
 if __name__ == "__main__":
     manager.run()

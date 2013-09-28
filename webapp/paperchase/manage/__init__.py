@@ -8,3 +8,4 @@
 
 from .journals import *
 from .users import *
+from .app import *

@@ -17,7 +17,11 @@ class CreateUser(Command):
 
     def run(self):
         email = prompt('email')
-        password = prompt('password')
+        password = prompt_pass('password')
+        confirm_password = prompt_pass('confirm password')
+        if password != confirm_password:
+            print '\nMismatching passwords'
+            return
         user = users.create( email = email, password = password, registered_at = datetime.datetime.utcnow(), active = True, confirmed_at = datetime.datetime.utcnow())
         print '\nUser created successfully'
         print 'User(id=%s email=%s)' % (user.id, user.title)
