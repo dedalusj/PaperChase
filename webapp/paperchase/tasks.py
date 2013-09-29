@@ -20,6 +20,7 @@ from lxml import etree
 from xml.etree import ElementTree as ET
 from HTMLParser import HTMLParser
 import urlparse
+from flask.ext.mail import Message
 
 from .core import mail
 from .factory import create_celery_app
@@ -259,3 +260,9 @@ def add_article(entry, journal_id):
         journal_id = journal_id
     )
     logger.debug("Added new entry with doi: {0}".format(paper.get("url")))
+    
+@celery.task
+def send_suggestion_email(json_msg):
+    msg = Message('Journal suggestion', sender='dedalusj@gmail.com', recipients=['dedalusj@gmail.com'])
+    msg.body = """{0}""".format(str(json_msg))
+    mail.send(msg)

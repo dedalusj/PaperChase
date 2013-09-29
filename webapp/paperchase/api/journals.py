@@ -2,10 +2,10 @@ from flask.ext.restful import Resource, fields, marshal
 from flask import request, abort
 from sqlalchemy import or_
 from sqlalchemy.orm import eagerload
-from flask.ext.mail import Message
 from ..services import categories, journals, users
 from ..models import *
-from ..core import mail, auth
+from ..core import auth
+from ..tasks import send_suggestion_email
 
 from flask import current_app
 
@@ -80,8 +80,5 @@ class JournalAPI(Resource):
 class SuggestionAPI(Resource):
     decorators = [auth.login_required]
     def post(self):
-        # this should be shipped to celery
-        msg = Message('Journal suggestion', sender='youremail@goes.here', recipients=['youremail@goes.here'])
-        msg.body = """{0}""".format(str(request.json))
-        mail.send(msg)      
+        send_suggestion_email.delay(request.json)
         return 201
