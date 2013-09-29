@@ -28,7 +28,7 @@ SECRET_KEY = 'SECRET_KEY'
 SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost:3306/development?charset=utf8'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
-
+CELERY_ALWAYS_EAGER = False
 CELERYBEAT_SCHEDULE = {
     'refresh-journals': {
         'task': 'paperchase.tasks.get_journals',
