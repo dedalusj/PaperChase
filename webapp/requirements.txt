@@ -6,7 +6,7 @@ Flask-Mail
 MySQL-python
 feedparser
 redis
-pytz
+pytz>=2013b
 requests
 lxml
 flask-script
