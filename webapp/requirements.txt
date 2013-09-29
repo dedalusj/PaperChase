@@ -12,7 +12,7 @@ lxml
 flask-script
 flask-restful
 flask-assets
-flash-httpauth
+flask-httpauth
 passlib
 flask-seasurf
 cssmin
