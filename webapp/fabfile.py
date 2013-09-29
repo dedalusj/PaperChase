@@ -20,8 +20,9 @@ def setup_redis():
     pass
     
 def setup_repo():
-    if run("git clone https://github.com/dedalusj/PaperChase.git .").failed:
-        run("git pull")
+    with settings(warn_only=True):
+        if run("git clone https://github.com/dedalusj/PaperChase.git .").failed:
+            run("git pull")
 
 def setup_venv():
     run("curl -O https://raw.github.com/pypa/virtualenv/1.9.X/virtualenv.py")
