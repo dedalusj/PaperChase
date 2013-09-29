@@ -16,3 +16,4 @@ flash-httpauth
 passlib
 flask-seasurf
 cssmin
+fabric
