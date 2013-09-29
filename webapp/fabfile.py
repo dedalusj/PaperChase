@@ -10,14 +10,6 @@ def outside():
 
 def run_celery(loglevel="info"):
     local("celery -A paperchase.tasks worker -B --loglevel=%s" % loglevel)    
-        
-def setup_mysql():
-    # setup mysql user and database here
-    pass
-
-def setup_redis():
-    # setup redis
-    pass
     
 def setup_repo():
     with settings(warn_only=True):
@@ -29,17 +21,23 @@ def setup_venv():
     run("python virtualenv.py PC")
     run("PC/bin/pip install -r requirements.txt")
 
+def update_database():
+    run("alembic upgrade head")
+
 def setup():
     code_dir = '/Users/paperchase/server'
+    local('mysqldump -u paperchase -p development > development.sql')
     with cd(code_dir):
-        setup_mysql()
-        setup_redis()
         setup_repo()
+        
     with cd(code_dir+'/webapp'):
         setup_venv()
-        run("mkdir log")    
+        put('development.sql', code_dir+'/webapp')
+        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect development < development.sql')
+        run("mkdir log")
     
 def deploy():
     code_dir = '/Users/paperchase/server/webapp'
+    put('paperchase/settings.py', code_dir+'/paperchase/')
     with cd(code_dir):
         pass
