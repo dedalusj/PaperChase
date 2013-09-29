@@ -105,7 +105,7 @@ def clean_element(tree_element):
         
     for attr in tree_element.keys():
         del tree_element.attrib[attr]
-    return tree_element.text + ''.join(ET.tostring(e) for e in tree_element)
+    return ET.tostring(tree_element)
     
 def extract_elements(article, paths):
     """
@@ -245,7 +245,7 @@ def add_article(entry, journal_id):
     stored_paper = papers.first(url=url)
     if stored_paper is not None:
         return
-        
+    
     paper = default_parser(entry)
     journal = journals.get(journal_id)
     paths = journal.paths.all()
