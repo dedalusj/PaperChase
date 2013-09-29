@@ -4,6 +4,8 @@ webapp/PC
 
 *.log
 
+*.sql
+
 *.espressostorage
 
 *.db
