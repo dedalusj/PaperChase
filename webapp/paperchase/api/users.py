@@ -24,6 +24,5 @@ class RegisterAPI(Resource):
         email = request.json['email']
         password = request.json['password']
         password = bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
-        # decode both email and password using hashing algorithm against the csrf_token
         user = users.create(email = email, password = password, registered_at = datetime.datetime.utcnow())
         return marshal(user, user_fields)

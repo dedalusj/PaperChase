@@ -2,12 +2,7 @@ from flask.ext.restful import Resource, fields, marshal
 from flask import request, abort
 from ..services import users, journals
 from ..core import auth
-
-from flask import current_app
-
-def request_user():
-    return users.first(email = request.authorization.username)
-
+from ..helpers import request_user
 
 journal_fields = {
     'title': fields.String,

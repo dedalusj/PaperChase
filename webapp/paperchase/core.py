@@ -59,6 +59,10 @@ class Service(object):
         """
         kwargs.pop('csrf_token', None)
         return kwargs
+    
+    def query(self):
+        """Return the query object for the model"""
+        return self.__model__.query
 
     def save(self, model):
         """Commits the model to the database and returns the model

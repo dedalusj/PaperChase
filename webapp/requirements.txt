@@ -2,6 +2,7 @@ flask
 alembic
 flask-sqlalchemy
 celery
+flower
 Flask-Mail
 MySQL-python
 feedparser

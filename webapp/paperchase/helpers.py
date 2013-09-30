@@ -28,6 +28,9 @@ def get_pw(username):
 def hash_pw(password):
     return bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
 
+def request_user():
+    return users.first(email = request.authorization.username)
+
 def register_blueprints(app, package_name, package_path):
     """Register all Blueprint instances on the specified Flask application found
     in all modules for the specified package.

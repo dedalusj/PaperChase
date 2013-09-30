@@ -13,6 +13,7 @@ from flask.ext.restful import Api
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
 from .users import UserAPI, RegisterAPI
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
+from .papers import PaperListAPI
 
 def create_app(settings_override=None):
     """Returns the paperchase API application instance"""
@@ -26,7 +27,6 @@ def create_app(settings_override=None):
     api.add_resource(CategoryJournalsAPI, '/categories/<int:id>/journals', endpoint = 'categoryJournal')
     api.add_resource(JournalListAPI, '/journals', endpoint = 'journals')
     api.add_resource(JournalAPI, '/journals/<int:id>', endpoint = 'journal')
-    
     api.add_resource(SuggestionAPI, '/suggestion')
     
     api.add_resource(UserAPI, '/users/<string:email>')
@@ -34,5 +34,7 @@ def create_app(settings_override=None):
     
     api.add_resource(SubscriptionListAPI, '/subscriptions')
     api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
+    
+    api.add_resource(PaperListAPI, '/papers')
     
     return app

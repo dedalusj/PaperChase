@@ -8,12 +8,12 @@
 
 from ..core import db
 from ..journals import Journal
+from ..papers import Paper
     
 subscriptions_users = db.Table(
     'subscriptions_users',
     db.Column('user_id', db.Integer(), db.ForeignKey('users.id'), nullable = False),
     db.Column('journal_id', db.Integer(), db.ForeignKey('journals.id'), nullable = False))
-
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -42,3 +42,6 @@ class User(db.Model):
         
     def is_subscribed(self, journal):
         return self.subscriptions.filter(subscriptions_users.c.journal_id == journal.id).count() > 0
+    
+    def papers(self):
+        return Paper.query.join(subscriptions_users, (subscriptions_users.c.journal_id == Paper.journal_id)).filter(subscriptions_users.c.user_id == self.id).order_by(Paper.created.desc())

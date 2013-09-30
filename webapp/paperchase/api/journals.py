@@ -7,8 +7,6 @@ from ..models import *
 from ..core import auth
 from ..tasks import send_suggestion_email
 
-from flask import current_app
-
 subcategory_fields = {
     'name': fields.String,
     'id': fields.Integer
@@ -26,6 +24,12 @@ journal_fields = {
     'subscribed': fields.Boolean
 }
 
+def get_category(id):
+    category = categories.get(id)
+    if category is None:
+        abort(404)
+    return category
+
 class CategoryListAPI(Resource):
     decorators = [auth.login_required]
     def get(self):
@@ -35,26 +39,20 @@ class CategoryListAPI(Resource):
 class CategoryAPI(Resource):
     decorators = [auth.login_required]
     def get(self, id):
-        category = categories.get(id)
-        if category is None:
-            abort(404)
+        category = get_category(id)
         return marshal(category, category_fields)
         
 class SubcategoryListAPI(Resource):
     decorators = [auth.login_required]
     def get(self, id):
-        category = categories.get(id)
-        if category is None:
-            abort(404)
+        category = get_category(id)
         subcategoryList = category.subcategories
         return map(lambda c: marshal(c, subcategory_fields), subcategoryList)
         
 class CategoryJournalsAPI(Resource):
     decorators = [auth.login_required]
     def get(self, id):
-        category = categories.get(id)
-        if category is None:
-            abort(404)
+        category = get_category(id)
         user = users.first(email = request.authorization.username)
         user_subscriptions = user.subscriptions.all()
         # every request for the journals of a category should return the journals of the parent category as well
