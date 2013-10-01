@@ -1,5 +1,5 @@
-from flask.ext.restful import Resource, fields, marshal, reqparse, types
-from flask import request, abort
+from flask.ext.restful import Resource, fields, marshal, reqparse
+
 from ..services import users, papers
 from ..core import auth
 from ..helpers import request_user
@@ -19,6 +19,8 @@ paper_fields = {
 }
 
 class PaperListAPI(Resource):
+    """API :class:`Resource` for a list of papers for the user in the request."""
+    
     decorators = [auth.login_required]
     def get(self):
         args = parser.parse_args()

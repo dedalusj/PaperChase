@@ -26,7 +26,6 @@ def find_journal():
     return None
 
 class CreateJournal(Command):
-    """Create a journal"""
 
     def run(self):
         title = prompt('Title')
@@ -37,7 +36,6 @@ class CreateJournal(Command):
         print 'Journal(id=%s title=%s)' % (journal.id, journal.title)
 
 class DeleteJournal(Command):
-    """Delete a journal"""
 
     def run(self):
         journal = find_journal()
@@ -60,7 +58,6 @@ class ResetJournal(Command):
         print 'Journal reset'
             
 class CreateCategory(Command):
-    """Create a category"""
 
     def run(self):
         name = prompt('Name')
@@ -70,7 +67,6 @@ class CreateCategory(Command):
         print 'Category(id=%s name=%s)' % (category.id, category.name)
 
 class DeleteCategory(Command):
-    """Delete a category"""
 
     def run(self):
         name = prompt('Name')
@@ -82,7 +78,6 @@ class DeleteCategory(Command):
         print 'Category deleted successfully'
             
 class AddCategoryToJournal(Command):
-    """Add categories to a journal"""
 
     def run(self):
         journal = find_journal()
@@ -107,7 +102,6 @@ class AddCategoryToJournal(Command):
         
             
 class DeleteCategoryFromJournal(Command):
-    """Remove a category from a journal"""
 
     def run(self):
         journal = find_journal()
@@ -126,7 +120,6 @@ class DeleteCategoryFromJournal(Command):
         print 'Category remove from journal succesfully'
         
 class CreatePath(Command):
-    """Create a path"""
 
     def run(self):
         journal = find_journal()

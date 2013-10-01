@@ -7,20 +7,18 @@
 """
 
 import os
-
 from celery import Celery
 from flask import Flask
 from flask.ext.seasurf import SeaSurf
-
-from datetime import date
 
 from .core import db, mail
 from .helpers import register_blueprints
 
 def create_app(package_name, package_path, settings_override=None):
-    """Returns a :class:`Flask` application instance configured with common
+    """
+    Returns a :class:`Flask` application instance configured with common
     functionality for the paperchase platform.
-
+    
     :param package_name: application package name
     :param package_path: application package path
     :param settings_override: a dictionary of settings to override
@@ -40,8 +38,13 @@ def create_app(package_name, package_path, settings_override=None):
 
     return app
 
-
 def create_celery_app(app=None):
+    """
+    Returns a :class:`Celery` instance configured from the config dictionary
+    of the app.
+    
+    :param app: application
+    """
     app = app or create_app('paperchase', os.path.dirname(__file__))
     celery = Celery(__name__, broker=app.config['CELERY_BROKER_URL'])
     celery.conf.update(app.config)

@@ -7,16 +7,22 @@
 """
 
 from flask_assets import Environment, Bundle
+
 from ..helpers import assetsList
 
 main_js_filename = "main.min.js"
 
 def init_app(app):
+    """
+    Initialise the assets for the :class:`Flask` app
+    """
     webassets = Environment(app)
     
+    # style sheets
     css_all = Bundle("css/PC.css", filters="cssmin", output="css/PC.min.css")
     webassets.register('css_all', css_all)
     
+    # javascripts
     js_list = assetsList(app, exclusions = [main_js_filename])
     js_all = Bundle(*js_list, filters="uglifyjs", output="js/main.min.js")
     webassets.register('js_all', js_all)

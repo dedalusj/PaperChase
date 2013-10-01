@@ -14,9 +14,7 @@ class RunDebug(Command):
     )
     
     def run(self, host, port):
-        application = DispatcherMiddleware(frontend.create_app(), {
-            '/api': api.create_app()
-        })
+        application = DispatcherMiddleware(frontend.create_app(), {'/api': api.create_app()})
         run_simple(host, port, application, use_reloader=True, use_debugger=True)
 
 class RunApp(RunDebug):

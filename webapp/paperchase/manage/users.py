@@ -13,7 +13,6 @@ from werkzeug.datastructures import MultiDict
 from ..services import users
 
 class CreateUser(Command):
-    """Create a new user"""
 
     def run(self):
         email = prompt('email')
@@ -27,7 +26,6 @@ class CreateUser(Command):
         print 'User(id=%s email=%s)' % (user.id, user.title)
 
 class DeleteUser(Command):
-    """Delete a user"""
 
     def run(self):
         email = prompt('User email')

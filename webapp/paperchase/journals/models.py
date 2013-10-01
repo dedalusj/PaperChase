@@ -5,10 +5,12 @@
 
     Journal models
 """
+from sqlalchemy import or_
 
 from ..core import db
 from ..papers import Paper
 
+# many-to-many relationship table between categories and journals
 journals_categories = db.Table('journals_categories', db.Column('journal_id', db.Integer(), db.ForeignKey('journals.id')), db.Column('category_id', db.Integer(), db.ForeignKey('categories.id')))
 
 class Category(db.Model):
@@ -21,6 +23,10 @@ class Category(db.Model):
     
     def __str__(self):
         return self.name
+        
+    def all_journals(self):
+        """Return all the journals for a given category even the journals of its parent."""
+        return Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == self.id, journals_categories.c.category_id == self.parent_id))
             
 class Journal(db.Model):
     __tablename__ = 'journals'

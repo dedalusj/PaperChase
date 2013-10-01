@@ -8,18 +8,18 @@
 
 import logging
 import dateutil.parser
-from pytz import utc
 import time
 import datetime
-from datetime import timedelta, date
-from celery.utils.log import get_task_logger
 import feedparser
 import requests
-from xml.sax import SAXException
-from lxml import etree
-from xml.etree import ElementTree as ET
-from HTMLParser import HTMLParser
 import urlparse
+from pytz import utc
+from datetime import timedelta, date
+from celery.utils.log import get_task_logger
+from xml.sax import SAXException
+from xml.etree import ElementTree as ET
+from lxml import etree
+from HTMLParser import HTMLParser
 from flask.ext.mail import Message
 
 from .core import mail
@@ -33,21 +33,27 @@ celery = create_celery_app()
 
 logger = get_task_logger(__name__)
 logger.setLevel(scraper_config.get("log_level"))
+
 # create file handler which logs even debug messages
 fh = logging.FileHandler("log/tasks_{0}.log".format(date.today().isoformat()))
 fh.setLevel(scraper_config.get("log_level"))
+
 # create formatter and add it to the handlers
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 fh.setFormatter(formatter)
+
 # add the handlers to the logger
 logger.addHandler(fh)
 
 class MLStripper(HTMLParser):
+
     def __init__(self):
         self.reset()
         self.fed = []
+
     def handle_data(self, d):
         self.fed.append(d)
+
     def get_data(self):
         return ''.join(self.fed)
 
@@ -69,8 +75,14 @@ def make_absolute_url(relative_url, page_url):
 
 def feed_requester(feed_url):
     """ 
-    This function handles the requesting and parsing of the journal feed. The feed is requested and parsed using feedparser. If the function is successful it will return a list of dicts for each article in the feed. If the function is not successful it shall return None.
-    :param feed_url The url of the feed to retrieve.
+    This function handles the requesting and parsing of the journal feed.
+    The feed is requested and parsed using feedparser. If the function is successful it 
+    will return a list of dicts for each article in the feed. If the function is not
+    successful it shall return None.
+    
+    :param feed_url: A string with the url of the feed to retrieve.
+    
+    :return: the feed_data in dictionary format as parsed by feedparser.
     """
     feed_data = None
     try:
@@ -84,7 +96,6 @@ def feed_requester(feed_url):
 
     if feed_data.bozo:
         logger.info("Feed at {0}, generated bozo error: {1}.\n".format(feed_url, feed_data.bozo_exception))
-
         if not bozo_checker(feed_data.bozo_exception):
             return None
 
@@ -92,8 +103,11 @@ def feed_requester(feed_url):
 
 def clean_element(tree_element):
     """
-    Format an xml node element. It makes the node a paragraph node, remove all link tags (for now, later maybe more) and remove all attributes  
+    Format an xml node element. It makes the node a paragraph node, remove all 
+    link tags (for now, later maybe more) and remove all attributes  
+    
     :param tree_element: The element to format. tree_element must be an instance of etree._Element
+    
     :return: This function return a string repreesnting the element or None if the a non ElementTree type is passed
     """
     try:
@@ -109,10 +123,10 @@ def clean_element(tree_element):
     
 def extract_elements(article, paths):
     """
-    Scrape elements from the article webpage and insert them into the article dictionary  
+    Scrape elements from the article webpage and insert them into the article dictionary.
+    
     :param article: The article to add.
     :param paths: Paths is a dictionary containing the name of the element to parse from the webpage of the article as key and the xpath corresponding to it as value
-    :return: This function does not return anything.
     """
     try:
         r = requests.get(article.get("url"))
@@ -132,9 +146,12 @@ def extract_elements(article, paths):
 
 def default_parser(entry):
     """
-        Parse a raw entry from the feed, as extracted by feedparser, and fill it with the correct information we want to keep as journal entry
-        :param entry: The feed entry from feedparser
-        :return: It returns a dictionary for the article with all the keys necessary to instantiate a new article object for the database
+    Parse a raw entry from the feed, as extracted by feedparser,
+    and fill it with the correct information we want to keep as journal entry.
+    
+    :param entry: The feed entry from feedparser
+    
+    :return: It returns a dictionary for the article with all the keys necessary to instantiate a new article object for the database
     """
     
     article = { "title": entry.get("title", "No title"),
@@ -152,6 +169,8 @@ def default_parser(entry):
     # let's sanitize authors from unwanted html tags
     authors = strip_tags(authors)
     authors = authors.strip(' \n')
+    
+    # if the authors list is to long truncate it to 900 chars
     article['authors'] = (authors[:900] + '..') if len(authors) > 900 else authors
       
     return article
@@ -159,7 +178,11 @@ def default_parser(entry):
 @celery.task    
 def get_journals():
     """
-    Gets journals that needs to be updated from the database. The update frequency aka how many minutes between each time to request the article, is defined in the config (config.py). The method will update the last_checked column of the feed after is has put it on the queue.
+    Gets journals that needs to be updated from the database. 
+    The update frequency aka how many minutes between each time to 
+    request the article, is defined in the config (config.py). 
+    The method will update the last_checked column of the feed after is has 
+    put it on the queue.
     """
     journals_list = journals.filter(Journal.next_check <= datetime.datetime.utcnow()).all()
     for journal in journals_list:
@@ -167,19 +190,32 @@ def get_journals():
 
 @celery.task
 def get_papers(journal_id):
+    """
+    Fetch the papers, RSS feed, of a journal.
+    
+    :param journal_id: the id of the journal
+    """
     journal = journals.get(journal_id)
     logger.debug("Getting papers for journal: {0}".format(journal.title))
+    
     feed_url = journal.url
     feed_data = feed_requester(feed_url)
     if feed_data is not None and feed_data.get("entries"):
         for entry in feed_data.entries:
             add_article.delay(entry, journal.id)
+    
     update_check.delay(journal.id, feed_data)
     if days_since(datetime.datetime.utcnow(), journal.metadata_update) >= scraper_config.get("metadata_update"):
         update_metadata.delay(journal.id, feed_data) 
    
 @celery.task   
 def update_check(journal_id, feed_data):
+    """
+    Update the time of the next feed refresh for a journal using its fetched RSS feed.
+    
+    :param journal_id: the id of the journal
+    :param feed_data: the RSS feed data of the journal used to compute the next refresh time
+    """
     journal = journals.get(journal_id)
     logger.debug("Updating last_checked for journal: {0}".format(journal.title))
     journals.update(journal, last_checked = datetime.datetime.utcnow())
@@ -208,10 +244,12 @@ def update_check(journal_id, feed_data):
 @celery.task         
 def update_metadata(journal_id, feed_data):
     """
-    This method updates the metadata of a feed, this function should be called if the feed is a feed that newly has been added to the system, or if it has been longer than n days since last update. N days is defined in the config.
-    This method returns nothing.
-    :param journal The journal service to change the metadata for.
-    :param feed_data The resulting dict from a feed_requester call.
+    This method updates the metadata of a journal, this function should be called if 
+    the feed is newly added, or if it has been longer than N days since last 
+    update. N days is defined in the config.
+    
+    :param journal_id: the id of the journal
+    :param feed_data: The resulting dict from a feed_requester call.
     """
     journal = journals.get(journal_id)
     logger.debug("Updating metadata for journal: {0}".format(journal.title))
@@ -234,10 +272,11 @@ def update_metadata(journal_id, feed_data):
 @celery.task
 def add_article(entry, journal_id):
     """
-    Adds an article to the database. The function will check if the article already is in the DB. 
-    :param article: The article to add.
-    :param journal: The journal.
-    :return: This function does not return anything.
+    Adds an article to the database. The function will 
+    check if the article already is in the DB. 
+    
+    :param entry: the data of the article
+    :param journal_id: the id of the journal
     """
     
     # entry is simply an item out of the feed so it is guaranteed to have a link atrribute

@@ -19,6 +19,7 @@ from .services import users
 
 @auth.get_password
 def get_pw(username):
+    """Flask-HTTPAuth method to validate a Basic HTTP Authentication."""
     user = users.first(email = username)
     if user:
         return user.password
@@ -26,13 +27,19 @@ def get_pw(username):
 
 @auth.hash_password
 def hash_pw(password):
+    """Flask-HTTPAuth method to hash the password."""
     return bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
 
 def request_user():
+    """
+    Return the :class:`User` corresponding to the username passed
+    in the HTTP request.
+    """
     return users.first(email = request.authorization.username)
 
 def register_blueprints(app, package_name, package_path):
-    """Register all Blueprint instances on the specified Flask application found
+    """
+    Register all Blueprint instances on the specified Flask application found
     in all modules for the specified package.
 
     :param app: the Flask application
@@ -50,16 +57,23 @@ def register_blueprints(app, package_name, package_path):
     return rv
         
 def days_since(t1, t2):
-        """
-        Returns the number of days between the two timestamps.
-
-        :param t1 Time one.
-        :param t2 Time two.
-        """
-        timedelta = t1 - t2
-        return timedelta.days
+    """
+    Returns the number of days between two timestamps.
+    
+    :param t1: Time one.
+    :param t2: Time two.
+    """
+    timedelta = t1 - t2
+    return timedelta.days
 
 def deltatime(period, frequency):
+    """
+    Returns the :class:`timedelta` given a period and a frequency over which 
+    the feed is refreshed in that period.
+    
+    :param period: the period in the feed RSS
+    :param frequency: the frequency of refresh of the feed in the period 
+    """
     frequency = int(frequency)
     if period == 'hourly':
         return timedelta(hours=1/frequency)
@@ -92,6 +106,11 @@ def bozo_checker(bozo_exception):
     return return_val
     
 def splitall(path):
+    """
+    Split a file path into its components returned as a list.
+    
+    :param path: a string representing the file path
+    """
     allparts = []
     while 1:
         parts = os.path.split(path)
@@ -107,6 +126,15 @@ def splitall(path):
     return allparts
     
 def assetsList(app, folder = 'js', extension = 'js', exclusions = []):
+    """
+    Compile a list of assets file of the kind specified by `extension` starting from
+    `folder` within the app static folder.
+    
+    :param app: a :class:`Flask` app
+    :param folder: a string specifying the root folder within the app static folder where to search
+    :param extension: a string specifying the kind of assets file to search
+    :param exclusions: a dictonary containing strings representing the names of files to exclude
+    """
     files_list = []
     for root, dirs, files in os.walk(os.path.join(app.static_folder,folder)):
         for file in files:

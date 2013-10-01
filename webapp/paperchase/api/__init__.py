@@ -6,35 +6,40 @@
     paperchase api application package
 """
 
-from functools import wraps
+from flask.ext.restful import Api
 
 from .. import factory
-from flask.ext.restful import Api
+
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
 from .users import UserAPI, RegisterAPI
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
 from .papers import PaperListAPI
 
 def create_app(settings_override=None):
-    """Returns the paperchase API application instance"""
-
+    """
+    Returns the paperchase API :class:`Flask` instance.
+    
+    :param settings_override: dictionary of settings to override
+    """
     app = factory.create_app(__name__, __path__, settings_override)
     api = Api(app)
     
-    api.add_resource(CategoryListAPI, '/categories', endpoint = 'categories')
-    api.add_resource(CategoryAPI, '/categories/<int:id>', endpoint = 'category')
-    api.add_resource(SubcategoryListAPI, '/categories/<int:id>/subcategories', endpoint = 'subcategories')
-    api.add_resource(CategoryJournalsAPI, '/categories/<int:id>/journals', endpoint = 'categoryJournal')
-    api.add_resource(JournalListAPI, '/journals', endpoint = 'journals')
-    api.add_resource(JournalAPI, '/journals/<int:id>', endpoint = 'journal')
+    # API endpoints connected to the Journal model
+    api.add_resource(CategoryListAPI, '/categories')
+    api.add_resource(CategoryAPI, '/categories/<int:id>')
+    api.add_resource(SubcategoryListAPI, '/categories/<int:id>/subcategories')
+    api.add_resource(CategoryJournalsAPI, '/categories/<int:id>/journals')
+    api.add_resource(JournalListAPI, '/journals')
+    api.add_resource(JournalAPI, '/journals/<int:id>')
     api.add_resource(SuggestionAPI, '/suggestion')
     
-    api.add_resource(UserAPI, '/users/<string:email>')
+    # API endpoints connected to the User model
+    api.add_resource(UserAPI, '/users')
     api.add_resource(RegisterAPI, '/register')
-    
     api.add_resource(SubscriptionListAPI, '/subscriptions')
     api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
     
+    # API endpoints connected to the Paper model
     api.add_resource(PaperListAPI, '/papers')
     
     return app
