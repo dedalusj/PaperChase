@@ -31,7 +31,7 @@ class Paper(db.Model):
         journal = Journal.query.get(kwargs['journal_id'])
         users = journal.users
         for user in users:
-            user_paper = UserPaper(score=50)
+            user_paper = UserPaper(score=50, created = kwargs['created'])
             user_paper.paper = self
             user.papers.append(user_paper)
             
@@ -40,6 +40,7 @@ class UserPaper(db.Model):
     
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
     paper_id = db.Column(db.Integer, db.ForeignKey('papers.id'), primary_key=True)
-    paper = db.relationship("Paper", backref=db.backref('user_paper'))    
+    paper = db.relationship("Paper", backref=db.backref('user_paper'))
+    created = db.Column(db.DateTime) 
     read_at = db.Column(db.DateTime)
     score = db.Column(db.Integer)
