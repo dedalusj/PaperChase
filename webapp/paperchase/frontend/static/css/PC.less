@@ -1,8 +1,19 @@
+@navbar-height: 50px;
+@papers-column-width: 400px; 
+@bottom-link-bar: 17px;
+@text-color: #444;
+@entry-font-size: 14px;
+@time-font-size: @entry-font-size - 1px;
+
 body { 
-  padding-top: 70px;
+  padding-top: @navbar-height;
 }
 
-.papers {
+.navbar {
+	margin-bottom: 0px;
+}
+
+.papers-column {
 	bottom: 0px;
 	top: 0px;
 	right: 0px;
@@ -10,25 +21,46 @@ body {
 	overflow-x: hidden;
 	overflow-y: auto;
 	position: relative;
-	width: 450px;
+	width: @papers-column-width;
 	border-collapse: collapse;
+	height: 100%;
+	ul {
+	    padding-left: 0px;
+	    padding-right: 0px;
+	    padding-top: 0px;
+	    padding-bottom: @bottom-link-bar;
+	    list-style-image: none;
+	    list-style-position: outside;
+	    list-style-type: none;	
+	}
+	li {
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+	}
+	a {
+		text-decoration: none;
+		color: @text-color;
+		font-size: @entry-font-size;
+		line-height: 20px;
+		padding: 10px 15px;
+		border: 1px solid #ddd;
+		box-sizing: border-box;
+		position: relative;
+		display: block;
+		margin-bottom: -1px;
+		&:hover, &:focus {
+			text-decoration: none;
+			background-color: #f5f5f5;
+			color: @text-color;
+		}
+	}
+	time {
+		font-size: @time-font-size;
+		color: rgb(153, 153, 153);
+	}
 }
 
-a.paper {
-	text-decoration: none;
-	color: #444;
-	font-size: 14px;
-	line-height: 20px;
-	padding: 10px 15px;
-	border: 1px solid #ddd;
-	box-sizing: border-box;
-	position: relative;
-	display: block;
-	margin-bottom: -1px;
-}
-
-a.paper:hover, a.paper:focus {
-	text-decoration: none;
-	background-color: #f5f5f5;
-	color: #444;
+.title {
+	font-weight: bold;
 }
