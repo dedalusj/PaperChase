@@ -24,4 +24,4 @@ class RunApp(RunDebug):
         application = DispatcherMiddleware(frontend.create_app(settings_override = dict(DEBUG = False)), {
             '/api': api.create_app(settings_override = dict(DEBUG = False))
         })
-        run_simple(host, port, application, use_reloader=True, use_debugger=True)
+        run_simple(host, port, application, use_reloader=True, use_debugger=False)
