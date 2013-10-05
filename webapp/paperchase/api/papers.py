@@ -2,6 +2,7 @@ from flask.ext.restful import Resource, fields, marshal, reqparse
 
 from ..services import users, papers
 from ..core import auth
+from ..helpers import smart_truncate
 
 parser = reqparse.RequestParser()
 parser.add_argument('page', type=int, default=1)
@@ -9,11 +10,15 @@ parser.add_argument('per_page', type=int, default=10)
 #parser.add_argument('since', type=types.date())
 parser.add_argument('unread', type=bool)
 
+class Ellipsis(fields.Raw):
+    def format(self, value):
+        return smart_truncate(value)
+
 paper_fields = {
     'title': fields.String(attribute='paper.title'),
     'id': fields.Integer(attribute='paper.id'),
     'authors': fields.String(attribute='paper.authors'),
-    'abstract': fields.String(attribute='paper.abstract'),
+    'abstract': Ellipsis(attribute='paper.abstract'),
     'journal_id': fields.Integer(attribute='paper.journal_id'),
     'score' : fields.Integer,
     'created' : fields.DateTime,
