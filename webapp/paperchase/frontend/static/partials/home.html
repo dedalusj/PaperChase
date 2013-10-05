@@ -1,1 +1,8 @@
-<h2> Home Page </h2>
+<h2 ng-show="!isLogged()"> Home Page </h2>
+
+<div class="papers" ng-show="isLogged()">   
+    <a href="#/home" class="paper" ng-repeat="paper in papers" ng-class="isActive(paper.id)">
+        <h4 class="list-group-item-heading">{{ paper.title }}</h4>
+        <p class="list-group-item-text">{{ paper.abstract }}</p>
+    </a> 
+</div>

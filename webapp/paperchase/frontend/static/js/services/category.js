@@ -45,7 +45,7 @@ app.factory('CategoryServices', ['CategoryAPI', function(CategoryAPI) {
             }
         },
         clearCategories: function() {
-            categforiesData = undefined; 
+            categoriesData = undefined; 
         },
         clearSubcategories: function() {
             subcategoriesData = undefined;
