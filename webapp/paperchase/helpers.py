@@ -15,6 +15,11 @@ from flask import Blueprint, request, current_app
 from passlib.hash import bcrypt
 
 from .core import auth
+from .services import users
+
+@auth.get_password
+def get_pw(username):
+    return users.get_pw(username)
 
 @auth.hash_password
 def hash_pw(password):
