@@ -5,16 +5,19 @@ from ..core import auth
 
 parser = reqparse.RequestParser()
 parser.add_argument('page', type=int, default=1)
-parser.add_argument('per_page', type=int, default=5)
+parser.add_argument('per_page', type=int, default=10)
 #parser.add_argument('since', type=types.date())
 parser.add_argument('unread', type=bool)
 
 paper_fields = {
-    'title': fields.String,
-    'id': fields.Integer,
-    'authors': fields.String,
-    'abstract': fields.String,
-    'journal_id': fields.Integer
+    'title': fields.String(attribute='paper.title'),
+    'id': fields.Integer(attribute='paper.id'),
+    'authors': fields.String(attribute='paper.authors'),
+    'abstract': fields.String(attribute='paper.abstract'),
+    'journal_id': fields.Integer(attribute='paper.journal_id'),
+    'score' : fields.Integer,
+    'created' : fields.DateTime,
+    'read_at' : fields.DateTime
 }
 
 class PaperListAPI(Resource):
@@ -24,5 +27,5 @@ class PaperListAPI(Resource):
     def get(self):
         args = parser.parse_args()
         user = users.request_user()
-        paperList = user.papers().paginate(args['page'],per_page=args['per_page'])
+        paperList = user.papers.paginate(args['page'],per_page=args['per_page'])
         return map(lambda p: marshal(p, paper_fields), paperList.items)
