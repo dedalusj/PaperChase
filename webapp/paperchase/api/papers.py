@@ -2,7 +2,6 @@ from flask.ext.restful import Resource, fields, marshal, reqparse
 
 from ..services import users, papers
 from ..core import auth
-from ..helpers import request_user
 
 parser = reqparse.RequestParser()
 parser.add_argument('page', type=int, default=1)
@@ -24,6 +23,6 @@ class PaperListAPI(Resource):
     decorators = [auth.login_required]
     def get(self):
         args = parser.parse_args()
-        user = request_user()
+        user = users.request_user()
         paperList = user.papers().paginate(args['page'],per_page=args['per_page'])
         return map(lambda p: marshal(p, paper_fields), paperList.items)

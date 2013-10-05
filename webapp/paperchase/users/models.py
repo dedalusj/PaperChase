@@ -7,8 +7,6 @@
 """
 
 from ..core import db
-from ..journals import Journal
-from ..papers import Paper
     
 subscriptions_users = db.Table(
     'subscriptions_users',
@@ -26,6 +24,7 @@ class User(db.Model):
     registered_at = db.Column(db.DateTime())
 
     subscriptions = db.relationship('Journal', secondary=subscriptions_users, backref=db.backref('users', lazy='dynamic'), lazy = 'dynamic')
+    papers = db.relationship("UserPaper", backref=db.backref('users'))
     
     def __str__(self):
         return self.email
@@ -43,5 +42,5 @@ class User(db.Model):
     def is_subscribed(self, journal):
         return self.subscriptions.filter(subscriptions_users.c.journal_id == journal.id).count() > 0
     
-    def papers(self):
-        return Paper.query.join(subscriptions_users, (subscriptions_users.c.journal_id == Paper.journal_id)).filter(subscriptions_users.c.user_id == self.id).order_by(Paper.created.desc())
+#    def papers(self):
+#        return Paper.query.join(subscriptions_users, (subscriptions_users.c.journal_id == Paper.journal_id)).filter(subscriptions_users.c.user_id == self.id).order_by(Paper.created.desc())

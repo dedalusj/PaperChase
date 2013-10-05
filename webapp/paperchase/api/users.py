@@ -5,7 +5,6 @@ from passlib.hash import bcrypt
 
 from ..services import users
 from ..core import auth
-from ..helpers import request_user
 
 user_fields = {
     'email': fields.String,
@@ -21,7 +20,7 @@ class UserAPI(Resource):
     
     decorators = [auth.login_required]
     def get(self, email):
-        user = request_user()
+        user = users.request_user()
         return marshal(user, user_fields)
         
 class RegisterAPI(Resource):

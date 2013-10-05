@@ -24,7 +24,6 @@ from flask.ext.mail import Message
 
 from .core import mail
 from .factory import create_celery_app
-from .models import Journal, Paper
 from .services import journals, papers
 from .helpers import bozo_checker, days_since, deltatime
 from .settings import scraper_config
@@ -184,7 +183,7 @@ def get_journals():
     The method will update the last_checked column of the feed after is has 
     put it on the queue.
     """
-    journals_list = journals.filter(Journal.next_check <= datetime.datetime.utcnow()).all()
+    journals_list = journals.filter(journals.__model__.next_check <= datetime.datetime.utcnow()).all()
     for journal in journals_list:
         get_papers.delay(journal.id)
 

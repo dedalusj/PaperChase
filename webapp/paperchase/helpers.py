@@ -15,27 +15,11 @@ from flask import Blueprint, request, current_app
 from passlib.hash import bcrypt
 
 from .core import auth
-from .services import users
-
-@auth.get_password
-def get_pw(username):
-    """Flask-HTTPAuth method to validate a Basic HTTP Authentication."""
-    user = users.first(email = username)
-    if user:
-        return user.password
-    return None
 
 @auth.hash_password
 def hash_pw(password):
     """Flask-HTTPAuth method to hash the password."""
     return bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
-
-def request_user():
-    """
-    Return the :class:`User` corresponding to the username passed
-    in the HTTP request.
-    """
-    return users.first(email = request.authorization.username)
 
 def register_blueprints(app, package_name, package_path):
     """

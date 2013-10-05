@@ -7,7 +7,10 @@
 """
 
 from ..core import Service
-from .models import Paper
+from .models import Paper, UserPaper
 
 class PapersService(Service):
     __model__ = Paper
+    
+class UserPapersService(Service):
+    __model__ = UserPaper

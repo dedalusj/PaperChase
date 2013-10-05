@@ -8,7 +8,6 @@
 from sqlalchemy import or_
 
 from ..core import db
-from ..papers import Paper
 
 # many-to-many relationship table between categories and journals
 journals_categories = db.Table('journals_categories', db.Column('journal_id', db.Integer(), db.ForeignKey('journals.id')), db.Column('category_id', db.Integer(), db.ForeignKey('categories.id')))

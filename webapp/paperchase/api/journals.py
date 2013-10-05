@@ -1,10 +1,9 @@
 from flask import request
 from flask.ext.restful import Resource, fields, marshal
 
-from ..services import categories, journals
+from ..services import categories, journals, users
 from ..core import auth
 from ..tasks import send_suggestion_email
-from ..helpers import request_user
 
 subcategory_fields = {
     'name': fields.String,
@@ -53,7 +52,7 @@ class CategoryJournalsAPI(Resource):
     
     decorators = [auth.login_required]
     def get(self, id):
-        user = request_user()
+        user = users.request_user()
         user_subscriptions = user.subscriptions.all()
         category = categories.get_or_404(id)
         journalList = category.all_journals().all()
