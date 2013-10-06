@@ -1,6 +1,6 @@
-<h2 ng-show="!isLogged()"> Home Page </h2>
+<h2 ng-if="!isLogged()"> Home Page </h2>
 
-<table ng-show="isLogged()" class="app-wrap">
+<table ng-if="isLogged()" class="app-wrap">
   <tbody>
     <tr>
       <td class="papers-column app-panel">
