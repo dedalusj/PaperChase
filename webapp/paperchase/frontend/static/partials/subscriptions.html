@@ -1,12 +1,11 @@
+<div class="subscriptions-wrap">
 <div class="row">   
-       
   <div class="col-md-4">
     <h4 class="text-center">Categories</h4>
     <div class="list-group">
       <a href="#/subscriptions" class="list-group-item" ng-repeat="category in categories" ng-click="updateSubcategories($event, category.id);" ng-class="isActive(category.id,false)">{{ category.name }}</a>
     </div>
   </div>
-  
   <div class="col-md-4">
     <h4 class="text-center">Subcategories</h4>
     <p class="text-center" ng-hide="subcategories.length"> Please select a category </p>
@@ -14,7 +13,6 @@
       <a href="#/subscriptions" class="list-group-item" ng-repeat="subcategory in subcategories" ng-click="updateJournals($event, subcategory.id);" ng-class="isActive(subcategory.id,true)">{{ subcategory.name }} </a>
     </div>
   </div>
-  
   <div class="col-md-4">
     <h4 class="text-center">Journals</h4>
     <p class="text-center" ng-hide="journals.length"> Please select a subcategory </p>
@@ -26,5 +24,5 @@
     </div>
     <p class="text-center" ng-show="journals.length"><a href="#/suggestion">Suggest a new journal</a></p>
   </div> 
-   
+</div>
 </div>

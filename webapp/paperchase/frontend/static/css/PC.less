@@ -22,6 +22,8 @@
 @journal-color: rgb(102, 102, 102);
 @light-gray-color: rgb(153, 153, 153);
 
+@subscriptions-margins: 30px;
+
 body { 
   padding-top: @navbar-height;
 }
@@ -193,4 +195,10 @@ body {
     	margin-top: 15px;
     	line-height: 25px;
     }
+}
+
+.subscriptions-wrap, .suggestion-wrap {
+	margin-left: @subscriptions-margins;
+	margin-right: @subscriptions-margins;
+	margin-top: 10px;
 }
