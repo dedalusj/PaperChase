@@ -1,6 +1,6 @@
-app.controller("subscriptionsController", ['$scope', 'CategoryServices', 'SubscriptionAPI', function($scope, CategoryServices, SubscriptionAPI){
+app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'SubscriptionAPI', '$cacheFactory', function($scope, CategoryAPI, SubscriptionAPI, $cacheFactory){
 
-    $scope.categories = CategoryServices.getCategories();
+    $scope.categories = CategoryAPI.getCategories();
     $scope.subcategories = [];
     $scope.journals = [];
     
@@ -13,7 +13,7 @@ app.controller("subscriptionsController", ['$scope', 'CategoryServices', 'Subscr
     };
     
     $scope.updateSubcategories = function($event, categoryId) {
-        $scope.subcategories = CategoryServices.getSubcategories(categoryId);
+        $scope.subcategories = CategoryAPI.getSubcategories({'category_id': categoryId});
         $scope.journals = [];
         $scope.selectedCategoryId = categoryId;
         $scope.selectedSubcategoryId = -1;
@@ -21,19 +21,21 @@ app.controller("subscriptionsController", ['$scope', 'CategoryServices', 'Subscr
     
     $scope.updateJournals = function($event, categoryId) {
         if (categoryId) $scope.selectedSubcategoryId = categoryId;
-        if ($scope.selectedSubcategoryId) $scope.journals = CategoryServices.getJournals($scope.selectedSubcategoryId);
+        if ($scope.selectedSubcategoryId) $scope.journals = CategoryAPI.getJournals({'category_id': $scope.selectedSubcategoryId});
     };
     
     $scope.subscribe = function($event, journalId) {
-        var newSubscription = new SubscriptionAPI({journal_id: journalId});
+        var newSubscription = new SubscriptionAPI({'journal_id': journalId});
         newSubscription.$save();
-        CategoryServices.clearJournals();
+        // This is less than ideal. We should only remove the cache of the journals request
+        $cacheFactory.get('$http').removeAll();
         $scope.updateJournals();
     };
     
     $scope.unsubscribe = function($event, journalId) {
         SubscriptionAPI.remove({'journal_id': journalId});
-        CategoryServices.clearJournals();
+        // This is less than ideal. We should only remove the cache of the journals request
+        $cacheFactory.get('$http').removeAll();
         $scope.updateJournals();
     };
 }]);
