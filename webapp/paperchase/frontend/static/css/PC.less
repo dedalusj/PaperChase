@@ -1,9 +1,26 @@
 @navbar-height: 50px;
 @papers-column-width: 400px; 
-@bottom-link-bar: 17px;
+@bottom-link-bar: 10px;
+
+@border-color: #ddd;
 @text-color: #444;
-@entry-font-size: 14px;
-@time-font-size: @entry-font-size - 1px;
+
+@base-font-size: 13px;
+@time-font-size: @base-font-size - 1px;
+@title-font-size: @base-font-size + 2px;
+@line-height: 1.35;
+
+@vertical-padding: 6px;
+@paper-margins: 5px;
+
+@active-color: #D5DAFF;
+
+@content-width: 600px;
+@toolbar-height: 36px;
+@toolbar-title-height: 16px;
+
+@journal-color: rgb(102, 102, 102);
+@light-gray-color: rgb(153, 153, 153);
 
 body { 
   padding-top: @navbar-height;
@@ -13,54 +30,167 @@ body {
 	margin-bottom: 0px;
 }
 
-.papers-column {
+.main-frame {
+	height: auto;
+	width: 100%;
+	top: @navbar-height;
 	bottom: 0px;
-	top: 0px;
-	right: 0px;
 	left: 0px;
-	overflow-x: hidden;
-	overflow-y: auto;
+	position: absolute;
+}
+
+.app-wrap {
+	height: 100%;
+	width: 100%;
+}
+
+.app-panel {
+	vertical-align: top;
+	display: table-cell;
+	height: 100%;
+}
+
+.full-height {
+	height: 100%;
+}
+
+.papers-wrap {
+    position: relative;
+}
+
+.papers-column {
 	position: relative;
 	width: @papers-column-width;
 	border-collapse: collapse;
-	height: 100%;
-	ul {
-	    padding-left: 0px;
-	    padding-right: 0px;
-	    padding-top: 0px;
-	    padding-bottom: @bottom-link-bar;
-	    list-style-image: none;
-	    list-style-position: outside;
-	    list-style-type: none;	
-	}
-	li {
-		list-style-image: none;
-		list-style-position: outside;
-		list-style-type: none;
-	}
-	a {
-		text-decoration: none;
-		color: @text-color;
-		font-size: @entry-font-size;
-		line-height: 20px;
-		padding: 10px 15px;
-		border: 1px solid #ddd;
-		box-sizing: border-box;
-		position: relative;
-		display: block;
-		margin-bottom: -1px;
-		&:hover, &:focus {
-			text-decoration: none;
-			background-color: #f5f5f5;
-			color: @text-color;
-		}
-	}
-	time {
-		font-size: @time-font-size;
-		color: rgb(153, 153, 153);
+	border-right: 1px solid @border-color;
+}
+
+.papers {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    overflow-x: hidden;	
+    ul {
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        padding-bottom: @bottom-link-bar;
+        list-style-image: none;
+        list-style-position: outside;
+        list-style-type: none;	
+    }
+    li {
+    	list-style-image: none;
+    	list-style-position: outside;
+    	list-style-type: none;
+    	&.paper {
+    		margin-right: -1px;
+    		a {
+    			text-decoration: none;
+    			color: @text-color;
+    			font-size: @base-font-size;
+    			line-height: @line-height * @base-font-size;
+    			padding: 10px 15px;
+    			border: 1px solid @border-color;
+    			box-sizing: border-box;
+    			position: relative;
+    			display: block;
+    			margin-bottom: -1px;
+    			padding-bottom: @vertical-padding;
+    			padding-top: @vertical-padding;
+    			padding-right: 8px;
+    			&:hover, &:focus {
+    				text-decoration: none;
+    				background-color: #f5f5f5;
+    				color: @text-color;
+    			}
+    		}
+    		time {
+    			font-size: @time-font-size;
+    			color: @light-gray-color;
+    		}
+    		.title {
+    			font-weight: bold;
+    			margin-top: @paper-margins;
+    			margin-bottom: @paper-margins;
+    			font-size: @title-font-size;
+    			line-height: @line-height * @title-font-size;
+    		}
+    		.journal {
+    			color: @journal-color;
+    			font-size: @time-font-size;
+    		}
+    		.body {
+    			color: rgb(140, 140, 140);
+    		}
+    		p {
+    			margin-bottom: @paper-margins;
+    		}
+    	}
+    }
+}
+
+
+.active {
+	background-color: @active-color;
+}
+
+.paper-wrap {
+	position: relative;
+}
+
+.paper-content-wrap {
+	position: relative;
+}
+
+.paper-toolbar {
+	background-color: #FFF;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: @toolbar-height;
+	border-bottom: 1px solid #CCC;
+	p {
+		height: @toolbar-title-height;
+		margin-top: 0.5*(@toolbar-height - @toolbar-title-height);
+		margin-left: 40px;
+		color: @journal-color;
 	}
 }
 
-.title {
-	font-weight: bold;
+.paper-content {
+    background-color: #FFF;
+    display: block;
+    position: absolute;
+    height: auto;
+    bottom: 0;
+    top: @toolbar-height + 1px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.paper-inner {
+    padding: 40px 20px 10px 20px;
+    margin: 0 auto;
+    max-width: @content-width;
+    .title {
+    	font-weight: normal;
+    	line-height: 1.1em;
+    }
+    .journal, time {
+    	color: @light-gray-color;
+    	font-size: @base-font-size + 1px;
+    	margin-bottom: @paper-margins;
+    }
+    .body {
+    	margin-top: 15px;
+    	line-height: 25px;
+    }
 }

@@ -1,13 +1,39 @@
 <h2 ng-show="!isLogged()"> Home Page </h2>
 
-<div class="papers-column" ng-show="isLogged()"> 
-  <ul>
-    <li class="paper" ng-repeat="paper in papers">
-      <a href="#/home" >
-        <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
-        <h4 class="title">{{ paper.title }}</h4>
-        <p>{{ paper.abstract }}</p>
-      </a>
-    </li>
-  </ul> 
-</div>
+<table ng-show="isLogged()" class="app-wrap">
+  <tbody>
+    <tr>
+      <td class="papers-column app-panel">
+        <div class="full-height papers-wrap">
+          <div class="papers">
+        <ul>
+          <li class="paper" ng-repeat="paper in papers" ng-class="isActive(paper.id)">
+            <a href="#/home" ng-click="showPaper($event,paper.id)">
+              <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+              <h4 class="title">{{ paper.title }}</h4>
+              <p class="journal">{{ paper.journal.title }}</p>
+              <p class="body">{{ paper.abstract | htmlToPlainText }}</p>
+            </a>
+          </li>
+        </ul>
+          </div>
+        </div> 
+      </td>
+      <td class="paper-column app-panel">
+        <div class="full-height paper-wrap">
+        <div class="paper-content-wrap full-height">
+        <div class="paper-toolbar"><p class="journal">{{ selectedPaper.journal.title }}</p></div>
+        <div class="paper-content">
+          <div class="paper-inner">
+            <h2 class="title">{{ selectedPaper.title }}</h2>
+            <p class="journal">{{ selectedPaper.journal.title }}</p>
+            <time>{{ selectedPaper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+            <p class="body" ng-bind-html="selectedPaper.abstract"></p>
+          </div>
+        </div>
+        </div>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
