@@ -26,7 +26,7 @@ def hash_pw(password):
     """Flask-HTTPAuth method to hash the password."""
     return bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
 
-def smart_truncate(content, length=250, suffix='...'):
+def smart_truncate(content, length=200, suffix='...'):
     if len(content) <= length:
         return content
     return content[:length].rsplit(' ', 1)[0]+suffix
