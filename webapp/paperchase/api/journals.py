@@ -27,7 +27,7 @@ class CategoryListAPI(Resource):
     
     decorators = [auth.login_required]
     def get(self):
-        categoryList = categories.find(parent_id == None)
+        categoryList = categories.find(parent_id = None)
         return map(lambda c: marshal(c, category_fields), categoryList)
 
 class CategoryAPI(Resource):
