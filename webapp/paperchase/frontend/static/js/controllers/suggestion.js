@@ -1,13 +1,13 @@
-app.controller("suggestionController", ['$scope', 'CategoryServices', function($scope, CategoryServices){
+app.controller("suggestionController", ['$scope', 'CategoryAPI', function($scope, CategoryAPI){
     
-    $scope.categories = CategoryServices.getCategories();
+    $scope.categories = CategoryAPI.getCategories();
     $scope.category = [];
     
     $scope.subcategories = [];
     $scope.subcategory = [];
     
     $scope.updateSubcategories = function() {
-        $scope.subcategories = CategoryServices.getSubcategories($scope.category.id);
+        $scope.subcategories = CategoryAPI.getSubcategories({'category_id' : $scope.category.id});
     };
     
     $scope.formatAndSubmit = function(suggestion) {

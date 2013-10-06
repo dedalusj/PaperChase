@@ -5,9 +5,9 @@
     <tr>
       <td class="papers-column app-panel">
         <div class="full-height papers-wrap">
-          <div class="papers">
+          <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
-          <li class="paper" ng-repeat="paper in papers" ng-class="isActive(paper.id)">
+          <li class="paper" ng-repeat="paper in papers.items" ng-class="isActive(paper.id)">
             <a href="#/home" ng-click="showPaper($event,paper.id)">
               <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <h4 class="title">{{ paper.title }}</h4>
@@ -15,6 +15,7 @@
               <p class="body">{{ paper.abstract | htmlToPlainText }}</p>
             </a>
           </li>
+          <li ng-show='papers.busy'>Loading data...</li>
         </ul>
           </div>
         </div> 
@@ -22,13 +23,13 @@
       <td class="paper-column app-panel">
         <div class="full-height paper-wrap">
         <div class="paper-content-wrap full-height">
-        <div class="paper-toolbar"><p class="journal">{{ selectedPaper.journal.title }}</p></div>
+        <div class="paper-toolbar"><p class="journal">{{ papers.currentItem.journal.title }}</p></div>
         <div class="paper-content">
           <div class="paper-inner">
-            <h2 class="title">{{ selectedPaper.title }}</h2>
-            <p class="journal">{{ selectedPaper.journal.title }}</p>
-            <time>{{ selectedPaper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
-            <p class="body" ng-bind-html="selectedPaper.abstract"></p>
+            <h2 class="title">{{ papers.currentItem.title }}</h2>
+            <p class="journal">{{ papers.currentItem.journal.title }}</p>
+            <time>{{ papers.currentItem.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+            <p class="body" ng-bind-html="papers.currentItem.abstract"></p>
           </div>
         </div>
         </div>
