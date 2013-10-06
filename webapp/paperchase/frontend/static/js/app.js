@@ -1,4 +1,4 @@
-var app = angular.module('PCApp',["ngResource","ngCookies"]).
+var app = angular.module('PCApp',["ngResource","ngCookies","ngRoute","ngSanitize"]).
   config(['$routeProvider', '$locationProvider', '$httpProvider',
           function($routeProvider, $locationProvider, $httpProvider) {
               $routeProvider.
