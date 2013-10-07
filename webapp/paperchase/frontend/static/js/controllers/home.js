@@ -2,8 +2,8 @@ app.controller("homeController", ['$scope', 'Papers', function($scope, Papers) {
     $scope.papers = new Papers();
     
     $scope.selectedPaperId = undefined;
-    $scope.isActive = function(paperId) {
-        return paperId === $scope.selectedPaperId ? 'active' : undefined;
+    $scope.isSelected = function(paperId) {
+        return paperId === $scope.selectedPaperId ? 'selected' : undefined;
     };
     
     $scope.selectedPaper = undefined;

@@ -36,6 +36,9 @@ paper_fields['abstract'] = Ellipsis(attribute='paper.abstract')
 
 full_paper_fields = dict(common_paper_fields)
 full_paper_fields['abstract'] = fields.String(attribute='paper.abstract')
+full_paper_fields['url'] = fields.String(attribute='paper.url')
+full_paper_fields['reference'] = fields.String(attribute='paper.ref')
+full_paper_fields['doi'] = fields.String(attribute='paper.doi')
 
 class PaperListAPI(Resource):
     """API :class:`Resource` for a list of papers for the user in the request."""

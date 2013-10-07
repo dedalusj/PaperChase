@@ -1,13 +1,15 @@
 <h2 ng-if="!isLogged()"> Home Page </h2>
 
-<table ng-if="isLogged()" class="app-wrap">
+<table ng-if="isLogged()" class="app-wrap"> 
+<!--pc-keydown pc-space="console.log('Space')"
+      pc-down="console.log('Down')" pc-up="console.log('Up')" pc-read="console.log('Read')"-->
   <tbody>
     <tr>
       <td class="papers-column app-panel">
         <div class="full-height papers-wrap">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
-          <li class="paper" ng-repeat="paper in papers.items" ng-class="isActive(paper.id)">
+          <li class="paper" ng-repeat="paper in papers.items" ng-class="isSelected(paper.id)">
             <a href="#/home" ng-click="showPaper($event,paper.id)">
               <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <h4 class="title">{{ paper.title }}</h4>
@@ -26,7 +28,7 @@
         <div class="paper-toolbar"><p class="journal">{{ papers.currentItem.journal.title }}</p></div>
         <div class="paper-content">
           <div class="paper-inner">
-            <h2 class="title">{{ papers.currentItem.title }}</h2>
+            <a href="{{ papers.currentItem.url }}"><h2 class="title">{{ papers.currentItem.title }}</h2></a>
             <p class="journal">{{ papers.currentItem.journal.title }}</p>
             <time>{{ papers.currentItem.created | date:'dd MMMM yyyy, h:mm a'}}</time>
             <p class="body" ng-bind-html="papers.currentItem.abstract"></p>
