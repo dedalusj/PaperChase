@@ -13,7 +13,7 @@ from .. import factory
 from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI, CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
 from .users import UserAPI, RegisterAPI
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
-from .papers import PaperListAPI, PaperAPI
+from .papers import PaperListAPI, PaperAPI, UnreadPapersAPI, ReadPapersAPI
 
 def create_app(settings_override=None):
     """
@@ -42,5 +42,7 @@ def create_app(settings_override=None):
     # API endpoints connected to the Paper model
     api.add_resource(PaperListAPI, '/papers')
     api.add_resource(PaperAPI, '/papers/<int:id>')
+    api.add_resource(UnreadPapersAPI, '/unread_papers')
+    api.add_resource(ReadPapersAPI, '/read_papers')
     
     return app
