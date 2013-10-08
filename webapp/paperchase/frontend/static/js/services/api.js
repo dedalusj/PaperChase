@@ -20,7 +20,7 @@ app.factory('PaperAPI', ['$http', '$resource', function($http, $resource) {
         'getPapers' : { method : 'GET', isArray : true, cache : true},
         'getPaper' : { method : 'GET', params: { paper_id : '@id' }, cache : true},
         'getUnreadList' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'GET', isArray : true, cache : true },
-        'markUnread' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'PUT'},
-        'markRead' : { url : 'http://localhost\\:5000/api/read_papers', method : 'PUT'}
+        'markUnread' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'PUT', isArray : true },
+        'markRead' : { url : 'http://localhost\\:5000/api/read_papers', method : 'PUT', isArray : true }
     });
 }]);

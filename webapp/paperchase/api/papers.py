@@ -80,7 +80,7 @@ class UnreadPapersAPI(Resource):
             return 413
         user = users.request_user()
         marked_ids = user_papers.markUnread(user, unread_ids)
-        return {'unread_papers' : marked_ids}
+        return marked_ids
 
 
 class ReadPapersAPI(Resource):
@@ -93,4 +93,4 @@ class ReadPapersAPI(Resource):
             return 413
         user = users.request_user()
         marked_ids = user_papers.markRead(user, read_ids)
-        return {'read_papers' : marked_ids}
+        return marked_ids
