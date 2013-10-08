@@ -9,7 +9,7 @@
         <div class="full-height papers-wrap">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
-          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected}">
+          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}">
             <a href="#/home" ng-click="papers.selectItem(paper.id)">
               <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <h4 class="title">{{ paper.title }}</h4>

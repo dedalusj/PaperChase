@@ -6,6 +6,7 @@ function Paper(paper) {
 
 Paper.prototype.init = function() {
   this.created = new Date(this.created);
+  this.read = this.read_at == null;
 }
 
 app.factory('Papers', ['PaperAPI', '$http', function(PaperAPI, $https) {
@@ -52,7 +53,7 @@ app.factory('Papers', ['PaperAPI', '$http', function(PaperAPI, $https) {
   Papers.prototype.selectItem = function(paperId) {
       PaperAPI.getPaper({'paper_id': paperId}, function(paper){
         this.selected = new Paper(paper);
-        if (this.selected.read_at == null) this.toggleRead();
+        if (!this.selected.read) this.toggleRead();
       }.bind(this));
   
       // Unselect previous selection.
