@@ -9,8 +9,8 @@
         <div class="full-height papers-wrap">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
-          <li class="paper" ng-repeat="paper in papers.items" ng-class="isSelected(paper.id)">
-            <a href="#/home" ng-click="showPaper($event,paper.id)">
+          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected}">
+            <a href="#/home" ng-click="papers.selectItem(paper.id)">
               <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <h4 class="title">{{ paper.title }}</h4>
               <p class="journal">{{ paper.journal.title }}</p>
@@ -25,13 +25,13 @@
       <td class="paper-column app-panel">
         <div class="full-height paper-wrap">
         <div class="paper-content-wrap full-height">
-        <div class="paper-toolbar"><p class="journal">{{ papers.currentItem.journal.title }}</p></div>
+        <div class="paper-toolbar"><p class="journal">{{ papers.selected.journal.title }}</p></div>
         <div class="paper-content">
           <div class="paper-inner">
-            <a href="{{ papers.currentItem.url }}"><h2 class="title">{{ papers.currentItem.title }}</h2></a>
-            <p class="journal">{{ papers.currentItem.journal.title }}</p>
-            <time>{{ papers.currentItem.created | date:'dd MMMM yyyy, h:mm a'}}</time>
-            <p class="body" ng-bind-html="papers.currentItem.abstract"></p>
+            <a href="{{ papers.selected.url }}"><h2 class="title">{{ papers.selected.title }}</h2></a>
+            <p class="journal">{{ papers.selected.journal.title }}</p>
+            <time>{{ papers.selected.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+            <p class="body" ng-bind-html="papers.selected.abstract"></p>
           </div>
         </div>
         </div>
