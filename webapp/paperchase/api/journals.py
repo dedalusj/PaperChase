@@ -55,7 +55,7 @@ class CategoryJournalsAPI(Resource):
         user = users.request_user()
         user_subscriptions = user.subscriptions.all()
         category = categories.get_or_404(id)
-        journalList = category.all_journals().all()
+        journalList = categories.all_journals(category).all()
         for j in journalList:
             j.subscribed = (j in user_subscriptions)
         return map(lambda j: marshal(j, journal_fields), journalList)

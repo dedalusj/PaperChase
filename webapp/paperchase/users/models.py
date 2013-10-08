@@ -7,7 +7,7 @@
 """
 
 from ..core import db
-    
+
 subscriptions_users = db.Table(
     'subscriptions_users',
     db.Column('user_id', db.Integer(), db.ForeignKey('users.id'), nullable = False),
@@ -27,20 +27,4 @@ class User(db.Model):
     papers = db.relationship("UserPaper", backref=db.backref('users'), lazy='dynamic', order_by="UserPaper.created.desc()")
     
     def __str__(self):
-        return self.email
-    
-    def subscribe(self, journal):
-        if not self.is_subscribed(journal):
-            self.subscriptions.append(journal)
-            return self
-        
-    def unsubscribe(self, journal):
-        if self.is_subscribed(journal):
-            self.subscriptions.remove(journal)
-            return self
-        
-    def is_subscribed(self, journal):
-        return self.subscriptions.filter(subscriptions_users.c.journal_id == journal.id).count() > 0
-    
-#    def papers(self):
-#        return Paper.query.join(subscriptions_users, (subscriptions_users.c.journal_id == Paper.journal_id)).filter(subscriptions_users.c.user_id == self.id).order_by(Paper.created.desc())
+        return self.email                        

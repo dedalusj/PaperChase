@@ -183,7 +183,7 @@ def get_journals():
     The method will update the last_checked column of the feed after is has 
     put it on the queue.
     """
-    journals_list = journals.filter(journals.__model__.next_check <= datetime.datetime.utcnow()).all()
+    journals_list = journals.filter(journals.model().next_check <= datetime.datetime.utcnow()).all()
     for journal in journals_list:
         get_papers.delay(journal.id)
 

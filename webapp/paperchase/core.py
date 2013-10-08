@@ -59,6 +59,12 @@ class Service(object):
         """
         kwargs.pop('csrf_token', None)
         return kwargs
+        
+    def model(self):
+        """Return the model object. Some attributes of the model object needs to be 
+        used in filter and providing a method that returns the model, without accessing
+        the private property can avoid the need to import the model."""
+        return self.__model__
     
     def query(self):
         """Return the query object for the model"""

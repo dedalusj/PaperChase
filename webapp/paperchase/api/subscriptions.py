@@ -3,7 +3,6 @@ from flask import request
 
 from ..services import users, journals
 from ..core import auth
-#from ..helpers import request_user
 
 journal_fields = {
     'title': fields.String,
@@ -27,7 +26,7 @@ class SubscriptionListAPI(Resource):
         journal_id = request.json['journal_id']
         journal = journals.get(journal_id)
         user = users.request_user()
-        users.save(user.subscribe(journal))
+        users.subscribe(user,journal)
         return '', 201
     
 class SubscriptionAPI(Resource):
@@ -40,5 +39,5 @@ class SubscriptionAPI(Resource):
     def delete(self,id):
         journal = journals.get(id)
         user = users.request_user()
-        users.save(user.unsubscribe(journal))
+        users.unsubscribe(user,journal)
         return '', 204

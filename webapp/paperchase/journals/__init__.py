@@ -5,12 +5,17 @@
 
     paperchase journals package
 """
+from sqlalchemy import or_
 
-from ..core import Service, paperchaseError
-from .models import Journal, Category, Path
+from ..core import Service
+from .models import Journal, Category, Path, journals_categories
 
 class CategoryService(Service):
     __model__ = Category
+    
+    def all_journals(self, category):
+        """Return all the journals for a given category even the journals of its parent."""
+        return Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == category.id, journals_categories.c.category_id == category.parent_id))
 
 class JournalsService(Service):
     __model__ = Journal
