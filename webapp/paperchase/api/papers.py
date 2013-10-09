@@ -1,3 +1,7 @@
+from dateutil.parser import *
+from datetime import *
+import pytz
+
 from flask.ext.restful import Resource, fields, marshal, reqparse
 from flask import request
 
@@ -6,13 +10,6 @@ from ..core import auth
 from ..helpers import smart_truncate
 
 from flask import current_app
-
-parser = reqparse.RequestParser()
-parser.add_argument('page', type=int, default=1)
-parser.add_argument('per_page', type=int, default=10)
-parser.add_argument('unread', type=bool)
-#parser.add_argument('since', type=types.date())
-#parser.add_argument('ids', type=types.date())
 
 class Ellipsis(fields.Raw):
     def format(self, value):
@@ -41,10 +38,32 @@ class PaperListAPI(Resource):
     """API :class:`Resource` for a list of papers for the user in the request."""
     
     decorators = [auth.login_required]
-    def get(self):
-        args = parser.parse_args()
+    
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('page', type=int, default=1)
+        self.parser.add_argument('per_page', type=int, default=10)
+        self.parser.add_argument('unread', type=bool, default = False)
+        self.parser.add_argument('since', type=str)
+        self.parser.add_argument('ids', type=str)
+        super(PaperListAPI, self).__init__()
+    
+    def get(self):    
+        args = self.parser.parse_args()
         user = users.request_user()
-        paperList = user.papers.paginate(args['page'],per_page=args['per_page'])
+        paperList = user.papers
+        
+        if args['unread'] is True:
+            paperList = paperList.filter(user_papers.model().read_at == None)
+        if args['ids'] is not None:
+            ids = [int(id) for id in args['ids'].split(',')]
+            paperList = paperList.filter(user_papers.model().paper_id.in_(ids))
+        if args['since'] is not None:    
+            since = parse(args['since'])
+            since = since.replace(tzinfo=None)
+            paperList = paperList.filter(user_papers.model().created >= since)
+
+        paperList = paperList.paginate(args['page'],per_page=args['per_page'])
         return map(lambda p: marshal(p, paper_fields), paperList.items)
 
 
