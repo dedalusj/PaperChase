@@ -1,8 +1,24 @@
 @navbar-height: 50px;
+
+@navbar-top-color: #333;
+@border-top-width: 3px;
+@border-bottom-width: 1px;
+
+@separator-height: 30px;
+
 @papers-column-width: 400px; 
+
+@controls-hor-padding: 10px;
+@filters-hor-margin: 3px;
+
+@blue-hint: #428bca;
+
+
 @bottom-link-bar: 10px;
 
-@border-color: #ddd;
+@frame-top: @navbar-height - 1px;
+
+@border-color: #bbb;
 @text-color: #444;
 
 @base-font-size: 13px;
@@ -25,18 +41,89 @@
 
 @subscriptions-margins: 30px;
 
+@border-height: 30px;
+
 body { 
-  padding-top: @navbar-height;
+  padding-top: @frame-top;
 }
 
-.navbar {
+.bar {
 	margin-bottom: 0px;
+	position: absolute;
+	height: @navbar-height;
+	top: 0;
+	width: 100%;
+	left: 0;
+	border-top: @border-top-width solid @navbar-top-color;
+	border-bottom: @border-bottom-width solid @border-color;
+	border-radius: 0;
+	background-color: #fff;
+	ul {  
+	    padding: 0;  
+	    margin: 0;  
+	    height: @navbar-height;
+	    display: inline;
+	    li {
+	    	display: inline;
+	    	a {  
+	    	    text-decoration: none;  
+	    	    display: inline-block;  
+	    	    float: left;    
+	    	    height: @separator-height;
+	    	    margin-bottom: (@navbar-height - @separator-height)/2 - @border-bottom-width;
+	    	    margin-top: (@navbar-height - @separator-height)/2 - @border-top-width; 
+	    	    line-height: @border-height; 
+	    	    text-align: center; 
+	    	    font-weight: bold;
+	    	}
+	    } 
+	    &.filters {
+	        background-color: #888;
+	        li {
+	        	a {
+	        		width: @papers-column-width / 2 - 2 * @filters-hor-margin;
+	        		border-radius: 4px;
+	        		margin-left: @filters-hor-margin;
+	        		margin-right: @filters-hor-margin;
+	        		color: @border-color - #222;
+	        		&.active {
+	        			background-color: @blue-hint;
+	        			color: #fff;
+	        			&:hover, &:focus {
+	        				border: 0;
+	        				color: #fff;
+	        				line-height: @border-height;
+	        			}
+	        		}
+	        		&:hover, &:focus {
+	        			color: @blue-hint;
+	        			border: 1px solid @border-color;
+	        			line-height: @border-height - 2px;
+	        		}
+	        	}
+	        }
+	    } 
+	    &.controls {
+	    	float: right;
+	    	padding-right: 5px;
+	    	li {
+	    	    a {
+	    	    	padding-left: @controls-hor-padding;
+	    	    	padding-right: @controls-hor-padding;
+	    	    	border-right: 1px solid @border-color;
+	    	    }
+	    	    &:last-child a {  
+	    	        border-right: none;
+	    	    }	
+	    	}
+	    }
+	} 
 }
 
 .main-frame {
 	height: auto;
 	width: 100%;
-	top: @navbar-height;
+	top: @frame-top;
 	bottom: 0px;
 	left: 0px;
 	position: absolute;
@@ -149,7 +236,7 @@ body {
 			color: @selected-body-color !important; 
 		}
 		.title {
-			color: rgb(255, 255, 255);
+			color: rgb(255, 255, 255) !important;
 		}
 		.journal {
 		    color: @selected-body-color;

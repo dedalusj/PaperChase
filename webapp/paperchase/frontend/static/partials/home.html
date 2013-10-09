@@ -1,4 +1,17 @@
-<h2 ng-if="!isLogged()"> Home Page </h2>
+<nav class="bar">  
+    <ul class="filters">  
+        <li><a href="#/home" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
+        <li><a href="#/home" ng-class="{active: unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
+    </ul>
+    <ul class="controls">
+        <li ng-if="isLogged()"><a href="#/subscriptions">Subscriptions</a></li>  
+        <li ng-if="isLogged()"><a href="" ng-click="logoutPC()">Logout</a></li>  
+        <li ng-if="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li> 
+        <li ng-if="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li>  
+    </ul>  
+</nav>
+
+<div class="main-frame">
 
 <table ng-if="isLogged()" class="app-wrap"> 
 <!--pc-keydown pc-space="console.log('Space')"
@@ -40,3 +53,5 @@
     </tr>
   </tbody>
 </table>
+
+</div>

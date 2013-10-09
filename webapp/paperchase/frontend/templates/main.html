@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    
+    <!--<link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">-->
+    
     {% assets "css_all" %}
         <link rel="{{ EXTRA.rel }}" type="text/css" href="{{ ASSET_URL }}">
     {% endassets %}
@@ -20,21 +23,7 @@
   <body>
     {% raw %}
     <div ng-app="PCApp" ng-controller="mainController">
-      <div class="navbar navbar-fixed-top navbar-inverse">
-        <a class="navbar-brand" href="#/home"><img src="/static/img/favicon.ico" alt="PC" width="20" height="20"></a>
-        <ul class="nav navbar-nav">
-          <li ng-class="{active:isActive('/home')}"><a href="#/home">Home</a></li>
-          <li ng-class="{active:isActive('/subscriptions')}" ng-show="isLogged()"><a href="#/subscriptions">Subscriptions</a></li>
-        </ul>
-        <ul class="nav navbar-nav pull-right">
-          <li href="" ng-show="isLogged()"><a ng-click="logoutPC()">Logout</a></li>
-          <li ng-show="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li>
-          <li ng-show="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li>
-        </ul>
-      </div>
-      <div class="main-frame">
         <ng-view>Loading...</ng-view>  
-      </div>
     </div>
     {% endraw %}
   </body>
