@@ -1,28 +1,52 @@
-<div class="subscriptions-wrap">
-<div class="row">   
-  <div class="col-md-4">
-    <h4 class="text-center">Categories</h4>
-    <div class="list-group">
-      <a href="#/subscriptions" class="list-group-item" ng-repeat="category in categories" ng-click="updateSubcategories($event, category.id);" ng-class="isActive(category.id,false)">{{ category.name }}</a>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <h4 class="text-center">Subcategories</h4>
-    <p class="text-center" ng-hide="subcategories.length"> Please select a category </p>
-    <div class="list-group" ng-show="subcategories.length">
-      <a href="#/subscriptions" class="list-group-item" ng-repeat="subcategory in subcategories" ng-click="updateJournals($event, subcategory.id);" ng-class="isActive(subcategory.id,true)">{{ subcategory.name }} </a>
-    </div>
-  </div>
-  <div class="col-md-4">
-    <h4 class="text-center">Journals</h4>
-    <p class="text-center" ng-hide="journals.length"> Please select a subcategory </p>
-    <div class="list-group" ng-show="journals.length">
-      <a href="#/subscriptions" class="list-group-item" ng-repeat="journal in journals">{{ journal.title }}
-      <button ng-show="!journal.subscribed" type="button" class="btn btn-xs pull-right btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
-      <button ng-show="journal.subscribed" type="button" class="btn btn-xs pull-right btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
-      </a>
-    </div>
-    <p class="text-center"><a href="#/suggestion">Suggest a new journal</a></p>
-  </div> 
-</div>
+<nav class="bar">  
+    <ul class="logo-link buttons"> 
+        <li><a href="#/home">Home</a></li>  
+    </ul> 
+    <ul class="controls buttons"> 
+        <li><a href="" ng-click="logoutPC()">Logout</a></li>  
+    </ul>  
+</nav>
+
+<div class="main-frame">
+
+<table class="app-wrap"> 
+  <tbody>
+    <tr class="subscription-headers">
+     <th><h4 class="text-center">Categories</h4></th>
+     <th><h4 class="text-center">Subcategories</h4></th>
+     <th><h4 class="text-center">Journals</h4></th>
+    </tr>
+    <tr>
+      <td class="subscription-column app-panel">
+        <div class="full-height overflow">
+        <ul>
+          <li ng-repeat="category in categories" ng-class="isActive(category.id,false)"><a href="#/subscriptions" ng-click="updateSubcategories($event, category.id);">{{ category.name }}</a></li>
+        </ul>
+        </div>
+      </td>
+      <td class="subscription-column app-panel">
+        <div class="full-height overflow">
+        <p class="text-center" ng-hide="subcategories.length">Please select a category</p>
+        <ul ng-show="subcategories.length">
+          <li ng-repeat="subcategory in subcategories" ng-class="isActive(subcategory.id,true)"><a href="#/subscriptions" ng-click="updateJournals($event, subcategory.id);">{{ subcategory.name }}</a></li>
+        </ul>
+        </div>
+      </td>
+      <td class="subscription-column journals app-panel">
+        <div class="full-height overflow">
+        <p class="text-center" ng-hide="journals.length">Please select a subcategory</p>
+        <ul ng-show="journals.length">
+          <li ng-repeat="journal in journals">
+          <a href="#/subscriptions">{{ journal.title }}
+          <button ng-show="!journal.subscribed" type="button" class="btn btn-sm pull-right btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
+          <button ng-show="journal.subscribed" type="button" class="btn btn-sm pull-right btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
+          </a>
+          </li>
+        </ul>
+        <p class="text-center"><a href="#/suggestion">Suggest a new journal</a></p>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>

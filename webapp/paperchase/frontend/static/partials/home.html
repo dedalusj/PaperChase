@@ -3,11 +3,11 @@
         <li><a href="#/home" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
         <li><a href="#/home" ng-class="{active: unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
-    <ul class="controls">
-        <li ng-if="isLogged()"><a href="#/subscriptions">Subscriptions</a></li>  
-        <li ng-if="isLogged()"><a href="" ng-click="logoutPC()">Logout</a></li>  
-        <li ng-if="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li> 
-        <li ng-if="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li>  
+    <ul class="controls buttons">
+        <li><a href="#/subscriptions">Subscriptions</a></li>  
+        <li><a href="" ng-click="logoutPC()">Logout</a></li>  
+        <!--<li ng-if="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li> 
+        <li ng-if="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li> --> 
     </ul>  
 </nav>
 
@@ -37,16 +37,16 @@
       </td>
       <td class="paper-column app-panel">
         <div class="full-height paper-wrap">
-        <div class="paper-content-wrap full-height">
-        <div class="paper-toolbar"><p class="journal">{{ papers.selected.journal.title }}</p></div>
-        <div class="paper-content">
-          <div class="paper-inner">
-            <a href="{{ papers.selected.url }}"><h2 class="title">{{ papers.selected.title }}</h2></a>
-            <p class="journal">{{ papers.selected.journal.title }}</p>
-            <time>{{ papers.selected.created | date:'dd MMMM yyyy, h:mm a'}}</time>
-            <p class="body" ng-bind-html="papers.selected.abstract"></p>
+        <div ng-if="papers.selected" class="paper-content-wrap full-height">
+          <div class="paper-toolbar"><p class="journal">{{ papers.selected.journal.title }}</p></div>
+          <div class="paper-content">
+            <div class="paper-inner">
+              <a href="{{ papers.selected.url }}"><h2 class="title">{{ papers.selected.title }}</h2></a>
+              <p class="journal">{{ papers.selected.journal.title }}</p>
+              <time>{{ papers.selected.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+              <p class="body" ng-bind-html="papers.selected.abstract"></p>
+            </div>
           </div>
-        </div>
         </div>
         </div>
       </td>

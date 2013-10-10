@@ -17,9 +17,9 @@ app.factory('SubscriptionAPI', ['$http', '$resource', function($http, $resource)
 app.factory('PaperAPI', ['$http', '$resource', function($http, $resource) {
     // Define the resource for the paper API to be shared by all other services and controllers
     return $resource('http://localhost\\:5000/api/papers/:paper_id',{},{
-        'getPapers' : { method : 'GET', isArray : true, cache : true},
-        'getPaper' : { method : 'GET', params: { paper_id : '@id' }, cache : true},
-        'getUnreadList' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'GET', isArray : true, cache : true },
+        'getPapers' : { method : 'GET', isArray : true},
+        'getPaper' : { method : 'GET', params: { paper_id : '@id' }},
+        'getUnreadList' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'GET', isArray : true},
         'markUnread' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'PUT', isArray : true },
         'markRead' : { url : 'http://localhost\\:5000/api/read_papers', method : 'PUT', isArray : true }
     });

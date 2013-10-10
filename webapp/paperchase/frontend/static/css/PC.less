@@ -1,47 +1,48 @@
-@navbar-height: 50px;
-
-@navbar-top-color: #333;
-@border-top-width: 3px;
-@border-bottom-width: 1px;
-
-@separator-height: 30px;
-
-@papers-column-width: 400px; 
-
-@controls-hor-padding: 10px;
-@filters-hor-margin: 3px;
-
+/*General Colors*/
 @blue-hint: #428bca;
-
-
-@bottom-link-bar: 10px;
-
-@frame-top: @navbar-height - 1px;
-
+@red-hint: #D43F3F;
 @border-color: #bbb;
+@paper-background-color: #eee;
+@journal-color: #666;
+@light-gray-text: #999;
+@selected-color: #4A9CE3;
+@selected-body-color: rgba(255, 255, 255, 0.8);
 @text-color: #444;
 
+/*General font sizes*/
 @base-font-size: 13px;
 @time-font-size: @base-font-size - 1px;
 @title-font-size: @base-font-size + 2px;
 @line-height: 1.35;
 
+/*Navbar*/
+@navbar-height: 50px;
+@navbar-top-color: #333;
+@border-top-width: 3px;
+@border-bottom-width: 1px;
+@separator-height: 30px;
+@controls-hor-padding: 10px;
+@filters-hor-margin: 3px; 
+@frame-top: @navbar-height - 1px;
+
+/*Spacing for the link bar chrome shows*/
+@bottom-link-bar: 10px;
+
+/*Papers column*/
+@papers-column-width: 400px;
 @vertical-padding: 6px;
 @paper-margins: 5px;
 
-@selected-color: rgb(51, 153, 255);
-@selected-body-color: rgba(255, 255, 255, 0.8);
-
+/*Content style*/
 @content-width: 600px;
 @toolbar-height: 36px;
 @toolbar-title-height: 16px;
 
-@journal-color: rgb(102, 102, 102);
-@light-gray-color: rgb(153, 153, 153);
-
+/*Other pages margins*/
 @subscriptions-margins: 30px;
 
-@border-height: 30px;
+/*Subscriotions style*/
+@active-indicator-width: 6px;
 
 body { 
   padding-top: @frame-top;
@@ -72,7 +73,7 @@ body {
 	    	    height: @separator-height;
 	    	    margin-bottom: (@navbar-height - @separator-height)/2 - @border-bottom-width;
 	    	    margin-top: (@navbar-height - @separator-height)/2 - @border-top-width; 
-	    	    line-height: @border-height; 
+	    	    line-height: @separator-height; 
 	    	    text-align: center; 
 	    	    font-weight: bold;
 	    	}
@@ -92,30 +93,36 @@ body {
 	        			&:hover, &:focus {
 	        				border: 0;
 	        				color: #fff;
-	        				line-height: @border-height;
+	        				line-height: @separator-height;
 	        			}
 	        		}
 	        		&:hover, &:focus {
-	        			color: @blue-hint;
-	        			border: 1px solid @border-color;
-	        			line-height: @border-height - 2px;
+	        			color: @red-hint;
+	        			border: 1px solid @red-hint;
+	        			line-height: @separator-height - 2px;
 	        		}
 	        	}
 	        }
 	    } 
-	    &.controls {
-	    	float: right;
-	    	padding-right: 5px;
+	    &.buttons {
 	    	li {
 	    	    a {
 	    	    	padding-left: @controls-hor-padding;
 	    	    	padding-right: @controls-hor-padding;
 	    	    	border-right: 1px solid @border-color;
+	    	    	color: @border-color - #222;
+	    	    	&:hover, &:focus {
+	    	    		color: @red-hint;
+	    	    	}
 	    	    }
 	    	    &:last-child a {  
 	    	        border-right: none;
 	    	    }	
 	    	}
+	    }
+	    &.controls {
+	    	float: right;
+	    	padding-right: 5px;
 	    }
 	} 
 }
@@ -200,7 +207,7 @@ body {
     		}
     		time {
     			font-size: @time-font-size;
-    			color: @light-gray-color;
+    			color: @light-gray-text;
     		}
     		.title {
     			font-weight: bold;
@@ -246,6 +253,7 @@ body {
 
 .paper-wrap {
 	position: relative;
+	background-color: @paper-background-color;
 }
 
 .paper-content-wrap {
@@ -274,7 +282,7 @@ body {
     position: absolute;
     height: auto;
     bottom: 0;
-    top: @toolbar-height + 1px;
+    top: @toolbar-height;
     left: 0;
     right: 0;
     margin: 0;
@@ -294,7 +302,7 @@ body {
     	line-height: 1.1em;
     }
     .journal, time {
-    	color: @light-gray-color;
+    	color: @light-gray-text;
     	font-size: @base-font-size + 1px;
     	margin-bottom: @paper-margins;
     }
@@ -304,8 +312,59 @@ body {
     }
 }
 
-.subscriptions-wrap, .suggestion-wrap {
-	margin-left: @subscriptions-margins;
-	margin-right: @subscriptions-margins;
-	margin-top: 10px;
+tr.subscription-headers {
+    height: 45px;
+	th {
+	    padding-top: 10px;
+		h4 {
+			border-bottom: 2px solid @red-hint;
+			margin: 0;
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+	}
+}
+
+.subscription-column {
+	width: 33%;
+	.overflow {
+		overflow-x: hidden;
+		overflow-y: auto;
+	}
+	ul {
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		padding-left: 0;
+	}
+	li {
+		list-style-image: none;
+		list-style-position: outside;
+		list-style-type: none;
+		border-bottom: 1px solid @border-color + #222;
+		a {
+			line-height: 50px;
+			padding-left: 30px;
+			color: @journal-color - #111;
+			display: block;
+			&:hover, &:focus {
+				text-decoration: none;
+			}
+		}
+		&.active {
+			border-right: @active-indicator-width solid @blue-hint;
+			background-color: fade(@blue-hint, 10%);
+			a {
+				margin-right: -@active-indicator-width;
+			}
+		}
+	}
+	&.journals {
+		ul li {
+			padding-right: 20px;
+			button {
+				margin-top: 8px;
+			}
+		}
+	}
 }
