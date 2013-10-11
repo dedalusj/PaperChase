@@ -1,39 +1,44 @@
-<div class="row">   
-  <div class="well col-lg-7 col-offset-3">
-    <legend>Register</legend>
+<div class="sign-page">
+
+<div id="logo">
+  <a href="#/home">
+    <span ng-include="'static/img/logo.svg'"></span>
+  </a>
+</div>
+
+<div class="form-box">
+<h2>Sign up</h2>
     <form class="form-horizontal" role="form" ng-submit="registerPC()" name="register" novalidate>
-    
+
       <div class="form-group" ng-class="{'has-error': register.email.$dirty && register.email.$invalid, 'has-success': register.email.$dirty && register.email.$valid}">
-        <label for="email" class="col-lg-4 control-label">Email Address</label>
-        <div class="col-lg-8">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon">@</span>
           <input type="email" class="form-control" ng-model="email" name="email" placeholder="Email Address" required>
-          <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.required">Please enter your email</p>
-          <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.email">Please enter a valid email address</p>
         </div>
+        <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.required">Please enter your email</p>
+        <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.email">Please enter a valid email address</p>
       </div>
         
       <div class="form-group" ng-class="{'has-error': register.password.$dirty && register.password.$invalid, 'has-success': register.password.$dirty && register.password.$valid}">
-        <label for="password" class="col-lg-4 control-label">Password</label>
-        <div class="col-lg-8">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="icon-lock"></i> </span>
           <input type="password" class="form-control" ng-model="password" name="password" placeholder="Password" required>
-          <p class="help-block error" ng-show="register.password.$dirty && register.password.$error.required">Please enter your password</p>
         </div>
+        <p class="help-block error" ng-show="register.password.$dirty && register.password.$error.required">Please enter your password</p>
       </div>
       
       <div class="form-group" ng-class="{'has-error': register.confirmPassword.$dirty && register.confirmPassword.$invalid, 'has-success': register.confirmPassword.$dirty && register.confirmPassword.$valid}">
-        <label for="confirmPassword" class="col-lg-4 control-label">Confirm Password</label>
-        <div class="col-lg-8">
-          <input type="password" class="form-control" ng-model="confirmPassword" name="confirmPassword" placeholder="Password" pw-check="password" required>
-          <p class="help-block error" ng-show="register.confirmPassword.$dirty && register.confirmPassword.$error.pwmatch">Passwords don't match.</p>
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="icon-lock"></i> </span>
+          <input type="password" class="form-control" ng-model="confirmPassword" name="confirmPassword" placeholder="Confirm Password" pw-check="password" required>
         </div>
-      </div>
-      
+        <p class="help-block error" ng-show="register.confirmPassword.$dirty && register.confirmPassword.$error.pwmatch">Passwords don't match.</p>
+      </div>  
+   
       <div class="form-group">
-        <div class="col-lg-offset-4 col-lg-8">
-          <button type="submit" ng-disabled="!register.$valid" class="btn btn-default">Register</button>
-        </div>
-      </div>
-      
-    </form>   
+        <input class="submit-button" name="commit" tabindex="3" type="submit" value="Register" ng-disabled="!register.$valid">
+      </div>      
+   
+    </form> 
   </div>
 </div>

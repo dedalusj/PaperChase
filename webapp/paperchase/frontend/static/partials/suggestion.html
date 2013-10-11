@@ -1,71 +1,86 @@
-<div class="suggestion-wrap">
-<div class="row">   
-  <form class="form-horizontal" role="form" ng-submit="formatAndSubmit(suggestion)" name="suggestion" novalidate>
-    <div class="col-md-6">
-      <div class="form-group" ng-class="{'has-error': suggestion.name.$dirty && suggestion.name.$invalid, 'has-success': suggestion.name.$dirty && suggestion.name.$valid}">
-        <label class="col-lg-4 control-label">Name</label>
-        <div class="col-lg-7">
-          <input type="text" class="form-control" placeholder="Journal name" ng-model="name" name="name" required>
-          <p class="help-block error" ng-show="suggestion.name.$error.required">Please enter a name for the journal</p>
-        </div>
-      </div>
-      <div class="form-group" ng-class="{'has-error': suggestion.url.$dirty && suggestion.url.$invalid, 'has-success': suggestion.url.$dirty && suggestion.url.$valid}">
-        <label class="col-lg-4 control-label">URL</label>
-        <div class="col-lg-7">
-          <input type="url" class="form-control" placeholder="Feed URL" ng-model="url" name="url" required>
-          <p class="help-block error" ng-show="suggestion.url.$error.required">Please enter the url for the journal feed</p>
-          <p class="help-block error" ng-show="suggestion.url.$error.url">Please enter a valid url</p>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-lg-4 control-label">Category</label>
-        <div class="col-lg-7">
-          <select class="form-control" ng-model="category" ng-change="updateSubcategories()" ng-options="c.name for c in categories" name="category" ng-disabled="suggestion.sCategory.$viewValue.length">
-            <option value="">-- choose a category --</option>
-          </select>
-          <p class="help-block">or suggest one</p>
-          <input type="text" class="form-control" placeholder="Category name" ng-model="category.name" name="sCategory">
-        </div>
-      </div>
-      <fieldset ng-disabled="category.name == undefined">
-        <div class="form-group">
-          <label class="col-lg-4 control-label">Subcategory</label>
-          <div class="col-lg-7">
-            <select class="form-control" ng-model="subcategory" ng-options="s.name for s in subcategories" name="subcategory"  ng-disabled="!subcategories.length || suggestion.sSubcategory.$viewValue.length">
-              <option value="">-- choose subcategory --</option>
-            </select>
-            <p class="help-block">or suggest one</p>
-            <input type="text" class="form-control" placeholder="Subcategory name" ng-model="subcategory.name" name="sSubcategory">
-          </div>
-        </div>
-      </fieldset>
-      <div class="form-group">
-        <div class="col-lg-offset-4 col-lg-7">
-          <button type="submit" ng-disabled="!suggestion.$valid" class="btn btn-default">Submit</button>
-        </div>
-      </div>
-    </div>   
-    <div class="col-md-4">
-      <p>You can help us speed up the process by extracting the <a href="http://en.wikipedia.org/wiki/XPath">XPath</a> of the following elements from the webpage the journal.</p>  
-      <div class="form-group">
-        <label class="col-lg-3 control-label">Title</label>
-        <div class="col-lg-9">
-          <input type="text" class="form-control" placeholder="Title" ng-model="title" name="title">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-lg-3 control-label">Authors</label>
-        <div class="col-lg-9">
-          <input type="text" class="form-control" placeholder="Authors" ng-model="authors" name="authors">
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="col-lg-3 control-label">Abstract</label>
-        <div class="col-lg-9">
-          <input type="text" class="form-control" placeholder="Abstract" ng-model="abstract" name="abstract">
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+<nav class="bar">  
+    <ul class="logo-link buttons"> 
+        <li><a href="#/home"><span ng-include="'static/img/logo.svg'"></span></a></li>  
+    </ul> 
+    <ul class="controls buttons"> 
+        <li><a href="" ng-click="logoutPC()">Logout</a></li>  
+    </ul>  
+</nav>
+
+<div class="main-frame">
+  <div class="suggestion-wrap">
+    <form class="form-horizontal" role="form" ng-submit="formatAndSubmit(suggestion)" name="suggestion" novalidate>
+      <table>
+      <tbody>
+        <tr>
+          <td>
+            <div class="form-group" ng-class="{'has-error': suggestion.name.$dirty && suggestion.name.$invalid, 'has-success': suggestion.name.$dirty && suggestion.name.$valid}">
+              <label class="col-lg-4 control-label">Name</label>
+              <div class="col-lg-7">
+                <input type="text" class="form-control" placeholder="Journal name" ng-model="name" name="name" required>
+                <p class="help-block error" ng-show="suggestion.name.$error.required">Please enter a name for the journal</p>
+              </div>
+            </div>
+            <div class="form-group" ng-class="{'has-error': suggestion.url.$dirty && suggestion.url.$invalid, 'has-success': suggestion.url.$dirty && suggestion.url.$valid}">
+              <label class="col-lg-4 control-label">URL</label>
+              <div class="col-lg-7">
+                <input type="url" class="form-control" placeholder="Feed URL" ng-model="url" name="url" required>
+                <p class="help-block error" ng-show="suggestion.url.$error.required">Please enter the url for the journal feed</p>
+                <p class="help-block error" ng-show="suggestion.url.$error.url">Please enter a valid url</p>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Category</label>
+              <div class="col-lg-7">
+                <select class="form-control" ng-model="category" ng-change="updateSubcategories()" ng-options="c.name for c in categories" name="category" ng-disabled="suggestion.sCategory.$viewValue.length">
+                  <option value="">-- choose a category --</option>
+                </select>
+                <p class="help-block">or suggest one</p>
+                <input type="text" class="form-control" placeholder="Category name" ng-model="category.name" name="sCategory">
+              </div>
+            </div>
+            <fieldset ng-disabled="category.name == undefined">
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Subcategory</label>
+              <div class="col-lg-7">
+                <select class="form-control" ng-model="subcategory" ng-options="s.name for s in subcategories" name="subcategory"  ng-disabled="!subcategories.length || suggestion.sSubcategory.$viewValue.length">
+                  <option value="">-- choose subcategory --</option>
+                </select>
+                <p class="help-block">or suggest one</p>
+                <input type="text" class="form-control" placeholder="Subcategory name" ng-model="subcategory.name" name="sSubcategory">
+              </div>
+            </div>
+            </fieldset>
+          </td>
+          <td> 
+            <div class="col-lg-9">
+              <p id="blurb">You can help us speed up the process by extracting the <a href="http://en.wikipedia.org/wiki/XPath">XPath</a> of the following elements from the webpage the journal.</p>  
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Title</label>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="Title" ng-model="title" name="title">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Authors</label>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="Authors" ng-model="authors" name="authors">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Abstract</label>
+              <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="Abstract" ng-model="abstract" name="abstract">
+              </div>
+            </div>
+            <div class="form-group">
+                <input class="submit-button" name="commit" tabindex="3" type="submit" value="Submit" ng-disabled="!suggestion.$valid">
+            </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      </table>
+    </form>
+  </div>
 </div>
