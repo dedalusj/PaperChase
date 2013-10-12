@@ -11,4 +11,8 @@ app.controller("homeController", ['$scope', 'Papers', function($scope, Papers) {
     $scope.markAllRead = function() {
         $scope.papers.markAllRead();
     };
+    
+    $scope.keyPressed = function() {
+        console.log('Key pressed');
+    };
 }]);

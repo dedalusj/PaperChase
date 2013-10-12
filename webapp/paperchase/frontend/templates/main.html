@@ -20,11 +20,9 @@
     <link rel="shortcut icon" href="/static/img/favicon.ico">
     
   </head>
-  <body>
-    {% raw %}
-    <div ng-app="PCApp" ng-controller="mainController">
+  {% raw %}
+  <body ng-app="PCApp" ng-controller="mainController" pc-keydown pc-space="keyPressed()" pc-down="keyPressed()" pc-up="keyPressed()" pc-read="keyPressed()">
         <ng-view>Loading...</ng-view>  
-    </div>
-    {% endraw %}
   </body>
+  {% endraw %}
 </html>

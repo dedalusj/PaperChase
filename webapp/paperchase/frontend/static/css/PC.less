@@ -334,11 +334,28 @@
 	width: 100%;
 	height: @toolbar-height;
 	border-bottom: 1px solid #CCC;
-	p {
-		height: @toolbar-title-height;
+	a {
 		margin-top: 0.5*(@toolbar-height - @toolbar-title-height);
 		margin-left: 40px;
 		color: @journal-color;
+		text-decoration: none;
+		line-height: @toolbar-height;
+		&:hover, &:focus {
+			text-decoration: none;
+		}
+	}
+	.paper-buttons {
+	    display: block;
+	    position: absolute;
+	    top: 0;
+	    right: 0px;
+	    height: @toolbar-height;
+	    z-index: 1;
+	    padding-right: 15px;
+	    i {
+	    	line-height: @toolbar-height;
+	    	color: @border-color - #222;
+	    }
 	}
 }
 

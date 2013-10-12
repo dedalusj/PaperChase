@@ -6,16 +6,12 @@
     <ul class="controls buttons">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
         <li><a href="" ng-click="logoutPC()">Logout</a></li>  
-        <!--<li ng-if="!isLogged()" ng-class="{active:isActive('/login')}"><a href="#/login">Login</a></li> 
-        <li ng-if="!isLogged()"><a style="color: orange;" href="#/register">Sign Up</a></li> --> 
     </ul>  
 </nav>
 
 <div class="main-frame">
 
 <table ng-if="isLogged()" class="app-wrap"> 
-<!--pc-keydown pc-space="console.log('Space')"
-      pc-down="console.log('Down')" pc-up="console.log('Up')" pc-read="console.log('Read')"-->
   <tbody>
     <tr>
       <td class="papers-column app-panel">
@@ -46,7 +42,10 @@
       <td class="paper-column app-panel">
         <div class="full-height paper-wrap">
         <div ng-if="papers.selected" class="paper-content-wrap full-height">
-          <div class="paper-toolbar"><p class="journal">{{ papers.selected.journal.title }}</p></div>
+          <div class="paper-toolbar">
+            <a class="journal">{{ papers.selected.journal.title }}</a>
+            <div class="paper-buttons"><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}"><i class="icon-envelope"></i></a></div>
+          </div>
           <div class="paper-content">
             <div class="paper-inner">
               <a href="{{ papers.selected.url }}"><h2 class="title">{{ papers.selected.title }}</h2></a>

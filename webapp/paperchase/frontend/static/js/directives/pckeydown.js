@@ -1,9 +1,6 @@
 app.directive('pcKeydown', function() {
   return function(scope, elm, attr) {
     elm.bind('keydown', function(e) {
-  
-      console.log(e.keyCode);
-  
       switch (e.keyCode) {
         case 34: // PgDn
         case 39: // right arrow
