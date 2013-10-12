@@ -62,7 +62,8 @@ class PaperListAPI(Resource):
             since = parse(args['since'])
             since = since.replace(tzinfo=None)
             paperList = paperList.filter(user_papers.model().created >= since)
-
+        
+        paperList = paperList.order_by(user_papers.model().created.desc())
         paperList = paperList.paginate(args['page'],per_page=args['per_page'])
         return map(lambda p: marshal(p, paper_fields), paperList.items)
 
@@ -106,10 +107,19 @@ class ReadPapersAPI(Resource):
     """API :class:`Resource` to mark papers as read"""
     
     def put(self):
-        """Delete papers from the unread list equivalent to marking them as read"""
+        """Put papers in the read list equivalent to marking them as read"""
         read_ids = request.json['read_papers']
         if len(read_ids) > 1000:
             return 413
         user = users.request_user()
         marked_ids = user_papers.markRead(user, read_ids)
         return marked_ids
+        
+class MarkAllPapersAPI(Resource):
+    """API :class:`Resource` to mark all papers as read"""
+    
+    def put(self):
+        """Delete papers from the unread list equivalent to marking them as read"""
+        user = users.request_user()
+        user_papers.markAllRead(user)
+        return 202

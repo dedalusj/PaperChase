@@ -123,11 +123,7 @@ app.factory('Papers', ['PaperAPI', '$http', function(PaperAPI, $https) {
   };
   
   Papers.prototype.markAllRead = function() {
-//        items.filtered.forEach(function(item) {
-//          item.read = true;
-//          feedStore.updateEntryProp(item.feedUrl, item.id, 'read', true);
-//        });
-//        items.readCount = items.filtered.length;
+      PaperAPI.markAllRead();
   };
 
   return Papers;

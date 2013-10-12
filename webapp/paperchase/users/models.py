@@ -24,7 +24,7 @@ class User(db.Model):
     registered_at = db.Column(db.DateTime())
 
     subscriptions = db.relationship('Journal', secondary=subscriptions_users, backref=db.backref('users', lazy='dynamic'), lazy = 'dynamic')
-    papers = db.relationship("UserPaper", backref=db.backref('users'), lazy='dynamic', order_by="UserPaper.created.desc()")
+    papers = db.relationship("UserPaper", backref=db.backref('users'), lazy='dynamic')
     
     def __str__(self):
         return self.email                        

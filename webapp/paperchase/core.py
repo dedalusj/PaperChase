@@ -166,3 +166,6 @@ class Service(object):
         self._isinstance(model)
         db.session.delete(model)
         db.session.commit()
+        
+    def commit_changes(self):
+        db.session.commit()

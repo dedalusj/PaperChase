@@ -7,4 +7,8 @@ app.controller("homeController", ['$scope', 'Papers', function($scope, Papers) {
         if ($scope.unreadFilter == true) $scope.papers.showUnread();
         else $scope.papers.showAll();
     };
+    
+    $scope.markAllRead = function() {
+        $scope.papers.markAllRead();
+    };
 }]);

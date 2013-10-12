@@ -17,7 +17,7 @@ class UserPapersService(Service):
     __model__ = UserPaper
     
     def _unreadPapers(self, user):
-        return user.papers.filter(UserPaper.read_at == None).all()
+        return user.papers.filter(UserPaper.read_at == None).order_by(UserPaper.created.desc()).all()
         
     def unreadList(self, user):
         return [paper.paper_id for paper in self._unreadPapers(user)]
@@ -39,3 +39,7 @@ class UserPapersService(Service):
             self.save(paper)
             ids_changed.append(paper.paper_id)
         return ids_changed
+    
+    def markAllRead(self, user):
+        user.papers.filter(UserPaper.read_at == None).update({"read_at": datetime.datetime.utcnow()})
+        self.commit_changes()

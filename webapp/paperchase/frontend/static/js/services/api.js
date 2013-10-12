@@ -21,6 +21,7 @@ app.factory('PaperAPI', ['$http', '$resource', function($http, $resource) {
         'getPaper' : { method : 'GET', params: { paper_id : '@id' }},
         'getUnreadList' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'GET', isArray : true},
         'markUnread' : { url : 'http://localhost\\:5000/api/unread_papers', method : 'PUT', isArray : true },
-        'markRead' : { url : 'http://localhost\\:5000/api/read_papers', method : 'PUT', isArray : true }
+        'markRead' : { url : 'http://localhost\\:5000/api/read_papers', method : 'PUT', isArray : true },
+        'markAllRead' : { url : 'http://localhost\\:5000/api/read_papers/mark_all_read', method : 'PUT'}
     });
 }]);
