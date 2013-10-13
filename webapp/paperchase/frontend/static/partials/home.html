@@ -14,7 +14,7 @@
 <table ng-if="isLogged()" class="app-wrap"> 
   <tbody>
     <tr>
-      <td class="papers-column app-panel">
+      <td class="papers-column app-panel" ng-class="{'active-column': papersActive}">
         <div class="full-height papers-wrap">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
@@ -39,7 +39,7 @@
           </div>
         </div> 
       </td>
-      <td class="paper-column app-panel">
+      <td class="paper-column app-panel" ng-class="{'active-column': !papersActive}">
         <div class="full-height paper-wrap">
         <div ng-if="papers.selected" class="paper-content-wrap full-height">
           <div class="paper-toolbar">

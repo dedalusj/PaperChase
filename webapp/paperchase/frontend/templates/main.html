@@ -21,7 +21,7 @@
     
   </head>
   {% raw %}
-  <body ng-app="PCApp" ng-controller="mainController" pc-keydown pc-space="keyPressed()" pc-down="keyPressed()" pc-up="keyPressed()" pc-read="keyPressed()">
+  <body ng-app="PCApp" ng-controller="mainController" pc-keydown pc-space="keyPressed('space')" pc-down="keyPressed('down')" pc-up="keyPressed('up')" pc-left="keyPressed('left')" pc-right="keyPressed('right')">
         <ng-view>Loading...</ng-view>  
   </body>
   {% endraw %}

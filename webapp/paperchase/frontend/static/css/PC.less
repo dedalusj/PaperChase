@@ -160,6 +160,8 @@
 	vertical-align: top;
 	display: table-cell;
 	height: 100%;
+	padding: 0;
+	border-top: 2px solid rgba(0,0,0,0);
 }
 
 .full-height {
@@ -178,6 +180,10 @@
 	padding: 0;
 }
 
+.active-column {
+	border-top: 2px solid @red-hint;
+}
+
 .papers {
     position: absolute;
     top: 0;
@@ -193,7 +199,7 @@
         padding-bottom: @bottom-link-bar;
         list-style-image: none;
         list-style-position: outside;
-        list-style-type: none;	
+        list-style-type: none;
     }
     li {
     	list-style-image: none;
@@ -207,7 +213,7 @@
     			font-size: @base-font-size;
     			line-height: @line-height * @base-font-size;
     			padding: 10px 15px;
-    			border: 1px solid @border-color;
+    			border-bottom: 1px solid @border-color;
     			box-sizing: border-box;
     			position: relative;
     			display: block;

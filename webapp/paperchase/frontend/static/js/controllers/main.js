@@ -9,4 +9,7 @@ app.controller("mainController", ['$scope', '$location', 'UserServices', functio
     $scope.isActive = function(route) {
         return route === $location.path();
     };
+    $scope.keyPressed = function(kind) {
+        $scope.$broadcast('keyPress',kind);
+    };
 }]);

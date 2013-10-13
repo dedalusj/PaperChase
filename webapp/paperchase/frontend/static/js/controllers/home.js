@@ -12,7 +12,25 @@ app.controller("homeController", ['$scope', 'Papers', function($scope, Papers) {
         $scope.papers.markAllRead();
     };
     
-    $scope.keyPressed = function() {
-        console.log('Key pressed');
-    };
+    $scope.papersActive = true;
+    
+    $scope.$on('keyPress', function(event, kind) {
+        switch (kind) {
+          case 'up':
+            if ($scope.papersActive === true) $scope.papers.prev();
+            break;
+          case 'down':
+            if ($scope.papersActive === true) $scope.papers.next();
+            break;
+          case 'left':
+            if ($scope.papersActive === false) $scope.papersActive = true;
+            break;
+          case 'right':
+            if ($scope.papersActive === true) $scope.papersActive = false;
+            break;
+          case 'space':
+            console.log('space');
+            break;
+        }
+    });
 }]);

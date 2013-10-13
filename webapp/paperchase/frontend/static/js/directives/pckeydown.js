@@ -21,7 +21,6 @@ app.directive('pcKeydown', function() {
             return scope.$apply(attr.pcUp);
 
         case 85: // U
-          return scope.$apply(attr.pcRead);
 
       }
     });
