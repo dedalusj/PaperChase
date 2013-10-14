@@ -19,3 +19,4 @@ flask-seasurf
 cssmin
 fabric
 python-dateutil
+beautifulsoup4

@@ -19,7 +19,8 @@ from celery.utils.log import get_task_logger
 from xml.sax import SAXException
 from xml.etree import ElementTree as ET
 from lxml import etree
-from HTMLParser import HTMLParser
+from bs4 import BeautifulSoup
+
 from flask.ext.mail import Message
 
 from .core import mail
@@ -44,23 +45,25 @@ fh.setFormatter(formatter)
 # add the handlers to the logger
 logger.addHandler(fh)
 
-class MLStripper(HTMLParser):
 
-    def __init__(self):
-        self.reset()
-        self.fed = []
+whitelist_tags = ['span','sup', 'em']
+blacklist_tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+def sanitize_html(html, whitelist_tags = [], blacklist_tags = []):
+    """
+    Sanitize html. It accepts a BeautifulSoup tree or a string as input. It removes the html tags and their content if they 
+    appear in the blacklist_tags array and hides all other tags that don't appear in whitelist_tags.
+    """
+    if isinstance(html, basestring):
+        html = BeautifulSoup(html)
+    for tag in html.findAll(True):
+        if tag.name in blacklist_tags:
+            tag.decompose()
+        elif tag.name not in whitelist_tags:
+            tag.hidden = True
+        else:
+            tag.attrs = {}
+    return html.renderContents()  
 
-    def handle_data(self, d):
-        self.fed.append(d)
-
-    def get_data(self):
-        return ''.join(self.fed)
-
-def strip_tags(html):
-    s = MLStripper()
-    s.feed(html)
-    return s.get_data()
-    
 def is_absolute(url):
     return bool(urlparse.urlparse(url).scheme)
     
@@ -99,26 +102,6 @@ def feed_requester(feed_url):
             return None
 
     return feed_data
-
-def clean_element(tree_element):
-    """
-    Format an xml node element. It makes the node a paragraph node, remove all 
-    link tags (for now, later maybe more) and remove all attributes  
-    
-    :param tree_element: The element to format. tree_element must be an instance of etree._Element
-    
-    :return: This function return a string repreesnting the element or None if the a non ElementTree type is passed
-    """
-    try:
-        # remove link tags from an element and maybe other things in the future
-        etree.strip_tags(tree_element,'a')
-    except TypeError:
-        logger.error("Wrong type passed to clen_element. Element: {0} Type: {1}".format(tree_element, type(tree_element)))
-        return None
-        
-    for attr in tree_element.keys():
-        del tree_element.attrib[attr]
-    return ET.tostring(tree_element)
     
 def extract_elements(article, paths):
     """
@@ -140,7 +123,7 @@ def extract_elements(article, paths):
         if len(elements) is 0:
             logger.warning("Article at URL {0} has no element {1}".format(article.get("url"),path.path))
             continue  
-        element_string = clean_element(elements[0])
+        element_string = sanitize_html(ET.tostring(elements[0]), whitelist_tags, blacklist_tags) # clean_element(elements[0])
         article[path.type] = element_string.strip(' \n')
 
 def default_parser(entry):
@@ -166,7 +149,7 @@ def default_parser(entry):
     authors = [authors[i]['name'] for i in range(len(authors))]
     authors = ', '.join(authors)
     # let's sanitize authors from unwanted html tags
-    authors = strip_tags(authors)
+    authors = sanitize_html(authors)
     authors = authors.strip(' \n')
     
     # if the authors list is to long truncate it to 900 chars
