@@ -20,6 +20,10 @@
         <ul>
           <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}">
             <a href="#/home" ng-click="papers.selectItem(paper.id)">
+              <span class="favicon-wrap">
+                  <img ng-if="paper.journal.favicon != null" ng-src="{{ paper.journal.favicon }}" height="16" width="16">
+                  <i ng-if="paper.journal.favicon == null" class="icon-beaker"></i>
+              </span>
               <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <h4 class="title">{{ paper.title }}</h4>
               <p class="journal">{{ paper.journal.title }}</p>
@@ -43,6 +47,10 @@
         <div class="full-height paper-wrap">
         <div ng-if="papers.selected" class="paper-content-wrap full-height">
           <div class="paper-toolbar">
+            <span class="favicon-wrap">
+                <img ng-if="papers.selected.journal.favicon != null" ng-src="{{ papers.selected.journal.favicon }}" height="16" width="16">
+                <i ng-if="papers.selected.journal.favicon == null" class="icon-beaker"></i>
+            </span>
             <a class="journal">{{ papers.selected.journal.title }}</a>
             <div class="paper-buttons"><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}"><i class="icon-envelope"></i></a></div>
           </div>

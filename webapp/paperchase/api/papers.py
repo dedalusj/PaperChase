@@ -17,6 +17,7 @@ class Ellipsis(fields.Raw):
 
 journal_fields = {
     'title': fields.String,
+    'favicon': fields.String,
     'id': fields.Integer
 }
 

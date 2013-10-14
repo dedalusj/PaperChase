@@ -31,6 +31,7 @@
 /*Papers column*/
 @papers-column-width: 400px;
 @vertical-padding: 6px;
+@horizontal-padding: 35px;
 @paper-margins: 5px;
 @actions-height: 80px;
 
@@ -205,6 +206,10 @@
     	list-style-image: none;
     	list-style-position: outside;
     	list-style-type: none;
+    	.favicon-wrap {
+    	    top: 21px;
+    	    left: 7px;	
+    	}
     	&.paper {
     		margin-right: -1px;
     		a {
@@ -212,7 +217,6 @@
     			color: @text-color;
     			font-size: @base-font-size;
     			line-height: @line-height * @base-font-size;
-    			padding: 10px 15px;
     			border-bottom: 1px solid @border-color;
     			box-sizing: border-box;
     			position: relative;
@@ -221,6 +225,7 @@
     			padding-bottom: @vertical-padding;
     			padding-top: @vertical-padding;
     			padding-right: 8px;
+    			padding-left: @horizontal-padding;
     			&:hover, &:focus {
     				text-decoration: none;
     				color: @text-color;
@@ -232,7 +237,7 @@
     		}
     		.title {
     			font-weight: bold;
-    			margin-top: @paper-margins;
+    			margin-top: 0;
     			margin-bottom: @paper-margins;
     			font-size: @title-font-size;
     			line-height: @line-height * @title-font-size;
@@ -314,6 +319,18 @@
 	}
 }
 
+.favicon-wrap {
+    border-radius: 2px;
+    z-index: 0;
+    padding: 2px;
+    display: block;
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    left: 8px;
+    top: 3px;
+}
+
 .paper-wrap {
 	position: relative;
 	background-color: @paper-background-color;
@@ -362,6 +379,10 @@
 	    	line-height: @toolbar-height;
 	    	color: @border-color - #222;
 	    }
+	}
+	.favicon-wrap {
+	    top: 8px;
+	    left: 13px;
 	}
 }
 
