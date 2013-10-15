@@ -26,7 +26,7 @@ from flask.ext.mail import Message
 from .core import mail
 from .factory import create_celery_app
 from .services import journals, papers
-from .helpers import bozo_checker, days_since, deltatime
+from .helpers import bozo_checker, days_since, deltatime, FaviconFetcher
 from .settings import scraper_config
 
 celery = create_celery_app()
@@ -238,13 +238,8 @@ def update_metadata(journal_id, feed_data):
     paper = papers.first(journal_id=journal_id)
     if paper:
         paper_url = paper.url
-        paper_page_request = requests.get(paper_url)
-        tree = etree.HTML(paper_page_request.content)
-        favicon_url = tree.xpath('//link[@rel="icon" or @rel="shortcut icon"]/@href')
-        if favicon_url:
-            favicon_url = favicon_url[0]
-            if not is_absolute(favicon_url):
-                favicon_url = make_absolute_url(favicon_url, paper_page_request.url)
+        favicon_url = FaviconFetcher().find_favicon(paper_url)
+        if favicon_url is not None:
             journals.update(journal, favicon = favicon_url)
         else:
             logger.error("The journal {0} at URL {1} does not have a favicon".format(journal.title,paper_url))

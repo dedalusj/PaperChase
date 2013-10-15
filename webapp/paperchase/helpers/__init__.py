@@ -14,8 +14,9 @@ import feedparser
 from flask import Blueprint, request, current_app
 from passlib.hash import bcrypt
 
-from .core import auth
-from .services import users
+from ..core import auth
+from ..services import users
+from .favicon import FaviconFetcher
 
 @auth.get_password
 def get_pw(username):
