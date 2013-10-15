@@ -23,9 +23,9 @@ scraper_config = {
 
 DEBUG = True
 CSRF_ENABLED = True
-SECRET_KEY = 'SECRET_KEY'
+SECRET_KEY = '$secret_key'
 
-SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost:3306/development?charset=utf8'
+SQLALCHEMY_DATABASE_URI = 'mysql://$db_username:$db_password@localhost:3306/$database?charset=utf8'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_ALWAYS_EAGER = False
@@ -36,16 +36,11 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
-#CELERY_TIMEZONE = 'UTC'
+PASSWORD_SALT = '$password_salt'
 
-SECURITY_REGISTERABLE = True
-SECURITY_PASSWORD_HASH = 'bcrypt'
-SECURITY_TRACKABLE = True
-SECURITY_PASSWORD_SALT = '$blahblah'
-
-MAIL_DEFAULT_SENDER = 'your.email@goes.here'
-MAIL_SERVER='smtp.email.com'
-MAIL_PORT=465
-MAIL_USE_SSL=True
-MAIL_USERNAME = 'your.email@goes.here'
-MAIL_PASSWORD = 'password'
+MAIL_DEFAULT_SENDER = '$mail_address'
+MAIL_SERVER='$mail_server'
+MAIL_PORT=$mail_port
+MAIL_USE_SSL=$mail_ssl
+MAIL_USERNAME = '$mail_username'
+MAIL_PASSWORD = '$mail_password'
