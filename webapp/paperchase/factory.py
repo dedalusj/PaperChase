@@ -7,6 +7,9 @@
 """
 
 import os
+import logging
+from logging.handlers import SMTPHandler, RotatingFileHandler
+
 from celery import Celery
 from flask import Flask
 from flask.ext.seasurf import SeaSurf
@@ -35,6 +38,21 @@ def create_app(package_name, package_path, settings_override=None):
     csrf = SeaSurf(app)
 	
     register_blueprints(app, package_name, package_path)
+    
+    if not app.debug:
+        credentials = None
+        if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
+            credentials = (app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
+        mail_handler = SMTPHandler((app.config['MAIL_SERVER'], app.config['MAIL_PORT']), 'no-reply@' + app.config['MAIL_SERVER'], app.config['MAIL_DEFAULT_SENDER'], 'paperchase failure', credentials)
+        mail_handler.setLevel(logging.ERROR)
+        app.logger.addHandler(mail_handler)
+        
+        file_handler = RotatingFileHandler('log/paperchase.log', 'a', 1 * 1024 * 1024, 10)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+        app.logger.setLevel(logging.INFO)
+        file_handler.setLevel(logging.INFO)
+        app.logger.addHandler(file_handler)
+        app.logger.info('paperchase startup')
 
     return app
 
