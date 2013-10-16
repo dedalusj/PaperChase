@@ -32,18 +32,8 @@ from .settings import scraper_config
 celery = create_celery_app()
 
 logger = get_task_logger(__name__)
+# This setting will be overwritten by fabric when launching the celery beat worker
 logger.setLevel(scraper_config.get("log_level"))
-
-# create file handler which logs even debug messages
-fh = logging.FileHandler("log/tasks_{0}.log".format(date.today().isoformat()))
-fh.setLevel(scraper_config.get("log_level"))
-
-# create formatter and add it to the handlers
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-
-# add the handlers to the logger
-logger.addHandler(fh)
 
 
 whitelist_tags = ['span','sup', 'em']
@@ -90,14 +80,14 @@ def feed_requester(feed_url):
     try:
         feed_data = feedparser.parse(feed_url, agent=scraper_config.get("User-agent"))
     except SAXException as errno:
-        logger.debug("Failed to retrive {0}\nTraceback:\n{1}".format(feed_url, errno))
+        logger.error("Failed to retrive {0}\nTraceback:\n{1}".format(feed_url, errno))
 
     if not feed_data:
-        logger.debug("Retriving feed from {0} returned nothing\n".format(feed_url))
+        logger.error("Retriving feed from {0} returned nothing\n".format(feed_url))
         return None
 
     if feed_data.bozo:
-        logger.info("Feed at {0}, generated bozo error: {1}.\n".format(feed_url, feed_data.bozo_exception))
+        logger.warning("Feed at {0}, generated bozo error: {1}.\n".format(feed_url, feed_data.bozo_exception))
         if not bozo_checker(feed_data.bozo_exception):
             return None
 
@@ -242,7 +232,7 @@ def update_metadata(journal_id, feed_data):
         if favicon_url is not None:
             journals.update(journal, favicon = favicon_url)
         else:
-            logger.error("The journal {0} at URL {1} does not have a favicon".format(journal.title,paper_url))
+            logger.wrarning("Can't find favicon at URL {1} for journal {0}".format(journal.title,paper_url))
         
     journals.update(journal, metadata_update = datetime.datetime.utcnow())
         

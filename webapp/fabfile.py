@@ -1,5 +1,6 @@
 import string
 from random import choice
+from datetime import date
 
 from fabric.api import *
 from fabric.operations import prompt
@@ -16,9 +17,10 @@ def outside():
 def vm():
     env.hosts = ['paperchasevm.local']
 
-# Run Celery worker locally
-def run_celery(loglevel="info"):
-    local("celery -A paperchase.tasks worker -B --loglevel=%s" % loglevel)    
+def local_celery(loglevel="warning"):
+    """Run the celery beat worker locally"""
+    filename = "log/tasks_{0}.log".format(date.today().isoformat())
+    local("celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1}".format(loglevel,filename))    
     
 # Setup and maintenance of the remote server
 def make_dir():
@@ -61,23 +63,47 @@ def setup_settings(path="PaperChase/webapp/paperchase"):
     prompt_for_settings()
     with cd(path):
         run("cp settings.py.example settings.py")
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$database',env.database))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$db_password',env.db_password))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_address',env.mail_address))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_server',env.mail_server))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_port',env.mail_port))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_ssl',env.mail_ssl))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_username',env.mail_username))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$mail_password',env.mail_password))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$database',env.database))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$db_username','paperchase'))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$db_password',env.db_password))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_address',env.mail_address))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_server',env.mail_server))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_port',env.mail_port))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_ssl',env.mail_ssl))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_username',env.mail_username))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_password',env.mail_password))
         
         chars = string.letters + string.digits
         length = 10
         secret_key = ''.join(choice(chars) for _ in range(length))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$secret_key',secret_key))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$secret_key',secret_key))
         
         length = 22
         password_salt = ''.join(choice(chars) for _ in range(length))
-        run('sed -i "" "s/{0}/{1}/" settings.py'.format('$password_salt',password_salt))
+        run("sed -i '' 's/{0}/{1}/' settings.py".format('$password_salt',password_salt))
+        
+def copy_settings(local_path="paperchase", remote_path="PaperChase/webapp/paperchase"):
+    local_file = local_path + "settings.py"
+    remote_file = remote_path + "settings.py"
+    put(local_file,remote_file)
+
+def update_database(path="PaperChase/webapp"):
+    with cd(path):
+        run("venv/bin/alembic upgrade head")
+
+def copy_local_database(path="PaperChase/webapp"):
+    prompt("Enter local MySQL username, ", key="db_username", default="paperchase")
+    prompt("What's the local MySQL database?", key="database", default="development")
+    local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.database))
+    put('database_copy.sql', path)
+    with cd(path):
+        prompt("What's the remote MySQL database?", key="database", default="paperchase_development")
+        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_copy.sql'.format(env.database))
+
+def copy_repo_database(path="PaperChase/webapp"):
+    with cd(path):
+        prompt("What's the MySQL database?", key="database", default="paperchase_development")
+        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_bootstrap.sql'.format(env.database))
 
 def setup():
     code_dir = '/Users/paperchase/server'
@@ -95,12 +121,8 @@ def update_repo(path="PaperChase"):
     """Update the repo"""
     with cd(path):
         run("git pull")
-    
-def deploy():
-    code_dir = '/Users/paperchase/server/webapp'
-    put('paperchase/settings.py', code_dir+'/paperchase/')
-    with cd(code_dir):
-        pass
         
-def update_database():
-    run("alembic upgrade head")
+def run_celery(loglevel="warning", path="PaperChase/webapp"):
+    with cd(path):
+        filename = "log/tasks_{0}.log".format(date.today().isoformat())
+        run("nohup celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1} &".format(loglevel,filename))
