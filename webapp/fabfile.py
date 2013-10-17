@@ -125,4 +125,4 @@ def update_repo(path="PaperChase"):
 def run_celery(loglevel="warning", path="PaperChase/webapp"):
     with cd(path):
         filename = "log/tasks_{0}.log".format(date.today().isoformat())
-        run("nohup celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1} &".format(loglevel,filename))
+        run("nohup venv/bin/celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1} &".format(loglevel,filename))
