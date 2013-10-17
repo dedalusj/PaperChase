@@ -20,18 +20,16 @@ def init_app(app):
     
     webassets.manifest = 'cache' if not app.debug else False
     webassets.cache = not app.debug
-    webassets.debug = app.debug    
-    webassets.config['LESS_BIN'] = 'less'
+    webassets.debug = app.debug
     
     # style sheets
     css_all = Bundle(
         'css/PC.less',
-        filters='less,cssmin',
+        filters='less, cssmin',
         extra={'rel': 'stylesheet/less' if webassets.debug else 'stylesheet'},
         output='css/PC.min.css'
     )
     webassets.register('css_all', css_all)
-    
     webassets.config['less_run_in_debug'] = False
     
     # javascripts
