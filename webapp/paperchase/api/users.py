@@ -19,7 +19,7 @@ class UserAPI(Resource):
     """
     
     decorators = [auth.login_required]
-    def get(self, email):
+    def get(self):
         user = users.request_user()
         return marshal(user, user_fields)
         
