@@ -18,7 +18,7 @@ scraper_config = {
     # How often to update the metadata information about a feed in days.
     "metadata_update": 1,
     
-    "log_level": logging.DEBUG,
+    "log_level": logging.WARNING,
 }
 
 DEBUG = True

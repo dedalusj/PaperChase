@@ -15,12 +15,7 @@ def outside():
     env.hosts = ['dedalusj.dyndns.org']
     
 def vm():
-    env.hosts = ['paperchasevm.local']
-
-def local_celery(loglevel="warning"):
-    """Run the celery beat worker locally"""
-    filename = "log/tasks_{0}.log".format(date.today().isoformat())
-    local("celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1}".format(loglevel,filename))    
+    env.hosts = ['paperchasevm.local']   
     
 # Setup and maintenance of the remote server
 def make_dir():

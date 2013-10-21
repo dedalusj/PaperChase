@@ -20,3 +20,4 @@ cssmin
 fabric
 python-dateutil
 beautifulsoup4
+supervisor
