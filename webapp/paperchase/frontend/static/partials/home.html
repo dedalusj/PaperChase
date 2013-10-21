@@ -1,3 +1,34 @@
+<div ng-if="!isLogged()">
+  <nav class="bar">  
+    <ul class="controls buttons"> 
+      <li><a href="#/login">Login</a></li>  
+    </ul>  
+  </nav>
+  <div class="main-frame">
+    <div class="home-page">
+      <div class="container">
+        <div class="logo">
+          <a href="#/home"><span ng-include="'static/img/logo.svg'"></span><h1>Paperchase</h1></a>
+        </div>
+        <div class="title">
+          <h2>The easiest way to keep up with</h2>
+          <h2>academic papers.</h2>
+        </div>
+        <div class="specs">
+          <div class="row">
+            <div class="col-md-4 col-md-offset-2"><div class="spec-icon"><i class="icon-file-text"></i></div><p class="text-center lead">Paperchase collects newly published papers from hundreds of different academic journals and serves them in <strong>one convenient place</strong>.</p></div>
+            <div class="col-md-4"><div class="spec-icon"><i class="icon-sort-by-order"></i></div><p class="text-center lead">Paperchase ranks every new paper based on <strong>your interests</strong> so you see the most interesting papers first.</p></div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-md-offset-4"><div class="spec-icon"><i class="icon-share"></i></div><p class="text-center lead"><strong>Share</strong> interesting papers with your colleagues or add them to your <a href="http://www.papersapp.com">Papers</a> and <a href="http://www.mendeley.com/">Mendeley</a> collections.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div ng-if="isLogged()">
 <nav class="bar">  
     <ul class="filters">  
         <li><a href="#/home" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
@@ -11,7 +42,7 @@
 
 <div class="main-frame">
 
-<table ng-if="isLogged()" class="app-wrap"> 
+<table class="app-wrap"> 
   <tbody>
     <tr>
       <td class="papers-column app-panel" ng-class="{'active-column': papersActive}">
@@ -69,4 +100,5 @@
   </tbody>
 </table>
 
+</div>
 </div>
