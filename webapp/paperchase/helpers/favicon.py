@@ -5,27 +5,27 @@ from bs4 import BeautifulSoup
 
 class FaviconFetcher():
 
-    def _htc(m):
+    def _htc(self,m):
         return chr(int(m.group(1),16))
     
-    def _url_decode(url):
+    def _url_decode(self,url):
         rex = re.compile('%([0-9a-hA-H][0-9a-hA-H])',re.M)
         return rex.sub(htc,url)
     
-    def _extract_path(url):
+    def _extract_path(self,url):
         return url_decode(url.lstrip("/"))
     
     def _extract_domain(url):
         return "http://" + urlparse( extract_path(url) )[1]
     
-    def icon_at_root(domain):
+    def icon_at_root(self,domain):
         root_icon_path = domain + "/favicon.ico"
         r = requests.get(root_icon_path)
         if r.status_code == 200:
             return root_icon_path
         return None
     
-    def icon_in_page(url):
+    def icon_in_page(self,url):
         path = extract_path(url) 
         r = requests.get(path) 
         if r.status_code == 200:
@@ -42,7 +42,7 @@ class FaviconFetcher():
                     return page_icon_path       
         return None
     
-    def find_favicon(url):
+    def find_favicon(self,url):
         domain = extract_domain(url)
         candidate_url = icon_at_root(domain)
         if candidate_url:
