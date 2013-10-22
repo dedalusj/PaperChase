@@ -20,9 +20,9 @@ serverurl=unix:///tmp/supervisor.sock ; use a unix:// URL  for a unix socket
 [program:celeryworker]
 command=celery -A paperchase.tasks worker -B --loglevel=WARNING
 
-directory=/Users/dedalus/Developer/PaperChase/webapp/
-stdout_logfile=/Users/dedalus/Developer/PaperChase/webapp/log/celery.log
-stderr_logfile=/Users/dedalus/Developer/PaperChase/webapp/log/celery.log
+directory=$APP_PATH/webapp/
+stdout_logfile=$APP_PATH/webapp/log/celery.log
+stderr_logfile=$APP_PATH/webapp/log/celery.log
 autostart=true
 autorestart=true
 startsecs=10
