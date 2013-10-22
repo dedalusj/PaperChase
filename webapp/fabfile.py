@@ -6,6 +6,7 @@ from fabric.api import *
 from fabric.operations import prompt
 
 env.user = 'paperchase'
+env.repo_path = 'PaperChase'
 
 # Define host names for inside and outside the LAN
 def inside():
@@ -15,27 +16,28 @@ def outside():
     env.hosts = ['dedalusj.dyndns.org']
     
 def vm():
-    env.hosts = ['paperchasevm.local']   
+    env.hosts = ['paperchasevm.local']  
+    env.full_path = '/Users/' + env.user + '/' + env.repo_path
     
 # Setup and maintenance of the remote server
-def make_dir():
-    run("mkdir PaperChase")
+def make_dir(path = env.repo_path):
+    run("mkdir {0}".format(path))
 
-def setup_repo(path="PaperChase"):
+def setup_repo(path = env.repo_path):
     """Original clone of the repo"""
     with cd(path):
         run("git clone https://github.com/dedalusj/PaperChase.git .")
         with cd('webapp'):
             run("mkdir log")
 
-def setup_venv(path="PaperChase/webapp"):
+def setup_venv(path = env.repo_path + "/webapp"):
     with cd(path):
         run("curl -O https://raw.github.com/pypa/virtualenv/1.9.X/virtualenv.py")
         run("python virtualenv.py venv")
         run("venv/bin/pip install -r requirements.txt")
     fix_feedparser(path)
         
-def fix_feedparser(path="PaperChase/webapp"):
+def fix_feedparser(path = env.repo_path + "/webapp"):
     with cd(path):
         run("mkdir temp")
         cd("temp")
@@ -54,7 +56,7 @@ def prompt_for_settings():
     prompt("Enter a username for the mail service, ", key="mail_username")
     prompt("Enter a password for the mail service, ", key="mail_password") 
 
-def setup_settings(path="PaperChase/webapp/paperchase"):
+def setup_settings(path = env.repo_path + "/webapp/paperchase"):
     prompt_for_settings()
     with cd(path):
         run("cp settings.py.example settings.py")
@@ -77,16 +79,22 @@ def setup_settings(path="PaperChase/webapp/paperchase"):
         password_salt = ''.join(choice(chars) for _ in range(length))
         run("sed -i '' 's/{0}/{1}/' settings.py".format('$password_salt',password_salt))
         
-def copy_settings(local_path="paperchase", remote_path="PaperChase/webapp/paperchase"):
+def setup_supervisor(path = env.repo_path + "/webapp"):
+    with cd(path):
+        run("cp supervisord.conf.example supervisord.conf")
+        run("sed -i '' 's/{0}/{1}/' supervisord.conf".format('$APP_PATH',env.full_path))
+        run("venv/bin/supervisord")
+        
+def copy_settings(local_path="paperchase", remote_path = env.repo_path + "/webapp/paperchase"):
     local_file = local_path + "settings.py"
     remote_file = remote_path + "settings.py"
     put(local_file,remote_file)
 
-def update_database(path="PaperChase/webapp"):
+def update_database(path = env.repo_path + "/webapp"):
     with cd(path):
         run("venv/bin/alembic upgrade head")
 
-def copy_local_database(path="PaperChase/webapp"):
+def copy_local_database(path = env.repo_path + "/webapp"):
     prompt("Enter local MySQL username, ", key="db_username", default="paperchase")
     prompt("What's the local MySQL database?", key="database", default="development")
     local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.database))
@@ -95,29 +103,20 @@ def copy_local_database(path="PaperChase/webapp"):
         prompt("What's the remote MySQL database?", key="database", default="paperchase_development")
         run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_copy.sql'.format(env.database))
 
-def copy_repo_database(path="PaperChase/webapp"):
+def copy_repo_database(path = env.repo_path + "/webapp"):
     with cd(path):
         prompt("What's the MySQL database?", key="database", default="paperchase_development")
         run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_bootstrap.sql'.format(env.database))
 
-def setup():
-    code_dir = '/Users/paperchase/server'
-    local('mysqldump -u paperchase -p development > development.sql')
-    with cd(code_dir):
-        setup_repo()
-        
-    with cd(code_dir + '/webapp'):
-        setup_venv()
-        put('development.sql', code_dir + '/webapp')
-        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect development < development.sql')
-        run("mkdir log")
-
-def update_repo(path="PaperChase"):
+def update_repo(path = env.repo_path):
     """Update the repo"""
     with cd(path):
         run("git pull")
         
-def run_celery(loglevel="warning", path="PaperChase/webapp"):
+def start_worker(path = env.repo_path + "/webapp"):
     with cd(path):
-        filename = "log/tasks_{0}.log".format(date.today().isoformat())
-        run("nohup venv/bin/celery -A paperchase.tasks worker -B --loglevel={0} --logfile={1} &".format(loglevel,filename))
+        run("venv/bin/supervisorctl start celeryworker")
+        
+def stop_worker(path = env.repo_path + "/webapp"):
+    with cd(path):
+        run("venv/bin/supervisorctl stop celeryworker")
