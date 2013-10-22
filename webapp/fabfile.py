@@ -1,12 +1,34 @@
 import string
+import StringIO
+import getpass
 from random import choice
 from datetime import date
 
 from fabric.api import *
 from fabric.operations import prompt
+from jinja2 import Template, Environment, FileSystemLoader
 
 env.user = 'paperchase'
 env.repo_path = 'PaperChase'
+env.web_app_path = env.repo_path + '/webapp'
+env.db_username = 'paperchase'
+env.database = 'paperchase_development'
+env.local_database = 'development'
+env.mail_address = 'dedalusj@gmail.com'
+env.mail_server = 'smtp.gmail.com'
+env.mail_port = '465'
+env.mail_use_ssl = 'True'
+env.mail_username = 'dedalusj@gmail.com'
+
+SUPERVISOR_CONF_FILE = 'supervisord.conf'
+SETTINGS_FILE = 'settings.py'
+
+prompt("Enter a password for the mail service, ", key="mail_password")
+
+def _render_template(template_name, context):
+    env = Environment(loader = FileSystemLoader('config_templates'))
+    template = env.get_template(template_name)
+    return template.render(context)
 
 # Define host names for inside and outside the LAN
 def inside():
@@ -17,28 +39,33 @@ def outside():
     
 def vm():
     env.hosts = ['paperchasevm.local']  
-    env.full_path = '/Users/' + env.user + '/' + env.repo_path
+    env.app_path = '/Users/' + env.user + '/' + env.repo_path
     
 # Setup and maintenance of the remote server
-def make_dir(path = env.repo_path):
-    run("mkdir {0}".format(path))
+def make_dir():
+    run("mkdir {0}".format(env.repo_path))
 
-def setup_repo(path = env.repo_path):
+def setup_repo():
     """Original clone of the repo"""
-    with cd(path):
+    with cd(env.repo_path):
         run("git clone https://github.com/dedalusj/PaperChase.git .")
         with cd('webapp'):
             run("mkdir log")
+            
+def update_repo():
+    """Update the repo"""
+    with cd(env.repo_path):
+        run("git pull")
 
-def setup_venv(path = env.repo_path + "/webapp"):
-    with cd(path):
+def setup_venv():
+    with cd(env.web_app_path):
         run("curl -O https://raw.github.com/pypa/virtualenv/1.9.X/virtualenv.py")
         run("python virtualenv.py venv")
         run("venv/bin/pip install -r requirements.txt")
     fix_feedparser(path)
         
-def fix_feedparser(path = env.repo_path + "/webapp"):
-    with cd(path):
+def fix_feedparser():
+    with cd(env.web_app_path):
         run("mkdir temp")
         cd("temp")
         run("git clone https://github.com/dedalusj/feedparser.git .")
@@ -47,76 +74,70 @@ def fix_feedparser(path = env.repo_path + "/webapp"):
         run("rm -fdr temp")
         
 def prompt_for_settings():
-    prompt("What's the MySQL database?", key="database", default="paperchase_development")
-    prompt("Enter the paperchase user password for the database, ", key="db_password")
-    prompt("Enter an email address for mail notifications, ", key="mail_address")
-    prompt("What's the mail server?", key="mail_server")
-    prompt("What's the mail port?", key="mail_port", default="465")
-    prompt("Does the mail service use SSL?", key="mail_ssl", default="True")
-    prompt("Enter a username for the mail service, ", key="mail_username")
-    prompt("Enter a password for the mail service, ", key="mail_password") 
+    db_pass = getpass.getpass(prompt='Enter the paperchase user password for the database, ')
+    env.db_password = db_pass
+    mail_pass = getpass.getpass(prompt='Enter a password for the mail service, ')
+    env.mail_password = mail_pass
 
-def setup_settings(path = env.repo_path + "/webapp/paperchase"):
+def setup_settings():
     prompt_for_settings()
+    path = env.web_app_path + "/paperchase"
     with cd(path):
-        run("cp settings.py.example settings.py")
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$database',env.database))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$db_username','paperchase'))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$db_password',env.db_password))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_address',env.mail_address))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_server',env.mail_server))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_port',env.mail_port))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_ssl',env.mail_ssl))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_username',env.mail_username))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$mail_password',env.mail_password))
-        
         chars = string.letters + string.digits
         length = 10
-        secret_key = ''.join(choice(chars) for _ in range(length))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$secret_key',secret_key))
-        
+        env.secret_key = ''.join(choice(chars) for _ in range(length))
         length = 22
-        password_salt = ''.join(choice(chars) for _ in range(length))
-        run("sed -i '' 's/{0}/{1}/' settings.py".format('$password_salt',password_salt))
+        env.password_salt = ''.join(choice(chars) for _ in range(length))
         
-def setup_supervisor(path = env.repo_path + "/webapp"):
-    with cd(path):
-        run("cp supervisord.conf.example supervisord.conf")
-        run("sed -i '' 's/{0}/{1}/' supervisord.conf".format('$APP_PATH',env.full_path))
-        run("venv/bin/supervisord")
+        settings = StringIO.StringIO()
+        settings.write(_render_template(SETTINGS_FILE, env))
+        put(settings, SETTINGS_FILE)
         
-def copy_settings(local_path="paperchase", remote_path = env.repo_path + "/webapp/paperchase"):
+def copy_settings():
+    local_path="paperchase"
+    remote_path = env.web_app_path + "/paperchase"
     local_file = local_path + "settings.py"
     remote_file = remote_path + "settings.py"
     put(local_file,remote_file)
 
-def update_database(path = env.repo_path + "/webapp"):
-    with cd(path):
+def update_database():
+    with cd(env.web_app_path):
         run("venv/bin/alembic upgrade head")
 
-def copy_local_database(path = env.repo_path + "/webapp"):
-    prompt("Enter local MySQL username, ", key="db_username", default="paperchase")
-    prompt("What's the local MySQL database?", key="database", default="development")
-    local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.database))
-    put('database_copy.sql', path)
-    with cd(path):
-        prompt("What's the remote MySQL database?", key="database", default="paperchase_development")
+def copy_local_database():
+    local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.local_database))
+    put('database_copy.sql', env.web_app_path)
+    with cd(env.web_app_path):
         run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_copy.sql'.format(env.database))
 
-def copy_repo_database(path = env.repo_path + "/webapp"):
-    with cd(path):
-        prompt("What's the MySQL database?", key="database", default="paperchase_development")
+def copy_repo_database():
+    with cd(env.web_app_path):
         run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_bootstrap.sql'.format(env.database))
 
-def update_repo(path = env.repo_path):
-    """Update the repo"""
-    with cd(path):
-        run("git pull")
+def setup_supervisor():
+    with cd(env.web_app_path):
+        supervisor_conf = StringIO.StringIO()
+        supervisor_conf.write(_render_template(SUPERVISOR_CONF_FILE, env))
+        put(supervisor_conf, SUPERVISOR_CONF_FILE)
+        run("venv/bin/supervisord")
         
-def start_worker(path = env.repo_path + "/webapp"):
-    with cd(path):
+def start_worker():
+    with cd(env.web_app_path):
         run("venv/bin/supervisorctl start celeryworker")
         
-def stop_worker(path = env.repo_path + "/webapp"):
-    with cd(path):
+def stop_worker():
+    with cd(env.web_app_path):
         run("venv/bin/supervisorctl stop celeryworker")
+        
+def run_redis():
+    with settings(warn_only=True):
+        run('redis-server')
+        
+def start_app():
+    with cd(env.web_app_path):
+        run("venv/bin/supervisorctl start paperchase")
+
+def stop_app():
+    with cd(env.web_app_path):
+        run("venv/bin/supervisorctl stop paperchase")
+        
