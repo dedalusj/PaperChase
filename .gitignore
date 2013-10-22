@@ -10,6 +10,8 @@ webapp/PC
 
 settings.py
 
+supervisord.conf
+
 .webassets-cache
 
 main.min.js
