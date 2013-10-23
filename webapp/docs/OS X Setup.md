@@ -1,32 +1,29 @@
 # PaperChase Setup
 
-This guide will let you deploy _PaperChase_ on a fresh Mac OS X Mountain Lion install.
+This guide will let you deploy _PaperChase_ on a fresh Mac OS X Mavericks install.
 
 ### PaperChase user
 
 Create a `paperchase` user on the hosting machine.
 
-### XCode
+### Command line tools
 
-Install Xcode and the command line tools
+Install the command line tools downloading them from the [Apple developer website](https://developer.apple.com/downloads/index.action "Apple Developer") or from XCode.
 
 ### Homebrew
 
 Install Homebrew with the following commands
 
     ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
-    brew install git
     brew doctor
     brew update
-    
+    brew install git
+
 ### Less and UglifyJS
 
 _PaperChase_ uses _less_ for its stylesheet and we need to install it in order to let _webassets_ compile them. Before we need _node_ and _npm_
 
     brew install node
-    curl https://npmjs.org/install.sh | sh
-    export NODE_PATH="/usr/local/lib/node"
-    export PATH="/usr/local/share/npm/bin:$PATH"
     
 and finally we can install _less_ and _UglifyJS_
 
@@ -35,7 +32,7 @@ and finally we can install _less_ and _UglifyJS_
 
 ### MySQL
 
-Install _MySQL?
+Install _MySQL_
 
     brew install mysql
 
