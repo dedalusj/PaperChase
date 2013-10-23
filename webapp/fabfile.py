@@ -8,38 +8,36 @@ from fabric.api import *
 from fabric.operations import prompt
 from jinja2 import Template, Environment, FileSystemLoader
 
+
+# Global settings variables
+SUPERVISOR_CONF_FILE = 'supervisord.conf'
+SETTINGS_FILE = 'settings.py'
+ADMIN_EMAIL = 'paperchase.app@gmail.com'
+MAIN_REPO = 'https://github.com/dedalusj/PaperChase.git'
+
 env.user = 'paperchase'
 env.repo_path = 'PaperChase'
 env.web_app_path = env.repo_path + '/webapp'
 env.db_username = 'paperchase'
-env.database = 'paperchase_development'
+env.database = 'paperchase_production'
 env.local_database = 'development'
-env.mail_address = 'dedalusj@gmail.com'
+env.mail_address = ADMIN_EMAIL
 env.mail_server = 'smtp.gmail.com'
 env.mail_port = '465'
 env.mail_use_ssl = 'True'
-env.mail_username = 'dedalusj@gmail.com'
+env.mail_username = ADMIN_EMAIL
 
-SUPERVISOR_CONF_FILE = 'supervisord.conf'
-SETTINGS_FILE = 'settings.py'
+# Settings specific to the deploy environment   
+def vm():
+    env.hosts = ['paperchasevm.local']  
+    env.app_path = '/Users/' + env.user + '/' + env.repo_path
+    
 
-prompt("Enter a password for the mail service, ", key="mail_password")
-
+# Utility method to render the configuration file templates
 def _render_template(template_name, context):
     env = Environment(loader = FileSystemLoader('config_templates'))
     template = env.get_template(template_name)
     return template.render(context)
-
-# Define host names for inside and outside the LAN
-def inside():
-    env.hosts = ['brick.local']
-
-def outside():
-    env.hosts = ['dedalusj.dyndns.org']
-    
-def vm():
-    env.hosts = ['paperchasevm.local']  
-    env.app_path = '/Users/' + env.user + '/' + env.repo_path
     
 # Setup and maintenance of the remote server
 def make_dir():
@@ -48,7 +46,7 @@ def make_dir():
 def setup_repo():
     """Original clone of the repo"""
     with cd(env.repo_path):
-        run("git clone https://github.com/dedalusj/PaperChase.git .")
+        run("git clone {0} .".format(MAIN_REPO))
         with cd('webapp'):
             run("mkdir log")
             
@@ -92,13 +90,6 @@ def setup_settings():
         settings = StringIO.StringIO()
         settings.write(_render_template(SETTINGS_FILE, env))
         put(settings, SETTINGS_FILE)
-        
-def copy_settings():
-    local_path="paperchase"
-    remote_path = env.web_app_path + "/paperchase"
-    local_file = local_path + "settings.py"
-    remote_file = remote_path + "settings.py"
-    put(local_file,remote_file)
 
 def update_database():
     with cd(env.web_app_path):
@@ -108,11 +99,11 @@ def copy_local_database():
     local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.local_database))
     put('database_copy.sql', env.web_app_path)
     with cd(env.web_app_path):
-        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_copy.sql'.format(env.database))
+        run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_copy.sql'.format(env,db_username, env.database))
 
 def copy_repo_database():
     with cd(env.web_app_path):
-        run('mysql --host=localhost --port=3306 --user=paperchase -p --reconnect {0} < database_bootstrap.sql'.format(env.database))
+        run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_bootstrap.sql'.format(env.db_username, env.database))
 
 def setup_supervisor():
     with cd(env.web_app_path):
@@ -141,3 +132,28 @@ def stop_app():
     with cd(env.web_app_path):
         run("venv/bin/supervisorctl stop paperchase")
         
+def initial_setup(local_data = 'False'):
+    make_dir()
+    setup_repo()
+    setup_venv()
+    setup_settings()
+    
+    update_database()
+    if local_data == 'True':
+        copy_local_database()
+    else:
+        copy_repo_database()
+    
+    run_redis()
+    setup_supervisor()
+    start_worker()
+    start_app()
+    
+def update_app():
+    stop_worker()
+    stop_app()
+    update_repo()
+    udate_database()
+    start_worker()
+    start_app()
+    
