@@ -20,6 +20,41 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
+# Dump of table categories
+# ------------------------------------------------------------
+
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+
+INSERT INTO `categories` (`id`, `name`, `parent_id`)
+VALUES
+	(1,'Physics',NULL),
+	(2,'Mathematics',NULL),
+	(3,'Chemistry',NULL),
+	(4,'Condensed Matter',1),
+	(5,'Ultra-cold Gases',1),
+	(6,'Material Science',1),
+	(7,'Disordered Systems and Neural Networks',1),
+	(8,'Mesoscale and Nanoscale Physics',1),
+	(9,'Quantum Optics',1),
+	(10,'Soft Condensed Matter',1),
+	(11,'Statistical Mechanics',1),
+	(12,'Quantum Chemistry',1),
+	(13,'Astrophysics',1),
+	(14,'Cosmology',1),
+	(15,'High Energy Physics',1),
+	(16,'Atomic Physics',1),
+	(17,'Computer Science',NULL),
+	(18,'Economy',NULL),
+	(19,'Statistics',NULL),
+	(20,'Psychology',NULL),
+	(21,'Philosophy',NULL),
+	(22,'History',NULL);
+
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
 # Dump of table journals
 # ------------------------------------------------------------
 
