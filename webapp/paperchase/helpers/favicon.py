@@ -10,13 +10,13 @@ class FaviconFetcher():
     
     def _url_decode(self,url):
         rex = re.compile('%([0-9a-hA-H][0-9a-hA-H])',re.M)
-        return rex.sub(htc,url)
+        return rex.sub(self._htc,url)
     
     def _extract_path(self,url):
-        return url_decode(url.lstrip("/"))
+        return self._url_decode(url.lstrip("/"))
     
     def _extract_domain(url):
-        return "http://" + urlparse( extract_path(url) )[1]
+        return "http://" + urlparse( self._extract_path(url) )[1]
     
     def icon_at_root(self,domain):
         root_icon_path = domain + "/favicon.ico"
@@ -26,7 +26,7 @@ class FaviconFetcher():
         return None
     
     def icon_in_page(self,url):
-        path = extract_path(url) 
+        path = self._extract_path(url) 
         r = requests.get(path) 
         if r.status_code == 200:
             page_soup = BeautifulSoup(r.content)
@@ -43,14 +43,14 @@ class FaviconFetcher():
         return None
     
     def find_favicon(self,url):
-        domain = extract_domain(url)
-        candidate_url = icon_at_root(domain)
+        domain = self._extract_domain(url)
+        candidate_url = self.icon_at_root(domain)
         if candidate_url:
             return candidate_url
-        candidate_url = icon_in_page(domain)
+        candidate_url = self.icon_in_page(domain)
         if candidate_url:
             return candidate_url
-        candidate_url = icon_in_page(url)
+        candidate_url = self.icon_in_page(url)
         if candidate_url:
             return candidate_url
         return None
