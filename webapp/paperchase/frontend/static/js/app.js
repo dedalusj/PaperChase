@@ -1,6 +1,6 @@
 var app = angular.module('PCApp',["ngResource","ngCookies","ngRoute","ngSanitize","infinite-scroll"]).
-  config(['$routeProvider', '$locationProvider', '$httpProvider',
-          function($routeProvider, $locationProvider, $httpProvider) {
+  config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider',
+          function($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
               $routeProvider.
                   when('/home', {templateUrl: 'static/partials/home.html', controller: 'homeController'}).
                   when('/subscriptions', {templateUrl: 'static/partials/subscriptions.html', controller: 'subscriptionsController'}).
@@ -26,4 +26,6 @@ var app = angular.module('PCApp',["ngResource","ngCookies","ngRoute","ngSanitize
                   }
               }];
               $httpProvider.responseInterceptors.push(interceptor);
+              
+              $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|papers):/);
 }]);

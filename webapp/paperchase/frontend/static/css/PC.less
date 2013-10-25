@@ -372,17 +372,37 @@
 			text-decoration: none;
 		}
 	}
-	.paper-buttons {
-	    display: block;
-	    position: absolute;
-	    top: 0;
-	    right: 0px;
+	ul {
+	    padding: 0;  
+	    margin: 0;  
 	    height: @toolbar-height;
-	    z-index: 1;
-	    padding-right: 15px;
-	    i {
-	    	line-height: @toolbar-height;
-	    	color: @border-color - #222;
+	    display: inline;
+	    &.buttons {
+	        li {
+	            display: inline;    
+	       	    a {
+	       	    	padding-left: @controls-hor-padding;
+	       	    	padding-right: @controls-hor-padding;
+	       	    	border-right: 1px solid @border-color;
+	       	    	text-decoration: none;  
+	       	    	margin-left: 0px;
+	       	    	color: @border-color - #222;
+	       	    	&:hover, &:focus {
+	       	    		color: @border-color - #222;
+	       	    	}
+	       	    }
+	       	    &:last-child a {  
+	       	        border-right: none;
+	       	    }
+	       	    i {
+	       	    	line-height: @toolbar-height;
+	       	    	color: @border-color - #222;
+	       	    }	
+	       	}
+	    }
+	    &.controls {
+	       	float: right;
+	       	padding-right: 5px;
 	    }
 	}
 	.favicon-wrap {

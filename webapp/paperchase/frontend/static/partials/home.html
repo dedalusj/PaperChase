@@ -83,7 +83,10 @@
                 <i ng-if="papers.selected.journal.favicon == null" class="icon-beaker"></i>
             </span>
             <a class="journal">{{ papers.selected.journal.title }}</a>
-            <div class="paper-buttons"><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}"><i class="icon-envelope"></i></a></div>
+            <ul class="controls buttons">
+              <li><a ng-href="papers://url/{{ papers.selected.url | escape }}">Add to Papers</a></li>
+              <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}"><i class="icon-envelope"></i></a></li>
+            </ul>
           </div>
           <div class="paper-content">
             <div class="paper-inner">
