@@ -21,7 +21,7 @@
         
       <div class="form-group" ng-class="{'has-error': register.password.$dirty && register.password.$invalid, 'has-success': register.password.$dirty && register.password.$valid}">
         <div class="input-group input-group-lg">
-          <span class="input-group-addon"><i class="icon-key"></i> </span>
+          <span class="input-group-addon"><i class="fa fa-key"></i> </span>
           <input type="password" class="form-control" ng-model="password" name="password" placeholder="Password" required>
         </div>
         <p class="help-block error" ng-show="register.password.$dirty && register.password.$error.required">Please enter your password</p>
@@ -29,7 +29,7 @@
       
       <div class="form-group" ng-class="{'has-error': register.confirmPassword.$dirty && register.confirmPassword.$invalid, 'has-success': register.confirmPassword.$dirty && register.confirmPassword.$valid}">
         <div class="input-group input-group-lg">
-          <span class="input-group-addon"><i class="icon-key"></i> </span>
+          <span class="input-group-addon"><i class="fa fa-key"></i> </span>
           <input type="password" class="form-control" ng-model="confirmPassword" name="confirmPassword" placeholder="Confirm Password" pw-check="password" required>
         </div>
         <p class="help-block error" ng-show="register.confirmPassword.$dirty && register.confirmPassword.$error.pwmatch">Passwords don't match.</p>
