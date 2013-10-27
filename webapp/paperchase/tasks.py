@@ -232,7 +232,7 @@ def update_metadata(journal_id, feed_data):
         if favicon_url is not None:
             journals.update(journal, favicon = favicon_url)
         else:
-            logger.wrarning("Can't find favicon at URL {1} for journal {0}".format(journal.title,paper_url))
+            logger.warning("Can't find favicon at URL {1} for journal {0}".format(journal.title,paper_url))
         
     journals.update(journal, metadata_update = datetime.datetime.utcnow())
         
