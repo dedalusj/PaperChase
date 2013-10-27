@@ -87,4 +87,4 @@ class SuggestionAPI(Resource):
     decorators = [auth.login_required]
     def post(self):
         send_suggestion_email.delay(request.json)
-        return 201
+        return '', 201

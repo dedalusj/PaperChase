@@ -3,13 +3,11 @@ from datetime import *
 import pytz
 
 from flask.ext.restful import Resource, fields, marshal, reqparse
-from flask import request
+from flask import request, abort
 
 from ..services import users, user_papers
 from ..core import auth
 from ..helpers import smart_truncate
-
-from flask import current_app
 
 class Ellipsis(fields.Raw):
     def format(self, value):
@@ -98,7 +96,7 @@ class UnreadPapersAPI(Resource):
         """Grab the ids from the request to mark read papers as unread"""
         unread_ids = request.json['unread_papers']
         if len(unread_ids) > 1000:
-            return 413
+            abort(413)
         user = users.request_user()
         marked_ids = user_papers.markUnread(user, unread_ids)
         return marked_ids
@@ -111,7 +109,7 @@ class ReadPapersAPI(Resource):
         """Put papers in the read list equivalent to marking them as read"""
         read_ids = request.json['read_papers']
         if len(read_ids) > 1000:
-            return 413
+            abort(413)
         user = users.request_user()
         marked_ids = user_papers.markRead(user, read_ids)
         return marked_ids
@@ -123,4 +121,4 @@ class MarkAllPapersAPI(Resource):
         """Delete papers from the unread list equivalent to marking them as read"""
         user = users.request_user()
         user_papers.markAllRead(user)
-        return 202
+        return ''
