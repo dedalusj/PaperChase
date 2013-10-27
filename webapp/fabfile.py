@@ -153,7 +153,7 @@ def update_app():
     stop_worker()
     stop_app()
     update_repo()
-    udate_database()
+    update_database()
     start_worker()
     start_app()
     
