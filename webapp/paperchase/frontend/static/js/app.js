@@ -1,4 +1,4 @@
-var app = angular.module('PCApp',["ngResource","ngCookies","ngRoute","ngSanitize","infinite-scroll"]).
+var app = angular.module('PCApp',["ngResource","ngCookies","ngRoute","ngSanitize","infinite-scroll","ui.bootstrap"]).
   config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider',
           function($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
               $routeProvider.
