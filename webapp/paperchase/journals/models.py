@@ -38,7 +38,6 @@ class Journal(db.Model):
     papers = db.relationship('Paper', backref = 'journal', lazy = 'dynamic')
     paths = db.relationship('Path', backref = 'journal', lazy = 'dynamic')
     favicon = db.Column(db.String(1024))
-    color = db.Column(db.String(7))
     categories = db.relationship('Category', secondary=journals_categories, backref=db.backref('journals', lazy='dynamic'), lazy = 'dynamic')
     
     def __str__(self):
