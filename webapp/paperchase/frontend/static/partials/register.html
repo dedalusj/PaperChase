@@ -8,6 +8,7 @@
 
 <div class="form-box">
 <h2>Sign up</h2>
+<alert ng-if="alert" type="alert.type" close="closeAlert()"><span ng-bind-html="alert.msg"></span></alert>
     <form class="form-horizontal" role="form" ng-submit="registerPC()" name="register" novalidate>
 
       <div class="form-group" ng-class="{'has-error': register.email.$dirty && register.email.$invalid, 'has-success': register.email.$dirty && register.email.$valid}">

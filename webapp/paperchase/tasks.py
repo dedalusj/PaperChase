@@ -27,7 +27,7 @@ from .core import mail
 from .factory import create_celery_app
 from .services import journals, papers
 from .helpers import bozo_checker, days_since, deltatime, FaviconFetcher
-from .settings import scraper_config
+from .settings import scraper_config, MAIL_DEFAULT_SENDER
 
 celery = create_celery_app()
 
@@ -269,6 +269,12 @@ def add_article(entry, journal_id):
     
 @celery.task
 def send_suggestion_email(json_msg):
-    msg = Message('Journal suggestion', sender='dedalusj@gmail.com', recipients=['dedalusj@gmail.com'])
+    msg = Message('Journal suggestion', sender=MAIL_DEFAULT_SENDER, recipients=[MAIL_DEFAULT_SENDER])
     msg.body = """{0}""".format(str(json_msg))
+    mail.send(msg)
+    
+@celery.task
+def send_confirmation_email(user_email):
+    msg = Message('Paperchase registration', sender=MAIL_DEFAULT_SENDER, recipients=[user_email])
+    msg.body = """Thanks for registering to Paperchase."""
     mail.send(msg)
