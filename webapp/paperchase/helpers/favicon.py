@@ -15,7 +15,7 @@ class FaviconFetcher():
     def _extract_path(self,url):
         return self._url_decode(url.lstrip("/"))
     
-    def _extract_domain(url):
+    def _extract_domain(self,url):
         return "http://" + urlparse( self._extract_path(url) )[1]
     
     def icon_at_root(self,domain):
