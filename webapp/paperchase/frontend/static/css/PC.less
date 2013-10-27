@@ -212,7 +212,11 @@
     	list-style-type: none;
     	.favicon-wrap {
     	    top: 21px;
-    	    left: 7px;	
+    	    left: 7px;
+    	    text-align: center;
+    	    i {
+    	    	font-size: 16px;
+    	    }	
     	}
     	&.paper {
     		margin-right: -1px;
@@ -382,8 +386,16 @@
 	       	    	text-decoration: none;  
 	       	    	margin-left: 0px;
 	       	    	color: @border-color - #222;
+	       	    	.logo-path {
+	       	    	    fill: @border-color - #222;
+	       	    	}
 	       	    	&:hover, &:focus {
 	       	    		color: @border-color - #222;
+	       	    	}
+	       	    	svg {
+	       	    		width: 18px;
+	       	    		height: 18px;
+	       	    		margin-bottom: -3px;
 	       	    	}
 	       	    }
 	       	    &:last-child a {  

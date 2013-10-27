@@ -83,14 +83,14 @@
                 <i ng-if="papers.selected.journal.favicon == null" class="fa fa-flask"></i>
             </span>
             <a class="journal">{{ papers.selected.journal.title }}</a>
-            <ul class="controls buttons">
-              <li><a ng-href="papers://url/{{ papers.selected.url | escape }}">Add to Papers</a></li>
-              <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}"><i class="fa fa-envelope"></i></a></li>
+            <ul class="controls buttons" id="paper-controls">
+              <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'static/img/papers-logo.svg'"></span></a></li>
+              <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
             </ul>
           </div>
           <div class="paper-content">
             <div class="paper-inner">
-              <a href="{{ papers.selected.url }}"><h2 class="title">{{ papers.selected.title }}</h2></a>
+              <a href="{{ papers.selected.url }}" target="_blank"><h2 class="title">{{ papers.selected.title }}</h2></a>
               <p class="journal">{{ papers.selected.journal.title }}</p>
               <time>{{ papers.selected.created | date:'dd MMMM yyyy, h:mm a'}}</time>
               <p class="body" ng-bind-html="papers.selected.abstract"></p>
