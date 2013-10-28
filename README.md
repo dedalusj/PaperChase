@@ -28,17 +28,22 @@ Every access to the API requires HTTP Basic authentication and the backend imple
 
 The web client is implemented using [AngularJS](http://angularjs.org/) that serves all the views of the app.
 
-Requirements
-------------
+Installation and requirements
+-----------------------------
 
-* Mac OS X
+* Mac OS X or Linux
 * Python 2.7
 * MySQL 5.6.12
 * Redis
 
-### TODO
+### Install
 
-#### Backend
+- [Mac OS X](webapp/docs/OS%20X%20Setup.md)
+
+TODO
+----
+
+### Backend
 
 * Storage of article score for every user.
 * Storage of user keywords.
@@ -46,13 +51,13 @@ Requirements
 
 The backend API is still rapidly evolving and as such is currently undocumented. Once the APIs for the keywords and articles are implemented I'll work on the documentation for clients. 
 
-#### Frontend
+### Frontend
 
 * Resource for keywords and their retrieval.
 * Scoring of articles locally.
 * Keywords tuning view.
 
-#### Other Clients
+### Other Clients
 
 * iOS client
 * Mac OS X client
