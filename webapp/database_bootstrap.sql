@@ -61,22 +61,22 @@ UNLOCK TABLES;
 LOCK TABLES `journals` WRITE;
 /*!40000 ALTER TABLE `journals` DISABLE KEYS */;
 
-INSERT INTO `journals` (`id`, `title`, `short_title`, `url`, `last_checked`, `next_check`, `metadata_update`, `favicon`, `color`)
+INSERT INTO `journals` (`id`, `title`, `short_title`, `url`, `last_checked`, `next_check`, `metadata_update`, `favicon`)
 VALUES
-	(1,'Physical Review Letter','PRL','http://feeds.aps.org/rss/recent/prl.xml','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://publish.aps.org/favicon.ico',NULL),
-	(2,'Nature','Nature','http://feeds.nature.com/NatureLatestResearch','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://www.nature.com/favicon.ico',NULL),
-	(3,'arXiv Quantum Gases','arXiv:cond-mat.quant-gas','http://export.arxiv.org/rss/cond-mat.quant-gas','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(4,'arXiv Disordered Systems and Neural Networks','arXiv:cond-mat.dis-nn','http://export.arxiv.org/rss/cond-mat.dis-nn/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(5,'arXiv Material Science','arXiv:cond-mat.mtrl-sci','http://export.arxiv.org/rss/cond-mat.mtrl-sci','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(6,'arXiv Mesoscale and Nanoscale Physics','arXiv:cond-mat.mes-hall','http://export.arxiv.org/rss/cond-mat.mes-hall/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(7,'arXiv Other Condensed Matter','arXiv:cond-mat.other','http://export.arxiv.org/rss/cond-mat.other/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(8,'arXiv Soft Condensed Matter','arXiv:cond-mat.soft','http://export.arxiv.org/rss/cond-mat.soft/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(9,'arXiv Statistical Mechanics','arXiv:cond-mat.stat-mech','http://export.arxiv.org/rss/cond-mat.stat-mech','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(10,'arXiv Superconductivity','arXiv:cond-mat.supr-con','http://export.arxiv.org/rss/cond-mat.supr-con','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(11,'arXiv Strongly Correlated Electrons','arXiv:cond-mat.str-el','http://export.arxiv.org/rss/cond-mat.str-el','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico',NULL),
-	(12,'Nature Physics','Nature Physics','http://feeds.nature.com/nphys/rss/current','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://www.nature.com/favicon.ico',NULL),
-	(13,'New Journal of Physics','NJP','http://iopscience.iop.org/1367-2630/?rss=1','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00',NULL,NULL),
-	(14,'Science','Science','http://www.sciencemag.org/rss/current.xml','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00',NULL,NULL);
+	(1,'Physical Review Letter','PRL','http://feeds.aps.org/rss/recent/prl.xml','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://publish.aps.org/favicon.ico'),
+	(2,'Nature','Nature','http://feeds.nature.com/NatureLatestResearch','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://www.nature.com/favicon.ico'),
+	(3,'arXiv Quantum Gases','arXiv:cond-mat.quant-gas','http://export.arxiv.org/rss/cond-mat.quant-gas','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(4,'arXiv Disordered Systems and Neural Networks','arXiv:cond-mat.dis-nn','http://export.arxiv.org/rss/cond-mat.dis-nn/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(5,'arXiv Material Science','arXiv:cond-mat.mtrl-sci','http://export.arxiv.org/rss/cond-mat.mtrl-sci','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(6,'arXiv Mesoscale and Nanoscale Physics','arXiv:cond-mat.mes-hall','http://export.arxiv.org/rss/cond-mat.mes-hall/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(7,'arXiv Other Condensed Matter','arXiv:cond-mat.other','http://export.arxiv.org/rss/cond-mat.other/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(8,'arXiv Soft Condensed Matter','arXiv:cond-mat.soft','http://export.arxiv.org/rss/cond-mat.soft/','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(9,'arXiv Statistical Mechanics','arXiv:cond-mat.stat-mech','http://export.arxiv.org/rss/cond-mat.stat-mech','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(10,'arXiv Superconductivity','arXiv:cond-mat.supr-con','http://export.arxiv.org/rss/cond-mat.supr-con','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(11,'arXiv Strongly Correlated Electrons','arXiv:cond-mat.str-el','http://export.arxiv.org/rss/cond-mat.str-el','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://arxiv.org/favicon.ico'),
+	(12,'Nature Physics','Nature Physics','http://feeds.nature.com/nphys/rss/current','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00','http://www.nature.com/favicon.ico'),
+	(13,'New Journal of Physics','NJP','http://iopscience.iop.org/1367-2630/?rss=1','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00',NULL),
+	(14,'Science','Science','http://www.sciencemag.org/rss/current.xml','2013-01-01 00:00:00','2013-01-01 00:00:00','2013-01-01 00:00:00',NULL);
 
 /*!40000 ALTER TABLE `journals` ENABLE KEYS */;
 UNLOCK TABLES;
