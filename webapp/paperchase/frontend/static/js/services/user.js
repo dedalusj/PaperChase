@@ -1,13 +1,19 @@
 app.factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', function ($http, $cookieStore, Base64, $cookies) {
     
-    var user = { isLogged: false };
+    var user = { 
+                  isLogged: false,
+                  firstLogin: true,
+               };
+               
     authData = $cookieStore.get('authdata');
-    
     if (authData) {
         // initialize to whatever is in the cookie, if anything
         $http.defaults.headers.common['Authorization'] = 'Basic ' + authData;
         user.isLogged = true;
     }
+    
+    firstLogin = $cookieStore.get('firstLogin');
+    if (firstLogin != undefined) user.firstLogin = false;
     
     $http.defaults.headers.post['X-CSRFToken'] = $cookies['_csrf_token'];
     $http.defaults.headers.delete = { 'X-CSRFToken' : $cookies['_csrf_token'] };
@@ -24,6 +30,7 @@ app.factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', func
             $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
             user.isLogged = true;
             $cookieStore.put('authdata', encoded);
+            if (user.firstLogin === true) $cookieStore.put('firstLogin', false);
         },
         clearCredentials: function () {
             document.execCommand("ClearAuthenticationCache");
@@ -33,6 +40,9 @@ app.factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', func
         },
         isLogged: function() {
             return user.isLogged;
+        },
+        hasLoggedInBefore: function() {
+            return !user.firstLogin;
         }
     };
 }]);
