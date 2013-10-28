@@ -618,9 +618,12 @@ tr.subscription-headers {
 }
 
 .home-page {
+    .header {
+    	margin-top: 30px;
+    	margin-bottom: 50px;
+    }
 	.logo {
-	    margin-left: 50px;
-	    margin-top: 30px;
+	    float: left;
 		svg {
 			width: @hp-logo-size;
 			height: @hp-logo-size;
@@ -639,6 +642,27 @@ tr.subscription-headers {
 		       padding-left: 10px;
 		       font-size: @hp-name-size;
 		   }
+		}
+	}
+	.login-button {
+		float: right;
+		display: block;
+		margin-top: 6px;
+		a {
+			padding-left: 30px;
+			padding-right: 30px;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			border-radius: 5px;
+			color: @red-hint;
+			font-weight: bold;
+			border: 1px solid @red-hint;
+			font-size: 20px;
+			&:hover, &:focus {
+				text-decoration: none;
+				background-color: @red-hint;
+				color:  #fff;
+			}
 		}
 	}
 	.title {
@@ -670,6 +694,44 @@ tr.subscription-headers {
 		}
 		.row {
 			margin-bottom: 35px;
+		}
+	}
+}
+
+.blurb {
+	background-color: rgb(220, 220, 220);
+	padding-top: 20px;
+	padding-bottom: 5px;
+	font-size: 18px;
+	font-weight: 200;
+	line-height: 26px;
+	.left-blurb {
+		padding-left: 0px;
+	}
+	.right-blurb {
+	    margin-top: -7px;
+	    border-color: @red-hint;
+		p {
+			margin-bottom: 0px;
+		}
+	}
+}
+
+.footer {
+	background-color: rgb(51, 51, 51);
+	color: #fff;
+	padding-top: 10px;
+	padding-bottom: 25px;
+	.row {
+	    text-align: center;	
+	    padding-top: 15px;
+	    padding-bottom: 15px;
+	}
+	a {
+	    color: #fff;
+		&:hover, &:focus {
+			color: #fff;
+			text-decoration: none;
 		}
 	}
 }

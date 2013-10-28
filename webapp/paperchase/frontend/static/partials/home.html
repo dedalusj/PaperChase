@@ -1,15 +1,17 @@
 <div ng-if="!isLogged()">
-  <nav class="bar">  
-    <ul class="controls buttons"> 
-      <li><a href="#/login">Login</a></li>  
-    </ul>  
-  </nav>
-  <div class="main-frame">
     <div class="home-page">
       <div class="container">
+        <a href="https://github.com/dedalusj/PaperChase"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+        
+        <div class="col-md-10 col-md-offset-1 header">
         <div class="logo">
           <a href="#/home"><span ng-include="'static/img/logo.svg'"></span><h1>Paperchase</h1></a>
         </div>
+        <div class="login-button">
+          <a href="#/login">Login</a>
+        </div>
+        </div>
+        
         <div class="title">
           <h2>The easiest way to keep up with</h2>
           <h2>academic papers.</h2>
@@ -24,8 +26,40 @@
           </div>
         </div>
       </div>
+      <div class="blurb">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <p>Paperchase was created by Jacopo Sabbatini using <a href="http://www.python.org/">Python</a>, with <a href="http://flask.pocoo.org/">Flask</a> and <a href="http://www.sqlalchemy.org/">SQLAlchemy</a>, and Javascript with <a href="http://angularjs.org/">AngularJS</a>.</p>
+              
+              <div class="col-md-6 left-blurb">
+                <p>Paperchase is his first attempt at building a web application. It's both a learning exercise and an attempt at building a tool useful to the academic community.</p>
+              </div>
+              <div class="panel panel-default col-md-6 right-blurb">
+                <div class="panel-body">
+                  <p>If you appreciate Paperchase please consider giving back by sending feedback, suggestions, or <a href="https://github.com/dedalusj/PaperChase">code</a>.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">
+        <div class="container">
+        <div class="row">
+          <div class="col-lg-2 col-md-offset-3">
+            <a href="mailto:paperchase.app@gmail.com"><i class="fa fa-envelope fa-5x"></i><div>Email me</div></a>
+          </div>
+          <div class="col-lg-2 next">
+            <a href="https://twitter.com/dedalusj"><i class="fa fa-twitter-square fa-5x"></i><div>Follow me on Twitter</div></a>
+          </div>
+          <div class="col-lg-2 next">
+            <a href="https://github.com/dedalusj"><i class="fa fa-github fa-5x"></i><div>See my github profile</div></a>
+          </div>
+        </div>
+        </div>
+      </div>
     </div>
-  </div>
 </div>
 
 <div ng-if="isLogged()">
