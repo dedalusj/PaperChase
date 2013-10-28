@@ -28,6 +28,8 @@ Every access to the API requires HTTP Basic authentication and the backend imple
 
 The web client is implemented using [AngularJS](http://angularjs.org/) that serves all the views of the app.
 
+The aesthetics of Paperchase is currently inspired by [Feedbin](https://feedbin.me/) by [Ben Ubois](https://github.com/benubois). 
+
 Installation and requirements
 -----------------------------
 
