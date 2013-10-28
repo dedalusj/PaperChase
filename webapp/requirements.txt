@@ -15,6 +15,7 @@ flask-restful
 flask-assets
 flask-httpauth
 passlib
+py-bcrypt
 flask-seasurf
 cssmin
 fabric
