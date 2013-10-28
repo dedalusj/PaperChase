@@ -7,7 +7,7 @@ app.controller("registerController", ['$scope', '$http', '$location', 'UserServi
         var postData = {email: $scope.email, 
                         password: $scope.password};
         $http({
-            url: 'http://localhost:5000/api/register',
+            url: '/api/register',
             method: "POST",
             data: angular.toJson(postData),
             headers: {'Content-Type': 'application/json'}

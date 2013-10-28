@@ -16,7 +16,7 @@ app.factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', func
         verifyCredentials: function(username, password) {
             var encoded = Base64.encode(username + ':' + password);
             var escaped_email = encodeURIComponent(username);
-            var api_address = 'http://localhost:5000/api/users';
+            var api_address = '/api/users';
             return $http({method: 'GET', url: api_address, headers: {'Authorization': 'Basic '.concat(encoded)}});
         },
         setCredentials: function (username, password) {

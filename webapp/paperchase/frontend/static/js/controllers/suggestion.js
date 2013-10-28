@@ -20,7 +20,7 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', function($scope
                             authors: $scope.authors,
                             abstract: $scope.abstract};
             $http({
-                url: 'http://localhost:5000/api/suggestion',
+                url: '/api/suggestion',
                 method: "POST",
                 data: angular.toJson(postData),
                 headers: {'Content-Type': 'application/json'}
