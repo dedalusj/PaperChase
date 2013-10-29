@@ -9,7 +9,7 @@ Paper.prototype.init = function() {
   this.read = this.read_at != null;
 }
 
-app.factory('Papers', ['PaperAPI', '$http', function(PaperAPI, $https) {
+app.factory('Papers', ['PaperAPI', '$http', '$injector', function(PaperAPI, $https, $injector) {
   var Papers = function(unread, since) {
     this.items = [];
     this.busy = false;
@@ -87,6 +87,13 @@ app.factory('Papers', ['PaperAPI', '$http', function(PaperAPI, $https) {
           i++;
       }
       this.items[this.selectedId].selected = true;
+      
+      var rootScope = $injector.get('$rootScope');
+      if (rootScope){
+        rootScope.$broadcast("selected_new_item", paperId);
+      }
+      
+      if (!this.hasNext()) this.nextPage();
   };
   
   Papers.prototype.prev = function() {

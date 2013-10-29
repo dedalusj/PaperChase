@@ -83,7 +83,7 @@
         <div class="full-height papers-wrap">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
-          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}">
+          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}" id="paper{{paper.id}}">
             <a href="#/home" ng-click="papers.selectItem(paper.id)">
               <span class="favicon-wrap">
                   <img ng-if="paper.journal.favicon != null" ng-src="{{ paper.journal.favicon }}" height="16" width="16">
