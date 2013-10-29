@@ -9,11 +9,8 @@ app.controller("loginController", ['$scope', '$http', '$location', 'UserServices
         UserServices.verifyCredentials($scope.email,$scope.password).
         success(function() {
             UserServices.setCredentials($scope.email,$scope.password);
-            if (UserServices.hasLoggedInBefore()) {
-                $location.path( "/home" );
-            } else {
-                $location.path( "/subscriptions" );
-            }
+            if (!UserServices.hasLoggedInBefore()) $scope.firstLogin();
+            $location.path( "/home" );
         }).
         error(function(data, status, headers, config) {
             $scope.alert = { type: 'danger', msg: 'Username or password incorrect.' };

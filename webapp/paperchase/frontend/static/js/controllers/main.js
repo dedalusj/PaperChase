@@ -1,4 +1,4 @@
-app.controller("mainController", ['$scope', '$location', 'UserServices', function($scope, $location, UserServices) {
+app.controller("mainController", ['$scope', '$location', 'UserServices', '$modal', function($scope, $location, UserServices, $modal) {
     $scope.isLogged = function() {
         return UserServices.isLogged();
     };
@@ -11,5 +11,19 @@ app.controller("mainController", ['$scope', '$location', 'UserServices', functio
     };
     $scope.keyPressed = function(kind) {
         $scope.$broadcast('keyPress',kind);
+    };
+    
+    $scope.firstLogin = function () {
+        var modalInstance = $modal.open({
+          templateUrl: 'static/partials/firstlogin.html',
+          controller: 'modalController',
+          resolve: {}
+        });
+        modalInstance.result.then(function () {
+            console.log("I'm done");
+            $location.path('/subscriptions');
+        }, function () {
+            console.log("Dismissed");
+        });
     };
 }]);
