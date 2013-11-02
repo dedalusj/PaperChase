@@ -20,11 +20,8 @@ class Category(db.Model):
     
     def __str__(self):
         return self.name
-        
-#    def all_journals(self):
-#        """Return all the journals for a given category even the journals of its parent."""
-#        return Journal.query.join(journals_categories, (journals_categories.c.journal_id == Journal.id)).filter(or_(journals_categories.c.category_id == self.id, journals_categories.c.category_id == self.parent_id))
-            
+    
+    
 class Journal(db.Model):
     __tablename__ = 'journals'
 
@@ -42,6 +39,7 @@ class Journal(db.Model):
     
     def __str__(self):
         return self.title
+    
             
 class Path(db.Model):
     __tablename__ = 'paths'

@@ -27,15 +27,26 @@ app.controller("subscriptionsController", ['$scope', 'CategoryAPI', 'Subscriptio
     $scope.subscribe = function($event, journalId) {
         var newSubscription = new SubscriptionAPI({'journal_id': journalId});
         newSubscription.$save();
-        // This is less than ideal. We should only remove the cache of the journals request
-        $cacheFactory.get('$http').removeAll();
-        $scope.updateJournals();
+        journal = $scope.findJournal(journalId);
+        if (journal) journal.subscribed = true;
     };
     
     $scope.unsubscribe = function($event, journalId) {
         SubscriptionAPI.remove({'journal_id': journalId});
-        // This is less than ideal. We should only remove the cache of the journals request
-        $cacheFactory.get('$http').removeAll();
-        $scope.updateJournals();
+        journal = $scope.findJournal(journalId);
+        if (journal) journal.subscribed = false;
+    };
+    
+    $scope.findJournal = function(journalId) {
+        var i = 0;
+        var journal = undefined;
+        while (i < $scope.journals.length) {
+        	if ($scope.journals[i].id === journalId) {
+        	    journal = $scope.journals[i];
+        	    break;
+        	}
+            i++;
+        }
+        return journal;
     };
 }]);

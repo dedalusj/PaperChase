@@ -79,6 +79,14 @@ class Service(object):
         db.session.add(model)
         db.session.commit()
         return model
+    
+    def save_all(self, models):
+        """Commits the models to the database
+    
+        :param models: a list containing the models
+        """
+        db.session.add_all(models)
+        db.session.commit()
 
     def all(self):
         """Returns a generator containing all instances of the service's model.

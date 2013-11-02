@@ -43,3 +43,24 @@ class UserPapersService(Service):
     def markAllRead(self, user):
         user.papers.filter(UserPaper.read_at == None).update({"read_at": datetime.datetime.utcnow()})
         self.commit_changes()
+        
+    def user_subscribed(self, user, journal):
+        """
+        When a user subscribe to a new journal we want to create a new UserPaper object to append to
+        his/her list of papers for every paper published in that journal in the last 2 weeks
+        """
+        papers = journal.papers.filter(Paper.created > datetime.datetime.utcnow() - datetime.timedelta(weeks=2)).all()
+        user_papers = []
+        for paper in papers:
+            user_papers.append(self.new(score = 50, created = paper.created, paper_id = paper.id, user_id = user.id))
+            self.save_all(user_papers)
+    
+    def user_unsubscribed(self, user, journal):
+        """
+        When a user unsubscribe from a journal we remove all the papers from that journal
+        """
+        
+        # TODO: we should be able to do a batch delete from the query wihtout looping through all the results
+        papers = db.session.query(UserPaper).join(Paper, (UserPaper.paper_id == Paper.id)).filter(UserPaper.user_id == user.id, Paper.journal_id == journal.id)
+        for paper in papers:
+            self.delete(paper)
