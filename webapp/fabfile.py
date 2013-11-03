@@ -110,13 +110,13 @@ def copy_repo_database():
         run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_bootstrap.sql'.format(env.db_username, env.database))
 
 def setup_host():
-    run('nginx -s stop')
+    sudo('nginx -s stop')
     host_conf = StringIO.StringIO()
     host_conf.write(_render_template(HOST_CONF_FILE, env))
     put(host_conf, REMOTE_NGINX_PATH, use_sudo=True)
     run('touch %s/log/access.log' % env.web_app_path)
     run('touch %s/log/error.log' % env.web_app_path)
-    run('nginx')
+    sudo('nginx')
 
 def setup_supervisor():
     with cd(env.web_app_path):
