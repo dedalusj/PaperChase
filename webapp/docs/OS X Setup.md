@@ -85,6 +85,14 @@ Install _Redis_
     brew install redis
     ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
     launchctl load ~/Library/LaunchAgents/homebrew.mxcl.redis.plist
+    
+### NGINX
+
+Install _nginx_
+
+    brew install nginx
+    ln -sfv /usr/local/opt/nginx/*.plist ~/Library/LaunchAgents
+    launchctl load ~/Library/LaunchAgents/homebrew.mxcl.nginx.plist
 
 ### Setup from Fabric
 

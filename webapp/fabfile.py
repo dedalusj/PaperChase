@@ -11,9 +11,11 @@ from jinja2 import Template, Environment, FileSystemLoader
 
 # Global settings variables
 SUPERVISOR_CONF_FILE = 'supervisord.conf'
+HOST_CONF_FILE = 'nginx.conf'
 SETTINGS_FILE = 'settings.py'
 ADMIN_EMAIL = 'paperchase.app@gmail.com'
 MAIN_REPO = 'https://github.com/dedalusj/PaperChase.git'
+REMOTE_NGINX_PATH = '/usr/local/etc/nginx/nginx.conf'
 
 env.user = 'paperchase'
 env.repo_path = 'PaperChase'
@@ -27,6 +29,8 @@ env.mail_port = '465'
 env.mail_use_ssl = 'True'
 env.mail_username = ADMIN_EMAIL
 env.virtual_env = 'venv'
+env.domain = 'dedalusj.dyndns.org'
+env.app_name = 'paperchase'
 
 # Settings specific to the deploy environment   
 def vm():
@@ -105,6 +109,15 @@ def copy_repo_database():
     with cd(env.web_app_path):
         run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_bootstrap.sql'.format(env.db_username, env.database))
 
+def setup_host():
+    run('nginx -s stop')
+    host_conf = StringIO.StringIO()
+    host_conf.write(_render_template(HOST_CONF_FILE, env))
+    put(host_conf, REMOTE_NGINX_PATH, use_sudo=True)
+    run('touch %s/log/access.log' % env.web_app_path)
+    run('touch %s/log/error.log' % env.web_app_path)
+    run('nginx')
+
 def setup_supervisor():
     with cd(env.web_app_path):
         supervisor_conf = StringIO.StringIO()
@@ -145,6 +158,7 @@ def initial_setup(local_data = 'False'):
         copy_repo_database()
     
     run_redis()
+    setup_host()
     setup_supervisor()
     start_worker()
     start_app()
