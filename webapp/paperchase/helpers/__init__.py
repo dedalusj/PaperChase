@@ -43,7 +43,10 @@ def register_blueprints(app, package_name, package_path):
     """
     rv = []
     for _, name, _ in pkgutil.iter_modules(package_path):
-        m = importlib.import_module('%s.%s' % (package_name, name))
+        try:
+            m = importlib.import_module('%s.%s' % (package_name, name))
+        except ImportError:
+            continue
         for item in dir(m):
             item = getattr(m, item)
             if isinstance(item, Blueprint):
