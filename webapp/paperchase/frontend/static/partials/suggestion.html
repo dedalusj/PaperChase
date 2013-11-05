@@ -9,6 +9,7 @@
 
 <div class="main-frame">
   <div class="suggestion-wrap">
+   <alert ng-if="alert" type="alert.type" close="closeAlert()"><span ng-bind-html="alert.msg"></span></alert>
     <form class="form-horizontal" role="form" ng-submit="formatAndSubmit(suggestion)" name="suggestion" novalidate>
       <table>
       <tbody>

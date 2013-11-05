@@ -1,5 +1,10 @@
 app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', function($scope, CategoryAPI, $http){
     
+    $scope.alert = undefined;
+    $scope.closeAlert = function() {
+        $scope.alert = undefined;
+    };
+    
     $scope.categories = CategoryAPI.getCategories();
     $scope.category = [];
     
@@ -24,7 +29,9 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', functi
                 method: "POST",
                 data: angular.toJson(postData),
                 headers: {'Content-Type': 'application/json'}
-            });
+            }).success(function() {
+                $scope.alert = { type: 'success', msg: 'Your journal suggestion has been submitted!' };
+            })
         }
     };
 }]);
