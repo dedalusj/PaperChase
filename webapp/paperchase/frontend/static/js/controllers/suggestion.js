@@ -1,4 +1,4 @@
-app.controller("suggestionController", ['$scope', 'CategoryAPI', function($scope, CategoryAPI){
+app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', function($scope, CategoryAPI, $http){
     
     $scope.categories = CategoryAPI.getCategories();
     $scope.category = [];
