@@ -10,6 +10,7 @@ app.controller("homeController", ['$scope', 'Papers', '$window', function($scope
     
     $scope.markAllRead = function() {
         $scope.papers.markAllRead();
+        $scope.papers.resetPapers();
     };
     
     $scope.$on("selected_new_item", function(event, message) {
