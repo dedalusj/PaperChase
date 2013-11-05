@@ -124,6 +124,10 @@ def setup_supervisor():
         supervisor_conf.write(_render_template(SUPERVISOR_CONF_FILE, env))
         put(supervisor_conf, SUPERVISOR_CONF_FILE)
         run("{0}/bin/supervisord".format(env.virtual_env))
+
+def reload_supervisor():
+    with cd(env.web_app_path):
+        run('{0}/bin/supervisorctl update'.format(env.virtual_env))
         
 def start_worker():
     with cd(env.web_app_path):
@@ -168,6 +172,7 @@ def update_app():
     stop_app()
     update_repo()
     update_database()
+    reload_supervisor()
     start_worker()
     start_app()
     
