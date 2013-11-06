@@ -9,8 +9,11 @@
 
 <div class="main-frame">
   <div class="suggestion-wrap">
+   <div class="col-md-8 col-md-offset-2">
    <alert ng-if="alert" type="alert.type" close="closeAlert()"><span ng-bind-html="alert.msg"></span></alert>
-    <form class="form-horizontal" role="form" ng-submit="formatAndSubmit(suggestion)" name="suggestion" novalidate>
+   </div>
+   <div class="col-md-12">
+    <form class="form-horizontal" role="form" name="suggestion" ng-submit="submitted()" novalidate action="mailto:paperchase.app@gmail.com" method="post" enctype="text/plain">
       <table>
       <tbody>
         <tr>
@@ -75,7 +78,7 @@
               </div>
             </div>
             <div class="form-group">
-                <input class="submit-button" name="commit" tabindex="3" type="submit" value="Submit" ng-disabled="!suggestion.$valid">
+                <input class="submit-button" tabindex="3" type="submit" value="Submit" ng-disabled="!suggestion.$valid" ng-class="{'disabled': !suggestion.$valid}">
             </div>
             </div>
           </td>
@@ -83,5 +86,6 @@
       </tbody>
       </table>
     </form>
+    </div>
   </div>
 </div>
