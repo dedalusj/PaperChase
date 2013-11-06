@@ -4,7 +4,7 @@
 @border-color: #bbb;
 @paper-background-color: #eee;
 @journal-color: #666;
-@light-gray-text: #999;
+@light-gray: #999;
 @selected-color: #4A9CE3;
 @selected-body-color: rgba(255, 255, 255, 0.8);
 @text-color: #444;
@@ -241,7 +241,7 @@
     		}
     		time {
     			font-size: @time-font-size;
-    			color: @light-gray-text;
+    			color: @light-gray;
     		}
     		.title {
     			font-weight: bold;
@@ -444,7 +444,7 @@
     	line-height: 1.1em;
     }
     .journal, time {
-    	color: @light-gray-text;
+    	color: @light-gray;
     	font-size: @base-font-size + 1px;
     	margin-bottom: @paper-margins;
     }
@@ -614,6 +614,11 @@ tr.subscription-headers {
 		margin-top: -3px;
 		margin-right: -3px;
 		margin-left: -3px;
+	}
+	&.disabled {
+		background-color: @light-gray;
+		border: 1px solid @light-gray;
+		opacity: 0.3;
 	}
 }
 
