@@ -382,7 +382,6 @@
 	       	    a {
 	       	    	padding-left: @controls-hor-padding;
 	       	    	padding-right: @controls-hor-padding;
-	       	    	border-right: 1px solid @border-color;
 	       	    	text-decoration: none;  
 	       	    	margin-left: 0px;
 	       	    	color: @border-color - #222;
@@ -398,8 +397,8 @@
 	       	    		margin-bottom: -3px;
 	       	    	}
 	       	    }
-	       	    &:last-child a {  
-	       	        border-right: none;
+	       	    &:nth-last-child(2) a {  
+	       	        border-right: 1px solid @border-color;
 	       	    }
 	       	    i {
 	       	    	line-height: @toolbar-height;
@@ -678,6 +677,21 @@ tr.subscription-headers {
 			font-weight: normal;
 			text-align: center;
 			font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+		}
+	}
+	.screenshot {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		background-color: #eee;
+		border-bottom: 1px solid @red-hint;
+		border-top: 1px solid @red-hint;
+		margin-bottom: 20px;
+		img {
+			width: 800px;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
+			border-radius: 4px;
 		}
 	}
 	.specs {

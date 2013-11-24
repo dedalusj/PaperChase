@@ -16,6 +16,11 @@
           <h2>The easiest way to keep up with</h2>
           <h2>academic papers.</h2>
         </div>
+     </div>
+     <div class="screenshot">
+       <img src="static/img/screenshot.png" class="img-rounded"/>
+     </div>
+     <div class="container">
         <div class="specs">
           <div class="row">
             <div class="col-md-4 col-md-offset-2"><div class="spec-icon"><i class="fa fa-file-text"></i></div><p class="text-center lead">Paperchase collects newly published papers from hundreds of different academic journals and serves them in <strong>one convenient place</strong>.</p></div>
@@ -120,6 +125,12 @@
             <ul class="controls buttons" id="paper-controls">
               <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'static/img/papers-logo.svg'"></span></a></li>
               <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
+              <li>
+                <a href="" title="Mark as read/unread" ng-click="toggleReadSelected()">
+                  <i ng-if="!papers.selected.read" class="fa fa-square-o"></i>
+                  <i ng-if="papers.selected.read" class="fa fa-check-square-o"></i>
+                </a>
+              </li>
             </ul>
           </div>
           <div class="paper-content">

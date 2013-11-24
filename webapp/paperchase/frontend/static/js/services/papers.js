@@ -109,11 +109,12 @@ app.factory('Papers', ['PaperAPI', '$http', '$injector', function(PaperAPI, $htt
   };
   
   Papers.prototype.toggleRead = function() {
-      if (this.selected.read == false) {
+      if (this.selected.read === false) {
           PaperAPI.markRead({ read_papers : [this.selected.id] });
       } else {
           PaperAPI.markUnread({ unread_papers : [this.selected.id] });
       }
+      this.selected.read = !this.selected.read;
       this.items[this.selectedId].read = !this.items[this.selectedId].read;
   };
   
