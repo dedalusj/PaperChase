@@ -5,7 +5,7 @@ from passlib.hash import bcrypt
 
 from ..services import users
 from ..core import auth
-from ..tasks import send_confirmation_email
+from ..tasks import send_email
 
 user_fields = {
     'email': fields.String,
@@ -35,5 +35,5 @@ class RegisterAPI(Resource):
         password = request.json['password']
         password = bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
         user = users.create(email = email, password = password, registered_at = datetime.datetime.utcnow())
-        send_confirmation_email.delay(email)
+        send_email.delay('Paperchase registration', 'registration', email, email = email, domain = current_app['DOMAIN'])
         return marshal(user, user_fields)

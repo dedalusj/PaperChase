@@ -1,0 +1,7 @@
+Welcome {{ email }}!
+
+Thank you for registering to Paperchase.
+
+Please login at http://{{ domain }}/#/login. You will be redirected to the subscription page where you can start choosing the journals you want to follow.
+
+Subsequently you can add or remove journals from your followed list by visiting http://{{ domain }}/#/subscriptions.

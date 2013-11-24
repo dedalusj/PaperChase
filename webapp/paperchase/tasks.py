@@ -13,6 +13,7 @@ import datetime
 import feedparser
 import requests
 import urlparse
+import os
 from pytz import utc
 from datetime import timedelta, date
 from celery.utils.log import get_task_logger
@@ -20,14 +21,14 @@ from xml.sax import SAXException
 from xml.etree import ElementTree as ET
 from lxml import etree
 from bs4 import BeautifulSoup
-
 from flask.ext.mail import Message
+from jinja2 import Environment, FileSystemLoader, exceptions
 
 from .core import mail
 from .factory import create_celery_app
 from .services import journals, papers
 from .helpers import bozo_checker, days_since, deltatime, FaviconFetcher
-from .settings import scraper_config, MAIL_DEFAULT_SENDER
+from .settings import scraper_config, DEFAULT_MAIL_SENDER
 
 celery = create_celery_app()
 
@@ -267,14 +268,24 @@ def add_article(entry, journal_id):
     )
     logger.debug("Added new entry with doi: {0}".format(paper.get("url")))
     
-@celery.task
-def send_suggestion_email(json_msg):
-    msg = Message('Journal suggestion', sender=MAIL_DEFAULT_SENDER, recipients=[MAIL_DEFAULT_SENDER])
-    msg.body = """{0}""".format(str(json_msg))
-    mail.send(msg)
+@celery.task    
+def send_email(subject, template, recipient, **kwargs):
+    """Send an email via the Flask-Mail extension.
+
+    :param subject: Email subject
+    :param recipient: Email recipient
+    :param template: The name of the email template. The method uses Jinja2 to render the template
+    :param **kwargs: dictionary containing the info used to render the template
+    """
+    msg = Message(subject, recipients=[recipient])
     
-@celery.task
-def send_confirmation_email(user_email):
-    msg = Message('Paperchase registration', sender=MAIL_DEFAULT_SENDER, recipients=[user_email])
-    msg.body = """Thanks for registering to Paperchase."""
+    this_dir = os.path.dirname(os.path.abspath(__file__))
+    env = Environment(loader=FileSystemLoader("%s/email_templates/" % this_dir))
+    msg.body = env.get_template("%s.txt" % template).render(**kwargs)
+    try:
+        msg.html = env.get_template("%s.html" % template).render(**kwargs)
+    except exceptions.TemplateNotFound:
+        # We assume there is at least a txt template for a text email.
+        pass
+
     mail.send(msg)

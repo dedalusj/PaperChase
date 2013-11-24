@@ -1,9 +1,9 @@
-from flask import request
+from flask import request, current_app
 from flask.ext.restful import Resource, fields, marshal
 
 from ..services import categories, journals, users
 from ..core import auth
-from ..tasks import send_suggestion_email
+from ..tasks import send_email
 
 subcategory_fields = {
     'name': fields.String,
@@ -86,5 +86,5 @@ class SuggestionAPI(Resource):
     
     decorators = [auth.login_required]
     def post(self):
-        send_suggestion_email.delay(request.json)
+        send_email.delay('Journal Suggestion', 'suggestion', current_app.config['DEFAULT_MAIL_SENDER'], json_msg = request.json)
         return '', 201
