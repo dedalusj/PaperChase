@@ -171,6 +171,7 @@ def update_app():
     stop_worker()
     stop_app()
     update_repo()
+    setup_settings()
     update_database()
     reload_supervisor()
     start_worker()

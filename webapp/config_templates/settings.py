@@ -38,9 +38,11 @@ CELERYBEAT_SCHEDULE = {
 
 PASSWORD_SALT = '{{ password_salt }}'
 
-MAIL_DEFAULT_SENDER = '{{ mail_address }}'
+DEFAULT_MAIL_SENDER='{{ mail_address }}'
 MAIL_SERVER='{{ mail_server }}'
 MAIL_PORT={{ mail_port }}
 MAIL_USE_SSL={{ mail_use_ssl }}
-MAIL_USERNAME = '{{ mail_username }}'
-MAIL_PASSWORD = '{{ mail_password }}'
+MAIL_USERNAME='{{ mail_username }}'
+MAIL_PASSWORD='{{ mail_password }}'
+
+DOMAIN='{{ domain }}'
