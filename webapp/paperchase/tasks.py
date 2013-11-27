@@ -80,8 +80,8 @@ def feed_requester(feed_url):
     feed_data = None
     try:
         feed_data = feedparser.parse(feed_url, agent=scraper_config.get("User-agent"))
-    except SAXException as errno:
-        logger.error("Failed to retrive {0}\nTraceback:\n{1}".format(feed_url, errno))
+    except Exception as err:
+        logger.error("Failed to retrive {0}\nTraceback:\n{1}".format(feed_url, err))
 
     if not feed_data:
         logger.error("Retriving feed from {0} returned nothing\n".format(feed_url))
