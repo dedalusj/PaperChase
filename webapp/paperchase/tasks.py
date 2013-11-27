@@ -81,7 +81,8 @@ def feed_requester(feed_url):
     try:
         feed_data = feedparser.parse(feed_url, agent=scraper_config.get("User-agent"))
     except Exception as err:
-        logger.error("Failed to retrive {0}\nTraceback:\n{1}".format(feed_url, err))
+        logger.error("Failed to parse {0}\nTraceback:\n{1}".format(feed_url, err))
+        return None
 
     if not feed_data:
         logger.error("Retriving feed from {0} returned nothing\n".format(feed_url))
@@ -135,15 +136,17 @@ def default_parser(entry):
                 "abstract": entry.get("summary",""),
                 "authors": entry.get("authors","")
                 }
-    article['doi'] = article['doi'][4:]  
-    authors = article['authors']
-    authors = [authors[i]['name'] for i in range(len(authors))]
+    article['doi'] = article['doi'][4:] 
+    
+    authors = []
+    for author in article['authors']:
+        if 'name' in author:
+            authors.append(author['name'])
     authors = ', '.join(authors)
     # let's sanitize authors from unwanted html tags
     authors = sanitize_html(authors)
     authors = authors.strip(' \n')
-    
-    # if the authors list is to long truncate it to 900 chars
+    # if the authors list is too long truncate it to 900 chars
     article['authors'] = (authors[:900] + '..') if len(authors) > 900 else authors
       
     return article
@@ -173,7 +176,10 @@ def get_papers(journal_id):
     
     feed_url = journal.url
     feed_data = feed_requester(feed_url)
-    if feed_data is not None and feed_data.get("entries"):
+    if feed_data is None:
+        return
+    
+    if feed_data.get("entries"):
         for entry in feed_data.entries:
             add_article.delay(entry, journal.id)
     
