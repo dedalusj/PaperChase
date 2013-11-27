@@ -1,7 +1,9 @@
-app.controller("modalController", ['$scope', '$modalInstance', function($scope, $modalInstance) {
+/*global app */
+/*jslint browser: true */
 
-  $scope.close = function () {
-    $modalInstance.close();
-  };
-
+app.controller("modalController", ['$scope', '$modalInstance', function ($scope, $modalInstance) {
+    "use strict";
+    $scope.close = function () {
+        $modalInstance.close();
+    };
 }]);

@@ -1,4 +1,9 @@
-app.factory('Base64', function() {
+/*global app */
+/*jslint browser: true */
+
+app.factory('Base64', function () {
+    "use strict";
+    
     var keyStr = 'ABCDEFGHIJKLMNOP' +
         'QRSTUVWXYZabcdef' +
         'ghijklmnopqrstuv' +
@@ -6,15 +11,20 @@ app.factory('Base64', function() {
         '=';
     return {
         encode: function (input) {
-            var output = "";
-            var chr1, chr2, chr3 = "";
-            var enc1, enc2, enc3, enc4 = "";
-            var i = 0;
+            var output = "",
+                chr1 = "",
+                chr2 = "",
+                chr3 = "",
+                enc1 = "",
+                enc2 = "",
+                enc3 = "",
+                enc4 = "",
+                i = 0;
  
             do {
-                chr1 = input.charCodeAt(i++);
-                chr2 = input.charCodeAt(i++);
-                chr3 = input.charCodeAt(i++);
+                chr1 = input.charCodeAt(i += 1);
+                chr2 = input.charCodeAt(i += 1);
+                chr3 = input.charCodeAt(i += 1);
  
                 enc1 = chr1 >> 2;
                 enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
@@ -40,13 +50,17 @@ app.factory('Base64', function() {
         },
  
         decode: function (input) {
-            var output = "";
-            var chr1, chr2, chr3 = "";
-            var enc1, enc2, enc3, enc4 = "";
-            var i = 0;
- 
-            // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
-            var base64test = /[^A-Za-z0-9\+\/\=]/g;
+            var output = "",
+                chr1 = "",
+                chr2 = "",
+                chr3 = "",
+                enc1 = "",
+                enc2 = "",
+                enc3 = "",
+                enc4 = "",
+                i = 0,
+                // remove all characters that are not A-Z, a-z, 0-9, +, /, or =
+                base64test = /[^A-Za-z0-9\+\/\=]/g;
             if (base64test.exec(input)) {
                 alert("There were invalid base64 characters in the input text.\n" +
                     "Valid base64 characters are A-Z, a-z, 0-9, '+', '/',and '='\n" +
@@ -66,10 +80,10 @@ app.factory('Base64', function() {
  
                 output = output + String.fromCharCode(chr1);
  
-                if (enc3 != 64) {
+                if (enc3 !== 64) {
                     output = output + String.fromCharCode(chr2);
                 }
-                if (enc4 != 64) {
+                if (enc4 !== 64) {
                     output = output + String.fromCharCode(chr3);
                 }
  

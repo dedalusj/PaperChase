@@ -1,19 +1,26 @@
-app.controller("loginController", ['$scope', '$http', '$location', 'UserServices', function($scope, $http, $location, UserServices) {
+/*global app */
+/*jslint browser: true */
+
+app.controller("loginController", ['$scope', '$http', '$location', 'UserServices', function ($scope, $http, $location, UserServices) {
+    "use strict";
+    
     $scope.alert = undefined;
     
-    $scope.closeAlert = function() {
+    $scope.closeAlert = function () {
         $scope.alert = undefined;
     };
     
-    $scope.loginPC = function() {
-        UserServices.verifyCredentials($scope.email,$scope.password).
-        success(function() {
-            UserServices.setCredentials($scope.email,$scope.password);
-            if (!UserServices.hasLoggedInBefore()) $scope.firstLogin();
-            $location.path( "/home" );
-        }).
-        error(function(data, status, headers, config) {
-            $scope.alert = { type: 'danger', msg: 'Username or password incorrect.' };
-        });  
+    $scope.loginPC = function () {
+        UserServices.verifyCredentials($scope.email, $scope.password).
+            success(function () {
+                UserServices.setCredentials($scope.email, $scope.password);
+                if (!UserServices.hasLoggedInBefore()) {
+                    $scope.firstLogin();
+                }
+                $location.path("/home");
+            }).
+            error(function (data, status, headers, config) {
+                $scope.alert = { type: 'danger', msg: 'Username or password incorrect.' };
+            });
     };
 }]);

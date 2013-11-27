@@ -1,3 +1,8 @@
-app.filter('escape', function() {
-  return window.encodeURIComponent;
+/*global app */
+/*jslint browser: true */
+
+app.filter('escape', function () {
+    "use strict";
+    
+    return window.encodeURIComponent;
 });

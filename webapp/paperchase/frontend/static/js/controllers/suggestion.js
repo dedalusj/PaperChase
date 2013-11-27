@@ -1,7 +1,11 @@
-app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', function($scope, CategoryAPI, $http){
+/*global app */
+/*jslint browser: true */
+
+app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', function ($scope, CategoryAPI, $http) {
+    "use strict";
     
     $scope.alert = undefined;
-    $scope.closeAlert = function() {
+    $scope.closeAlert = function () {
         $scope.alert = undefined;
     };
     
@@ -11,11 +15,11 @@ app.controller("suggestionController", ['$scope', 'CategoryAPI', '$http', functi
     $scope.subcategories = [];
     $scope.subcategory = [];
     
-    $scope.updateSubcategories = function() {
+    $scope.updateSubcategories = function () {
         $scope.subcategories = CategoryAPI.getSubcategories({'category_id' : $scope.category.id});
     };
     
-    $scope.submitted = function() {
+    $scope.submitted = function () {
         $scope.alert = { type: 'success', msg: 'The developers will review the information in your email, add the journal and contact you. You can now return to the <a href="#/home">home page</a>' };
     };
 }]);
