@@ -2,11 +2,9 @@ import string
 import StringIO
 import getpass
 from random import choice
-from datetime import date
 
 from fabric.api import *
-from fabric.operations import prompt
-from jinja2 import Template, Environment, FileSystemLoader
+from jinja2 import Environment, FileSystemLoader
 
 
 # Global settings variables
@@ -32,21 +30,24 @@ env.virtual_env = 'venv'
 env.domain = 'dedalusj.dyndns.org'
 env.app_name = 'paperchase'
 
-# Settings specific to the deploy environment   
+
+# Settings specific to the deploy environment
 def vm():
-    env.hosts = ['paperchasevm.local']  
+    env.hosts = ['paperchasevm.local']
     env.app_path = '/Users/' + env.user + '/' + env.repo_path
-    
+
 
 # Utility method to render the configuration file templates
 def _render_template(template_name, context):
-    env = Environment(loader = FileSystemLoader('config_templates'))
+    env = Environment(loader=FileSystemLoader('config_templates'))
     template = env.get_template(template_name)
     return template.render(context)
-    
+
+
 # Setup and maintenance of the remote server
 def make_dir():
     run("mkdir {0}".format(env.repo_path))
+
 
 def setup_repo():
     """Original clone of the repo"""
@@ -54,11 +55,13 @@ def setup_repo():
         run("git clone {0} .".format(MAIN_REPO))
         with cd('webapp'):
             run("mkdir log")
-            
+
+
 def update_repo():
     """Update the repo"""
     with cd(env.repo_path):
         run("git pull")
+
 
 def setup_venv():
     with cd(env.web_app_path):
