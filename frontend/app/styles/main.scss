@@ -1,9 +1,7 @@
-// $icon-font-path: "/bower_components/sass-bootstrap/fonts/";
-
 @import 'sass-bootstrap/lib/bootstrap';
 
-$fa-font-path: "/bower_components/font-awesome/fonts";
-@import "font-awesome/scss/font-awesome";
+$fa-font-path: '/bower_components/font-awesome/fonts';
+@import 'font-awesome/scss/font-awesome';
 
 /*General Colors*/
 $blue-hint: #428bca;
