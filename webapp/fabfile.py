@@ -53,6 +53,7 @@ def setup_repo():
     """Original clone of the repo"""
     with cd(env.repo_path):
         run("git clone {0} .".format(MAIN_REPO))
+        run("mkdir log")
         with cd('webapp'):
             run("mkdir log")
 
@@ -65,24 +66,28 @@ def update_repo():
 
 def setup_venv():
     with cd(env.web_app_path):
-        run("curl -O https://raw.github.com/pypa/virtualenv/1.9.X/virtualenv.py")
+        run("curl -O https://raw.github.com/pypa/virtualenv/" +
+            "1.9.X/virtualenv.py")
         run("python virtualenv.py {0}".format(env.virtual_env))
         run("{0}/bin/pip install -r requirements.txt".format(env.virtual_env))
     fix_feedparser()
-        
+
+
 def fix_feedparser():
-    with cd(env.web_app_path):
-        run("mkdir temp")
-        with cd("temp"):
-            run("git clone https://github.com/dedalusj/feedparser.git .")
-            run("mv feedparser/feedparser.py ../venv/lib/python2.7/")
-        run("rm -fdr temp")
-        
+    with cd(env.web_app_path + "/" + env.virtual_env + "lib/python2.7/" +
+            "site-packages/"):
+        run("curl -O https://raw.github.com/dedalusj/feedparser/master/" +
+            "feedparser/feedparser.py")
+
+
 def prompt_for_settings():
-    db_pass = getpass.getpass(prompt='Enter the paperchase user password for the database, ')
+    db_pass = getpass.getpass(
+        prompt='Enter the paperchase user password for the database, ')
     env.db_password = db_pass
-    mail_pass = getpass.getpass(prompt='Enter a password for the mail service, ')
+    mail_pass = getpass.getpass(
+        prompt='Enter a password for the mail service, ')
     env.mail_password = mail_pass
+
 
 def setup_settings():
     prompt_for_settings()
@@ -93,33 +98,41 @@ def setup_settings():
         env.secret_key = ''.join(choice(chars) for _ in range(length))
         length = 22
         env.password_salt = ''.join(choice(chars) for _ in range(length))
-        
+
         settings = StringIO.StringIO()
         settings.write(_render_template(SETTINGS_FILE, env))
         put(settings, SETTINGS_FILE)
+
 
 def update_database():
     with cd(env.web_app_path):
         run("{0}/bin/alembic upgrade head".format(env.virtual_env))
 
+
 def copy_local_database():
-    local('mysqldump -u {0} -p {1} > database_copy.sql'.format(env.db_username, env.local_database))
+    local('mysqldump -u {0} -p {1} > database_copy.sql'.format(
+        env.db_username, env.local_database))
     put('database_copy.sql', env.web_app_path)
     with cd(env.web_app_path):
-        run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_copy.sql'.format(env,db_username, env.database))
+        run("mysql --host=localhost --port=3306 --user={0} -p --reconnect {1}" +te
+            " < database_copy.sql".format(
+            env, db_username, env.database))
+
 
 def copy_repo_database():
     with cd(env.web_app_path):
-        run('mysql --host=localhost --port=3306 --user={0} -p --reconnect {1} < database_bootstrap.sql'.format(env.db_username, env.database))
+        run("mysql --host=localhost --port=3306 --user={0} -p --reconnect {1}" +
+            " < database_bootstrap.sql".format(
+            env.db_username, env.database))
+
 
 def setup_host():
     sudo('nginx -s stop')
     host_conf = StringIO.StringIO()
     host_conf.write(_render_template(HOST_CONF_FILE, env))
     put(host_conf, REMOTE_NGINX_PATH, use_sudo=True)
-    run('touch %s/log/access.log' % env.web_app_path)
-    run('touch %s/log/error.log' % env.web_app_path)
     sudo('nginx')
+
 
 def setup_supervisor():
     with cd(env.web_app_path):
@@ -128,48 +141,56 @@ def setup_supervisor():
         put(supervisor_conf, SUPERVISOR_CONF_FILE)
         run("{0}/bin/supervisord".format(env.virtual_env))
 
+
 def reload_supervisor():
     with cd(env.web_app_path):
         run('{0}/bin/supervisorctl update'.format(env.virtual_env))
-        
+
+
 def start_worker():
     with cd(env.web_app_path):
         run("{0}/bin/supervisorctl start celeryworker".format(env.virtual_env))
-        
+
+
 def stop_worker():
     with cd(env.web_app_path):
         run("{0}/bin/supervisorctl stop celeryworker".format(env.virtual_env))
-        
+
+
 def run_redis():
     with settings(warn_only=True):
         run('redis-server')
-        
+
+
 def start_app():
     with cd(env.web_app_path):
         run("{0}/bin/supervisorctl start paperchase".format(env.virtual_env))
 
+
 def stop_app():
     with cd(env.web_app_path):
         run("{0}/bin/supervisorctl stop paperchase".format(env.virtual_env))
-        
-def initial_setup(local_data = 'False'):
+
+
+def initial_setup(local_data='False'):
     make_dir()
     setup_repo()
     setup_venv()
     setup_settings()
-    
+
     update_database()
     if local_data == 'True':
         copy_local_database()
     else:
         copy_repo_database()
-    
+
     run_redis()
     setup_host()
     setup_supervisor()
     start_worker()
     start_app()
-    
+
+
 def update_app():
     stop_worker()
     stop_app()
@@ -179,4 +200,3 @@ def update_app():
     reload_supervisor()
     start_worker()
     start_app()
-    
