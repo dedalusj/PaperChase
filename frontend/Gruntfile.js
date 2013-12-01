@@ -1,6 +1,13 @@
 // Generated on 2013-11-28 using generator-angular 0.6.0-rc.2
 'use strict';
 
+// Proxy to Flask app conf
+var lrSnippet = require('grunt-contrib-livereload/lib/utils').livereloadSnippet;
+var mountFolder = function (connect, dir) {
+    return connect.static(require('path').resolve(dir));
+};
+var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -66,13 +73,31 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      proxies: [
+                {
+                    context: '/api',
+                    host: '127.0.0.1',
+                    port: 5000,
+                    https: false,
+                    changeOrigin: false,
+                    xforward: false
+                }
+            ],
       livereload: {
         options: {
           open: true,
           base: [
             '.tmp',
             '<%= yeoman.app %>'
-          ]
+          ],
+          middleware: function (connect) {
+                        return [
+                            proxySnippet,
+                            lrSnippet,
+                            mountFolder(connect, '.tmp'),
+                            mountFolder(connect, 'app')
+                        ];
+                    }
         }
       },
       test: {
@@ -362,6 +387,7 @@ module.exports = function (grunt) {
       'clean:server',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies',
       'connect:livereload',
       'watch'
     ]);
