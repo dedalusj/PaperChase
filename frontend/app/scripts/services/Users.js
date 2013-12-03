@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .factory('UserServices', ['$http', '$cookieStore', 'Base64', '$cookies', function ($http, $cookieStore, Base64, $cookies) {
+    .factory('UserServices', ['$http', '$cookieStore', '$base64', '$cookies', function ($http, $cookieStore, $base64, $cookies) {
         var user = {isLogged: false, firstLogin: true },
             authData = $cookieStore.get('authdata'),
             firstLogin = $cookieStore.get('firstLogin');
@@ -22,13 +22,12 @@ angular.module('paperchaseApp')
 
         return {
             verifyCredentials: function (username, password) {
-                var encoded = Base64.encode(username + ':' + password),
-                    escaped_email = encodeURIComponent(username),
-                    api_address = '/api/users';
-                return $http({method: 'GET', url: api_address, headers: {'Authorization': 'Basic '.concat(encoded)}});
+                var encoded = $base64.encode(username + ':' + password),
+                    apiAddress = '/api/users';
+                return $http({method: 'GET', url: apiAddress, headers: {'Authorization': 'Basic '.concat(encoded)}});
             },
             setCredentials: function (username, password) {
-                var encoded = Base64.encode(username + ':' + password);
+                var encoded = $base64.encode(username + ':' + password);
                $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
                 user.isLogged = true;
                 $cookieStore.put('authdata', encoded);

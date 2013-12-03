@@ -6,7 +6,8 @@ angular.module('paperchaseApp', [
     'ngSanitize',
     'ngRoute',
     'infinite-scroll',
-    'ui.bootstrap'
+    'ui.bootstrap',
+    'ngBase64'
 ])
     .config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider',
             function ($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
