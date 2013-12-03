@@ -19,7 +19,9 @@ mail = Mail()
 #: Basic authentication provider for the API
 auth = HTTPBasicAuth()
 
+
 class paperchaseError(Exception):
+
     """Base application error class."""
 
     def __init__(self, msg):
@@ -27,12 +29,15 @@ class paperchaseError(Exception):
 
 
 class paperchaseFormError(Exception):
+
     """Raise when an error processing a form occurs."""
 
     def __init__(self, errors=None):
         self.errors = errors
 
+
 class Service(object):
+
     """A :class:`Service` instance encapsulates common SQLAlchemy model
     operations in the context of a :class:`Flask` application.
     """
@@ -59,13 +64,16 @@ class Service(object):
         """
         kwargs.pop('csrf_token', None)
         return kwargs
-        
+
     def model(self):
-        """Return the model object. Some attributes of the model object needs to be 
-        used in filter and providing a method that returns the model, without accessing
-        the private property can avoid the need to import the model."""
+        """
+        Return the model object. Some attributes of the model object needs
+        to be used in filter and providing a method that returns the model,
+        without accessing the private property can avoid the need to import
+        the model.
+        """
         return self.__model__
-    
+
     def query(self):
         """Return the query object for the model"""
         return self.__model__.query
@@ -79,10 +87,10 @@ class Service(object):
         db.session.add(model)
         db.session.commit()
         return model
-    
+
     def save_all(self, models):
         """Commits the models to the database
-    
+
         :param models: a list containing the models
         """
         db.session.add_all(models)
@@ -110,8 +118,10 @@ class Service(object):
         return self.__model__.query.filter(self.__model__.id.in_(ids)).all()
 
     def filter(self, *criterion):
-        """Returns a list of instances of the service's model filtered by the SQL expression criterion.
-    
+        """
+        Returns a list of instances of the service's model filtered by the
+        SQL expression criterion.
+
         :param *criterion: SQL expression for the filter
         """
         return self.__model__.query.filter(*criterion)
@@ -174,6 +184,6 @@ class Service(object):
         self._isinstance(model)
         db.session.delete(model)
         db.session.commit()
-        
+
     def commit_changes(self):
         db.session.commit()

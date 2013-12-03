@@ -10,30 +10,41 @@ from ..tasks import send_email
 user_fields = {
     'email': fields.String,
     'id': fields.Integer,
-    'registered_at' : fields.DateTime
+    'registered_at': fields.DateTime
 }
 
+
 class UserAPI(Resource):
+
     """
     API :class:`Resource` for a returning the details of a user.
     This endpoint can be used to verify a user login credentials.
     """
-    
+
     decorators = [auth.login_required]
+
     def get(self):
         user = users.request_user()
         return marshal(user, user_fields)
-        
+
+
 class RegisterAPI(Resource):
+
     """API :class:`Resource` for a registering a new user."""
-    
+
     def post(self):
         email = request.json['email']
-        user = users.first(email = email)
+        user = users.first(email=email)
         if user:
             abort(409)
         password = request.json['password']
-        password = bcrypt.encrypt(password, salt = current_app.config['PASSWORD_SALT'])
-        user = users.create(email = email, password = password, registered_at = datetime.datetime.utcnow())
-        send_email.delay('Paperchase registration', 'registration', email, email = email, domain = current_app['DOMAIN'])
+        password = bcrypt.encrypt(
+            password, salt=current_app.config['PASSWORD_SALT'])
+        user = users.create(
+            email=email,
+            password=password,
+            registered_at=datetime.datetime.utcnow())
+        send_email.delay('Paperchase registration', 'registration',
+                         email, email=email,
+                         domain=current_app.config['DOMAIN'])
         return marshal(user, user_fields)
