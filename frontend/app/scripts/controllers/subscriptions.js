@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('SubscriptionsCtrl', ['$scope', 'CategoryAPI', 'SubscriptionAPI', '$cacheFactory', function ($scope, CategoryAPI, SubscriptionAPI, $cacheFactory) {
+    .controller('SubscriptionsCtrl', ['$scope', 'CategoryAPI', 'SubscriptionAPI', function ($scope, CategoryAPI, SubscriptionAPI) {
         $scope.categories = CategoryAPI.getCategories();
         $scope.subcategories = [];
         $scope.journals = [];
@@ -16,7 +16,7 @@ angular.module('paperchaseApp')
         };
 
         $scope.updateSubcategories = function ($event, categoryId) {
-            $scope.subcategories = CategoryAPI.getSubcategories({'category_id': categoryId});
+            $scope.subcategories = CategoryAPI.getSubcategories({'categoryId': categoryId});
             $scope.journals = [];
             $scope.selectedCategoryId = categoryId;
             $scope.selectedSubcategoryId = -1;
@@ -27,12 +27,12 @@ angular.module('paperchaseApp')
                 $scope.selectedSubcategoryId = categoryId;
             }
             if ($scope.selectedSubcategoryId) {
-                $scope.journals = CategoryAPI.getJournals({'category_id': $scope.selectedSubcategoryId});
+                $scope.journals = CategoryAPI.getJournals({'categoryId': $scope.selectedSubcategoryId});
             }
         };
 
         $scope.subscribe = function ($event, journalId) {
-            var newSubscription = new SubscriptionAPI({'journal_id': journalId}),
+            var newSubscription = new SubscriptionAPI({'journalId': journalId}),
                 journal = $scope.findJournal(journalId);
             newSubscription.$save();
             if (journal) {
@@ -40,7 +40,7 @@ angular.module('paperchaseApp')
             }
         };
         $scope.unsubscribe = function ($event, journalId) {
-            SubscriptionAPI.remove({'journal_id': journalId});
+            SubscriptionAPI.remove({'journalId': journalId});
             var journal = $scope.findJournal(journalId);
             if (journal) {
                 journal.subscribed = false;

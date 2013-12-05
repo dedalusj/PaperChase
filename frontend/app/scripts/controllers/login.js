@@ -18,9 +18,9 @@ angular.module('paperchaseApp')
                     if (!UserServices.hasLoggedInBefore()) {
                         $scope.firstLogin();
                     }
-                    $location.path("/home");
+                    $location.path('/home');
                 }).
-                error(function (data, status, headers, config) {
+                error(function () {
                     $scope.alert = { type: 'danger', msg: 'Username or password incorrect.' };
                 });
         };

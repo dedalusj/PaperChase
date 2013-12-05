@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('SuggestionCtrl', ['$scope', 'CategoryAPI', '$http', function ($scope, CategoryAPI, $http) {
+    .controller('SuggestionCtrl', ['$scope', 'CategoryAPI', function ($scope, CategoryAPI) {
 
         $scope.alert = undefined;
         $scope.closeAlert = function () {
@@ -15,7 +15,7 @@ angular.module('paperchaseApp')
         $scope.subcategory = [];
 
         $scope.updateSubcategories = function () {
-            $scope.subcategories = CategoryAPI.getSubcategories({'category_id' : $scope.category.id});
+            $scope.subcategories = CategoryAPI.getSubcategories({'categoryId' : $scope.category.id});
         };
 
         $scope.submitted = function () {

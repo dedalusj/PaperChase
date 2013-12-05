@@ -9,7 +9,7 @@ function Paper(paper) {
 
 Paper.prototype.init = function () {
     this.created = new Date(this.created);
-    this.read = this.read_at !== null;
+    this.read = this.readAt !== null;
 };
 
 angular.module('paperchaseApp')
@@ -82,7 +82,7 @@ angular.module('paperchaseApp')
             var i = 0,
                 rootScope = $injector.get('$rootScope');
 
-            PaperAPI.getPaper({'paper_id': paperId}, function (paper) {
+            PaperAPI.getPaper({'paperId': paperId}, function (paper) {
                 this.selected = new Paper(paper);
                 if (!this.selected.read) {
                     this.toggleRead();
@@ -102,7 +102,7 @@ angular.module('paperchaseApp')
             }
             this.items[this.selectedId].selected = true;
             if (rootScope) {
-                rootScope.$broadcast("selected_new_item", paperId);
+                rootScope.$broadcast('selected_new_item', paperId);
             }
             if (!this.hasNext()) {
                 this.nextPage();
@@ -123,9 +123,9 @@ angular.module('paperchaseApp')
 
         Papers.prototype.toggleRead = function () {
             if (this.selected.read === false) {
-                PaperAPI.markRead({ read_papers : [this.selected.id] });
+                PaperAPI.markRead({ readPapers : [this.selected.id] });
             } else {
-                PaperAPI.markUnread({ unread_papers : [this.selected.id] });
+                PaperAPI.markUnread({ unreadPapers : [this.selected.id] });
             }
             this.selected.read = !this.selected.read;
             this.items[this.selectedId].read = !this.items[this.selectedId].read;

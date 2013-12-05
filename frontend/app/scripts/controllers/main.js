@@ -26,7 +26,7 @@ angular.module('paperchaseApp')
             $scope.papers.toggleRead();
         };
 
-        $scope.$on("selected_new_item", function (event, message) {
+        $scope.$on('selected_new_item', function (event, message) {
             $scope.scrollInto('paper' + message);
         });
 

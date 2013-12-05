@@ -9,7 +9,7 @@ angular.module('paperchaseApp')
 
         if (authData) {
             // initialize to whatever is in the cookie, if anything
-            $http.defaults.headers.common['Authorization'] = 'Basic ' + authData;
+            $http.defaults.headers.common.Authorization = 'Basic ' + authData;
             user.isLogged = true;
         }
 
@@ -31,7 +31,7 @@ angular.module('paperchaseApp')
                     apiAddress = '/api/users/token';
                 $http({method: 'GET', url: apiAddress, headers: {'Authorization': 'Basic '.concat(encoded)}}).
                 success(function (data) {
-                    encoded = $base64.encode(data.token + ':unused')
+                    encoded = $base64.encode(data.token + ':unused');
                     $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
                     user.isLogged = true;
                     $cookieStore.put('authdata', encoded);
@@ -43,7 +43,7 @@ angular.module('paperchaseApp')
                 error();
             },
             clearCredentials: function () {
-                document.execCommand("ClearAuthenticationCache");
+                document.execCommand('ClearAuthenticationCache');
                 $http.defaults.headers.common.Authorization = 'Basic ';
                 user.isLogged = false;
                 $cookieStore.remove('authdata');
