@@ -5,7 +5,7 @@
 
     paperchase users package
 """
-from flask import request
+# from flask import request
 
 from ..core import Service
 from .models import User, subscriptions_users
@@ -13,16 +13,6 @@ from .models import User, subscriptions_users
 
 class UsersService(Service):
     __model__ = User
-
-    def request_user(self):
-        """
-        Return the :class:`User` corresponding to the username passed
-        in the HTTP request.
-
-        By the tyme this method is called we are past the authentication
-        stage of the API hence we are ensured a user with such email exists
-        """
-        return self.first(email=request.authorization.username)
 
     def is_subscribed(self, user, journal):
         return user.subscriptions.filter(

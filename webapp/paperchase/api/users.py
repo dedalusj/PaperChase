@@ -37,8 +37,9 @@ class UserToken(Resource):
     decorators = [auth.login_required]
 
     def get(self):
-        token = g.user.generate_auth_token(600)
-        return {'token': token.decode('ascii'), 'duration': 600}
+        duration = 7200
+        token = g.user.generate_auth_token(duration)
+        return {'token': token.decode('ascii'), 'duration': duration}
 
 
 class RegisterAPI(Resource):

@@ -64,7 +64,7 @@ class User(db.Model):
         return self.password == bcrypt.encrypt(
             password, salt=current_app.config['PASSWORD_SALT'])
 
-    def generate_auth_token(self, expiration=600):
+    def generate_auth_token(self, expiration=7200):  # two hours expiration
         s = Serializer(current_app.config['SECRET_KEY'],
                        expires_in=expiration)
         return s.dumps({'email': self.email})
