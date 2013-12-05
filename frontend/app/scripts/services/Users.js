@@ -27,13 +27,20 @@ angular.module('paperchaseApp')
                 return $http({method: 'GET', url: apiAddress, headers: {'Authorization': 'Basic '.concat(encoded)}});
             },
             setCredentials: function (username, password) {
-                var encoded = $base64.encode(username + ':' + password);
-               $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
-                user.isLogged = true;
-                $cookieStore.put('authdata', encoded);
-                if (user.firstLogin === true) {
-                    $cookieStore.put('firstLogin', false);
-                }
+                var encoded = $base64.encode(username + ':' + password),
+                    apiAddress = '/api/users/token';
+                $http({method: 'GET', url: apiAddress, headers: {'Authorization': 'Basic '.concat(encoded)}}).
+                success(function (data) {
+                    encoded = $base64.encode(data.token + ':unused')
+                    $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
+                    user.isLogged = true;
+                    $cookieStore.put('authdata', encoded);
+                    $cookieStore.put('authexpire', data.duration);
+                    if (user.firstLogin === true) {
+                        $cookieStore.put('firstLogin', false);
+                    }
+                }).
+                error();
             },
             clearCredentials: function () {
                 document.execCommand("ClearAuthenticationCache");
