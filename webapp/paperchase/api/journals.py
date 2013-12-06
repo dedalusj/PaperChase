@@ -1,9 +1,25 @@
 from flask import request, current_app, g
-from flask.ext.restful import Resource, fields, marshal
+from flask.ext.restful import Resource, fields, marshal, reqparse
 
 from ..services import categories, journals
 from ..core import auth
 from ..tasks import send_email
+
+
+class DictList(fields.List):
+    def output(self, key, data):
+        value = fields.get_value(key if self.attribute is None else self.attribute, data)
+        # we cannot really test for external dict behavior
+        if fields.is_indexable_but_not_string(value) and not isinstance(value, dict):
+            # Convert all instances in typed list to container type
+            return [self.container.output(idx, val) for idx, val
+                    in enumerate(value)]
+
+        if value is None:
+            return self.default
+
+        return [marshal(value, self.container.nested)]
+
 
 subcategory_fields = {
     'name': fields.String,
@@ -19,7 +35,7 @@ category_fields = {
 journal_fields = {
     'title': fields.String,
     'id': fields.Integer,
-    'subscribed': fields.Boolean
+    'categories': DictList(fields.Integer(attribute='id'))
 }
 
 
@@ -45,43 +61,25 @@ class CategoryAPI(Resource):
         return marshal(category, category_fields)
 
 
-class SubcategoryListAPI(Resource):
-
-    """API :class:`Resource` for a list of subcategories given a category id."""
-
-    decorators = [auth.login_required]
-
-    def get(self, id):
-        category = categories.get_or_404(id)
-        subcategoryList = category.subcategories
-        return map(lambda c: marshal(c, subcategory_fields), subcategoryList)
-
-
-class CategoryJournalsAPI(Resource):
-
-    """API :class:`Resource` for a list of journals for a category id."""
-
-    decorators = [auth.login_required]
-
-    def get(self, id):
-        user = g.user
-        user_subscriptions = user.subscriptions.all()
-        category = categories.get_or_404(id)
-        journalList = categories.all_journals(category).all()
-        for j in journalList:
-            j.subscribed = (j in user_subscriptions)
-        return map(lambda j: marshal(j, journal_fields), journalList)
-
-
 class JournalListAPI(Resource):
 
     """API :class:`Resource` for a list of journals."""
 
     decorators = [auth.login_required]
 
+    def __init__(self):
+        self.parser = reqparse.RequestParser()
+        self.parser.add_argument('subscribed', type=bool, default=False)
+        super(JournalListAPI, self).__init__()
+
     def get(self):
-        journalList = journals.all()
-        return map(lambda j: marshal(j, journal_fields), journalList)
+        args = self.parser.parse_args()
+        if args.subscribed is False:
+            return map(lambda j: marshal(j, journal_fields), journals.all())
+        extended_fields = journal_fields.copy()
+        extended_fields.update({'subscribed': fields.Boolean})
+        journalList = journals.all(user=g.user)
+        return map(lambda j: marshal(j, extended_fields), journalList)
 
 
 class JournalAPI(Resource):

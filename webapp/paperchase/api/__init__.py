@@ -10,8 +10,8 @@ from flask.ext.restful import Api
 
 from .. import factory
 
-from .journals import CategoryAPI, CategoryListAPI, SubcategoryListAPI,\
-    CategoryJournalsAPI, JournalListAPI, JournalAPI, SuggestionAPI
+from .journals import CategoryAPI, CategoryListAPI, JournalListAPI, JournalAPI, SuggestionAPI
+# SubcategoryListAPI, CategoryJournalsAPI
 from .users import UserAPI, RegisterAPI, UserToken
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
 from .papers import PaperListAPI, PaperAPI, UnreadPapersAPI,\
@@ -30,8 +30,6 @@ def create_app(settings_override=None):
     # API endpoints connected to the Journal model
     api.add_resource(CategoryListAPI, '/categories')
     api.add_resource(CategoryAPI, '/categories/<int:id>')
-    api.add_resource(SubcategoryListAPI, '/categories/<int:id>/subcategories')
-    api.add_resource(CategoryJournalsAPI, '/categories/<int:id>/journals')
     api.add_resource(JournalListAPI, '/journals')
     api.add_resource(JournalAPI, '/journals/<int:id>')
     api.add_resource(SuggestionAPI, '/suggestion')
