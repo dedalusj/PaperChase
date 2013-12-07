@@ -7,6 +7,7 @@
 """
 
 from flask_mail import Mail
+from flask import make_response, request
 from flask_sqlalchemy import SQLAlchemy
 from flask.ext.httpauth import HTTPBasicAuth
 
@@ -18,6 +19,13 @@ mail = Mail()
 
 #: Basic authentication provider for the API
 auth = HTTPBasicAuth()
+
+
+@auth.error_handler
+def auth_error():
+    res = make_response("Unauthorized Access")
+    res.status_code = int(request.headers.get('X-Statusonloginfail', default=401))
+    return res
 
 
 class paperchaseError(Exception):
