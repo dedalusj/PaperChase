@@ -22,7 +22,7 @@ angular.module('paperchaseApp')
             this.readCount = 0;
             this.selected = null;
             this.selectedId = -1;
-            this.unread = unread !== 'undefined' ? unread : true;
+            this.unread = unread !== undefined ? unread : true;
             this.since = since;
         };
 
