@@ -1,16 +1,75 @@
 <nav class="bar">  
-    <ul class="logo-link buttons"> 
-        <li><a href="#/home" title="Home"><span ng-include="'static/img/logo.svg'"></span></a></li>  
-    </ul> 
-    <ul class="controls buttons"> 
-        <li><a href="" ng-click="logoutPC()">Logout</a></li>  
-    </ul>  
+  <ul class="logo-link buttons"> 
+    <li><a href="#/home" title="Home"><span ng-include="'images/logo.svg'"></span></a></li>  
+  </ul> 
+  <ul class="controls buttons"> 
+    <li><a href="" ng-click="logoutPC()">Logout</a></li>  
+  </ul>  
 </nav>
 
 <div class="main-frame">
 
-<table class="app-wrap"> 
-  <tbody>
+  <div class="app-wrap"> 
+
+
+    <div class="filters">
+      <div class="container">
+        <div class="filter">
+          Status:
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ subscribed.name }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-click="subscriptionFilter(true)"><a>Subscribed</a></li>
+              <li ng-click="subscriptionFilter(false)"><a>Unsubscribed</a></li>
+              <li ng-click="subscriptionFilter(undefined)"><a>All</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="filter">
+          Category:
+          <div class="dropdown filter">
+            <a class="dropdown-toggle">
+              {{ category.name }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li ng-click="resetCategory()"><a>All</a></li>
+              <li class="divider"></li>
+              <li ng-repeat="cat in categories" ng-click="$parent.category = cat"><a>{{ cat.name }}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="filter" ng-show="category.subcategories.length">
+          Subcategory:
+          <div class="dropdown filter">
+            <a class="dropdown-toggle">
+              {{ subcategory.name }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li ng-repeat="sub_cat in category.subcategories" ng-click="$parent.subcategory = sub_cat"><a>{{ sub_cat.name }}</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="full-height overflow subscription-column">
+        <ul>
+        <li ng-repeat="journal in journals | filter:{subscribed: subscribed.value} | categoryFilter:category:subcategory">
+            <a href="#/subscriptions">
+              <button ng-show="!journal.subscribed" type="button" class="btn btn-sm btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
+              <button ng-show="journal.subscribed" type="button" class="btn btn-sm btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
+              {{ journal.title }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--   <tbody>
     <tr class="subscription-headers">
      <th><h4 class="text-center">Categories</h4></th>
      <th><h4 class="text-center">Subcategories</h4></th>
@@ -50,3 +109,4 @@
   </tbody>
 </table>
 </div>
+ -->
