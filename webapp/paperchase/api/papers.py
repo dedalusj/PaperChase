@@ -27,7 +27,7 @@ common_paper_fields = {
     'journal': fields.Nested(journal_fields, attribute='paper.journal'),
     'score': fields.Integer,
     'created': fields.DateTime,
-    'read_at': fields.DateTime
+    'readAt': fields.DateTime(attribute='read_at')
 }
 
 
@@ -94,7 +94,7 @@ class PaperAPI(Resource):
 
 class UnreadPapersAPI(Resource):
 
-    """API :class:`Resource` to mark retrieve or mark papers as unread"""
+    """API :class:`Resource` to retrieve or mark papers as unread"""
 
     decorators = [auth.login_required]
 
@@ -117,9 +117,11 @@ class ReadPapersAPI(Resource):
 
     """API :class:`Resource` to mark papers as read"""
 
+    decorators = [auth.login_required]
+
     def put(self):
         """Put papers in the read list equivalent to marking them as read"""
-        read_ids = request.json['read_papers']
+        read_ids = request.json['readPapers']
         if len(read_ids) > 1000:
             abort(413)
         user = g.user
@@ -130,6 +132,8 @@ class ReadPapersAPI(Resource):
 class MarkAllPapersAPI(Resource):
 
     """API :class:`Resource` to mark all papers as read"""
+
+    decorators = [auth.login_required]
 
     def put(self):
         """

@@ -5,8 +5,6 @@
 
     paperchase users package
 """
-# from flask import request
-
 from ..core import Service
 from .models import User, subscriptions_users
 
