@@ -37,7 +37,7 @@ class UserToken(Resource):
     decorators = [auth.login_required]
 
     def get(self):
-        duration = 7200
+        duration = 3600 * 24 * 30  # 1hour * 24 hour/day * 30 days
         token = g.user.generate_auth_token(duration)
         return {'token': token.decode('ascii'), 'duration': duration}
 
