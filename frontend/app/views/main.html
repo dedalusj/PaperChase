@@ -5,7 +5,7 @@
         
         <div class="col-md-10 col-md-offset-1 header">
         <div class="logo">
-          <a href="#/home"><span ng-include="'images/logo.svg'"></span><h1>Paperchase</h1></a>
+          <a href="#/"><span ng-include="'images/logo.svg'"></span><h1>Paperchase</h1></a>
         </div>
         <div class="login-button">
           <a href="#/login">Login</a>
@@ -70,8 +70,8 @@
 <div ng-if="isLogged()">
 <nav class="bar">  
     <ul class="filters">  
-        <li><a href="#/home" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
-        <li><a href="#/home" ng-class="{active: unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
+        <li><a href="#/" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
+        <li><a href="#/" ng-class="{active: unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
     <ul class="controls buttons">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
@@ -89,7 +89,7 @@
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
           <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}" id="paper{{paper.id}}">
-            <a href="#/home" ng-click="papers.selectItem(paper.id)">
+            <a href="#/" ng-click="papers.selectItem(paper.id)">
               <span class="favicon-wrap">
                   <img ng-if="paper.journal.favicon != null" ng-src="{{ paper.journal.favicon }}" height="16" width="16">
                   <i ng-if="paper.journal.favicon == null" class="fa fa-flask"></i>
@@ -123,7 +123,7 @@
             </span>
             <a class="journal">{{ papers.selected.journal.title }}</a>
             <ul class="controls buttons" id="paper-controls">
-              <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'static/img/papers-logo.svg'"></span></a></li>
+              <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'images/papers-logo.svg'"></span></a></li>
               <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
               <li>
                 <a href="" title="Mark as read/unread" ng-click="toggleReadSelected()">
