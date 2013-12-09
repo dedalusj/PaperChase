@@ -6,3 +6,4 @@ backend/PC
 backend/paperchase/settings.py
 backend/supervisord.conf
 .webassets-cache
+docs/OS*
