@@ -52,7 +52,7 @@ class RegisterAPI(Resource):
         if user:
             abort(409)  # user exists
         password = request.json['password']
-        password = users.hash_pw(password)
+        password = users.__model__.hash_password(password)
         user = users.create(
             email=email,
             password=password,

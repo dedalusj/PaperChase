@@ -56,9 +56,9 @@ class User(db.Model):
     def __str__(self):
         return self.email
 
+    @staticmethod
     def hash_password(self, password):
-        self.password = bcrypt.encrypt(password,
-                                       salt=current_app.config['PASSWORD_SALT'])
+        return bcrypt.encrypt(password, salt=current_app.config['PASSWORD_SALT'])
 
     def verify_password(self, password):
         return self.password == bcrypt.encrypt(
