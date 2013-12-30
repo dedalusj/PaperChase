@@ -1,4 +1,4 @@
-backend/PC
+backend/venv
 *.pyc
 *.log
 *.espressostorage
