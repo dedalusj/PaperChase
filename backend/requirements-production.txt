@@ -16,10 +16,8 @@ flask-assets
 flask-httpauth
 passlib
 py-bcrypt
-flask-seasurf
 cssmin
 fabric
 python-dateutil
 beautifulsoup4
 supervisor
-uwsgi

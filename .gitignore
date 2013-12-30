@@ -1,9 +1,11 @@
 backend/venv
+backend/paperchase/settings.py
+backend/supervisord.conf
+backend/dump.rdb
+
 *.pyc
 *.log
 *.espressostorage
 *.db
-backend/paperchase/settings.py
-backend/supervisord.conf
 .webassets-cache
 docs/OS*
