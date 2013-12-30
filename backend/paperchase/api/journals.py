@@ -104,5 +104,5 @@ class SuggestionAPI(Resource):
 
     def post(self):
         send_email.delay('Journal Suggestion', 'suggestion', current_app.config[
-                         'DEFAULT_MAIL_SENDER'], json_msg=request.json)
+                         'MAIL_DEFAULT_SENDER'], json_msg=request.json)
         return '', 201

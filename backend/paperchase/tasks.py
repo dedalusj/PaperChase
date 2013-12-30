@@ -178,10 +178,10 @@ def default_parser(entry):
 @celery.task
 def get_journals():
     """
-    Gets journals that needs to be updated from the database. 
-    The update frequency aka how many minutes between each time to 
-    request the article, is defined in the config (config.py). 
-    The method will update the last_checked column of the feed after is has 
+    Gets journals that needs to be updated from the database.
+    The update frequency aka how many minutes between each time to
+    request the article, is defined in the config (config.py).
+    The method will update the last_checked column of the feed after is has
     put it on the queue.
     """
     journals_list = journals.filter(
@@ -194,7 +194,7 @@ def get_journals():
 def get_papers(journal_id):
     """
     Fetch the papers, RSS feed, of a journal.
-    
+
     :param journal_id: the id of the journal
     """
     journal = journals.get(journal_id)
@@ -259,10 +259,10 @@ def update_check(journal_id, feed_data):
 @celery.task
 def update_metadata(journal_id, feed_data):
     """
-    This method updates the metadata of a journal, this function should be called if 
-    the feed is newly added, or if it has been longer than N days since last 
+    This method updates the metadata of a journal, this function should be called if
+    the feed is newly added, or if it has been longer than N days since last
     update. N days is defined in the config.
-    
+
     :param journal_id: the id of the journal
     :param feed_data: The resulting dict from a feed_requester call.
     """
@@ -284,9 +284,9 @@ def update_metadata(journal_id, feed_data):
 @celery.task
 def add_article(entry, journal_id):
     """
-    Adds an article to the database. The function will 
-    check if the article already is in the DB. 
-    
+    Adds an article to the database. The function will
+    check if the article already is in the DB.
+
     :param entry: the data of the article
     :param journal_id: the id of the journal
     """

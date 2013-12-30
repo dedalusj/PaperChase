@@ -57,7 +57,7 @@ class User(db.Model):
         return self.email
 
     @staticmethod
-    def hash_password(self, password):
+    def hash_password(password):
         return bcrypt.encrypt(password, salt=current_app.config['PASSWORD_SALT'])
 
     def verify_password(self, password):
@@ -67,6 +67,12 @@ class User(db.Model):
     def generate_auth_token(self, expiration=7200):  # two hours expiration
         s = Serializer(current_app.config['SECRET_KEY'],
                        expires_in=expiration)
+        # TODO
+        # we should also keep track of when a user change her password and dump that
+        # into the token. When she changes her password a previously released token
+        # becomes invalid. It's a compromise between dumping the password in the token
+        # (insecure) and having just the email which doesn't protect the user from
+        # stolen passwords
         return s.dumps({'email': self.email})
 
     @staticmethod

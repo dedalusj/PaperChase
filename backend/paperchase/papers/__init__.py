@@ -6,6 +6,7 @@
     paperchase papers package
 """
 import datetime
+from flask import current_app
 
 from ..core import Service, db
 from .models import Paper, UserPaper
@@ -52,10 +53,12 @@ class UserPapersService(Service):
     def user_subscribed(self, user, journal):
         """
         When a user subscribe to a new journal we want to create a new UserPaper object to append to
-        his/her list of papers for every paper published in that journal in the last 2 weeks
+        his/her list of papers for every paper published in that journal in the last
+        SUBSCRIPTION_IMPORT weeks
         """
+        weeks = current_app['SUBSCRIPTION_IMPORT']
         papers = journal.papers.filter(
-            Paper.created > datetime.datetime.utcnow() - datetime.timedelta(weeks=2)).all()
+            Paper.created > datetime.datetime.utcnow() - datetime.timedelta(weeks=weeks)).all()
         user_papers = []
         for paper in papers:
             user_papers.append(
@@ -67,9 +70,17 @@ class UserPapersService(Service):
         When a user unsubscribe from a journal we remove all the papers from that journal
         """
 
+        paperQuery = db.session.query(Paper.id).filter(Paper.journal_id == journal.id)
+
+        db.session.query(UserPaper)\
+                  .filter(UserPaper.paper_id.in_(paperQuery.subquery()))\
+                  .filter(UserPaper.user_id == user.id)\
+                  .delete(synchronize_session='fetch')
+        self.commit_changes()
+
         # TODO: we should be able to do a batch delete from the query wihtout
         # looping through all the results
-        papers = db.session.query(UserPaper).join(Paper, (UserPaper.paper_id == Paper.id)).filter(
-            UserPaper.user_id == user.id, Paper.journal_id == journal.id)
-        for paper in papers:
-            self.delete(paper)
+        # papers = db.session.query(UserPaper).join(Paper, (UserPaper.paper_id == Paper.id)).filter(
+        #     UserPaper.user_id == user.id, Paper.journal_id == journal.id)
+        # for paper in papers:
+        #     self.delete(paper)
