@@ -60,6 +60,10 @@ $logo-color: fade($red-hint, 95%);
 $hp-logo-size: 50px;
 $hp-name-size: 40px;
 
+.logo-path {
+    fill: $border-color - #222;
+}
+
 .bar {
     margin-bottom: 0px;
     position: absolute;
@@ -398,12 +402,12 @@ $hp-name-size: 40px;
                     text-decoration: none;  
                     margin-left: 0px;
                     color: $border-color - #222;
-                    .logo-path {
-                        fill: $border-color - #222;
-                    }
-                    &:hover, &:focus {
-                        color: $border-color - #222;
-                    }
+                    // .logo-path {
+                    //     fill: $border-color - #222;
+                    // }
+                    // &:hover, &:focus {
+                    //     color: $border-color - #222;
+                    // }
                     svg {
                         width: 18px;
                         height: 18px;
