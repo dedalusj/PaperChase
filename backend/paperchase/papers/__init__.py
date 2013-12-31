@@ -56,7 +56,7 @@ class UserPapersService(Service):
         his/her list of papers for every paper published in that journal in the last
         SUBSCRIPTION_IMPORT weeks
         """
-        weeks = current_app['SUBSCRIPTION_IMPORT']
+        weeks = current_app.config['SUBSCRIPTION_IMPORT']
         papers = journal.papers.filter(
             Paper.created > datetime.datetime.utcnow() - datetime.timedelta(weeks=weeks)).all()
         user_papers = []
