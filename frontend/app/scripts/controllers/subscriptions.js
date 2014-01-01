@@ -2,34 +2,42 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('SubscriptionsCtrl', ['$scope', 'CategoryAPI', 'SubscriptionAPI', function ($scope, CategoryAPI, SubscriptionAPI) {
+    .controller('SubscriptionsCtrl', ['$scope', 'CategoryAPI', 'SubscriptionAPI', 'JournalAPI', function ($scope, CategoryAPI, SubscriptionAPI, JournalAPI) {
+        
         $scope.categories = CategoryAPI.getCategories();
-        $scope.subcategories = [];
-        $scope.journals = [];
-
-        $scope.selectedCategoryId = undefined;
-        $scope.selectedSubcategoryId = undefined;
-        $scope.isActive = function (categoryId, isSubcategory) {
-            // Return the class for an element of a list (active.clicked state or not) given an index and a kind
-            var selectedId = isSubcategory ? $scope.selectedSubcategoryId : $scope.selectedCategoryId;
-            return categoryId === selectedId ? 'active' : undefined;
-        };
-
-        $scope.updateSubcategories = function ($event, categoryId) {
-            $scope.subcategories = CategoryAPI.getSubcategories({'categoryId': categoryId});
-            $scope.journals = [];
-            $scope.selectedCategoryId = categoryId;
-            $scope.selectedSubcategoryId = -1;
-        };
-
-        $scope.updateJournals = function ($event, categoryId) {
-            if (categoryId) {
-                $scope.selectedSubcategoryId = categoryId;
-            }
-            if ($scope.selectedSubcategoryId) {
-                $scope.journals = CategoryAPI.getJournals({'categoryId': $scope.selectedSubcategoryId});
+        $scope.journals = JournalAPI.getJournalsWithSubscriptions();
+        
+        $scope.subscribed = {name: 'All', value: undefined};
+        $scope.subscriptionFilter = function (status) {
+            $scope.subscribed.value = status;
+            switch(status)
+            {
+            case true:
+                $scope.subscribed.name = 'Subscribed';
+                break;
+            case false:
+                $scope.subscribed.name = 'Unsubscribed';
+                break;
+            default:
+                $scope.subscribed.name = 'All';
             }
         };
+
+        $scope.resetSubcategory = function () {
+            $scope.subcategory = {name: 'All', id: undefined};
+        };
+        $scope.resetSubcategory();
+
+        $scope.selectCategory = function (cat) {
+            $scope.category = cat;
+            $scope.resetSubcategory();
+        };
+
+        $scope.resetCategory = function () {
+            $scope.category = {name: 'All', id: undefined, subcategories: []};
+            $scope.resetSubcategory();
+        };
+        $scope.resetCategory();
 
         $scope.subscribe = function ($event, journalId) {
             var newSubscription = new SubscriptionAPI({'journalId': journalId}),

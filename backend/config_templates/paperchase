@@ -1,0 +1,28 @@
+# nginx configuration file. Copy this file to /etc/nginx/sites-available, edit the server name
+# to include your domain, create a symbolic link to the file in /etc/nginx/sites-enabled,
+# remove any other symbolic link in the folder, restart nginx.
+
+server {
+  listen       80;
+  server_name     <your domain>;
+  root            /home/paperchase/PaperChase/frontend/dist;
+
+  access_log      /home/paperchase/PaperChase/log/nginx_access.log;
+  error_log       /home/paperchase/PaperChase/log/nginx_error.log;
+
+  index index.html index.htm;
+
+  location / {
+    root            /home/paperchase/PaperChase/frontend/dist;
+    index index.html index.htm;
+  }
+
+  location /api {
+    rewrite ^/api/(.*) /$1 break;
+    try_files $uri @paperchase;
+  }
+  location @paperchase {
+    uwsgi_pass 127.0.0.1:4242;
+    include uwsgi_params;
+  }
+}

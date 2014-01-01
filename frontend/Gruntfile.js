@@ -237,16 +237,16 @@ module.exports = function (grunt) {
                 }]
             }
         },
-        svgmin: {
-            dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '{,*/}*.svg',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
-            }
-        },
+        // svgmin: {
+        //     dist: {
+        //         files: [{
+        //             expand: true,
+        //             cwd: '<%= yeoman.app %>/images',
+        //             src: '{,*/}*.svg',
+        //             dest: '<%= yeoman.dist %>/images'
+        //         }]
+        //     }
+        // },
         htmlmin: {
             dist: {
                 options: {
@@ -308,7 +308,8 @@ module.exports = function (grunt) {
                     cwd: '.tmp/images',
                     dest: '<%= yeoman.dist %>/images',
                     src: [
-                        'generated/*'
+                        'generated/*',
+                        '*.svg'
                     ]
                 }]
             },
@@ -317,6 +318,12 @@ module.exports = function (grunt) {
                 cwd: '<%= yeoman.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
+            },
+            svgs: {
+                expand: true,
+                cwd: '<%= yeoman.app %>/images',
+                dest: '.tmp/images/',
+                src: '{,*/}*.svg'
             }
         },
 
@@ -324,17 +331,20 @@ module.exports = function (grunt) {
         concurrent: {
             server: [
                 'compass:server',
-                'copy:styles'
+                'copy:styles',
+                'copy:svgs'
             ],
             test: [
                 'compass',
-                'copy:styles'
+                'copy:styles',
+                'copy:svgs'
             ],
             dist: [
                 'compass:dist',
                 'copy:styles',
+                'copy:svgs',
                 'imagemin',
-                'svgmin',
+                // 'svgmin',
                 'htmlmin'
             ]
         },

@@ -1,10 +1,11 @@
-webapp/PC
+backend/venv
+backend/paperchase/settings.py
+backend/supervisord.conf
+backend/dump.rdb
+
 *.pyc
 *.log
 *.espressostorage
 *.db
-webapp/paperchase/settings.py
-webapp/supervisord.conf
 .webassets-cache
-main.min.js
-PC.min.css
+docs/OS*

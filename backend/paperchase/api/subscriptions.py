@@ -20,13 +20,13 @@ class SubscriptionListAPI(Resource):
         """Returns the list of journals the user is subscribed to."""
 
         user = g.user
-        subscriptionsList = user.subscriptions
+        subscriptionsList = user.subscriptions.order_by(journals.__model__.id)
         return map(lambda j: marshal(j, journal_fields), subscriptionsList)
 
     def post(self):
         """Post request with the journal id the user wants to subscribe to."""
 
-        journal_id = request.json['journal_id']
+        journal_id = request.json['journalId']
         journal = journals.get_or_404(journal_id)
         user = g.user
         users.subscribe(user, journal)

@@ -12,7 +12,6 @@ from logging.handlers import SMTPHandler, RotatingFileHandler
 
 from celery import Celery
 from flask import Flask
-from flask.ext.seasurf import SeaSurf
 
 from .core import db, mail
 from .helpers import register_blueprints
@@ -36,7 +35,6 @@ def create_app(package_name, package_path, settings_override=None):
 
     db.init_app(app)
     mail.init_app(app)
-    SeaSurf(app)
 
     register_blueprints(app, package_name, package_path)
 
@@ -45,8 +43,11 @@ def create_app(package_name, package_path, settings_override=None):
         if app.config['MAIL_USERNAME'] or app.config['MAIL_PASSWORD']:
             credentials = (
                 app.config['MAIL_USERNAME'], app.config['MAIL_PASSWORD'])
-        mail_handler = SMTPHandler((app.config['MAIL_SERVER'], app.config['MAIL_PORT']), 'no-reply@' + app.config[
-                                   'MAIL_SERVER'], app.config['DEFAULT_MAIL_SENDER'], 'paperchase failure', credentials)
+        mail_handler = SMTPHandler((app.config['MAIL_SERVER'], app.config['MAIL_PORT']),
+                                   'no-reply@' + app.config['MAIL_SERVER'],
+                                   app.config['MAIL_DEFAULT_SENDER'],
+                                   'paperchase failure',
+                                   credentials)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)
 

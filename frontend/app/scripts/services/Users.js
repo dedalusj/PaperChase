@@ -53,6 +53,15 @@ angular.module('paperchaseApp')
             },
             hasLoggedInBefore: function () {
                 return !user.firstLogin;
+            },
+            register: function (username, password) {
+                var postData = {email: username, password: password};
+                return $http({
+                    url: '/api/register',
+                    method: 'POST',
+                    data: angular.toJson(postData),
+                    headers: {'Content-Type': 'application/json'}
+                });
             }
         };
     }]);

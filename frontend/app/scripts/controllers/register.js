@@ -2,20 +2,15 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('RegisterCtrl', ['$scope', '$http', function ($scope, $http) {
+    .controller('RegisterCtrl', ['$scope', '$http', 'UserServices', function ($scope, $http, UserServices) {
 
         $scope.alert = undefined;
         $scope.closeAlert = function () {
             $scope.alert = undefined;
         };
         $scope.registerPC = function () {
-            var postData = {email: $scope.email, password: $scope.password};
-            $http({
-                url: '/api/register',
-                method: 'POST',
-                data: angular.toJson(postData),
-                headers: {'Content-Type': 'application/json'}
-            }).success(function () {
+            UserServices.register($scope.email, $scope.password)
+            .success(function () {
                 $scope.alert = { type: 'success', msg: 'Congratulations! You will receive a confirmation email shortly. You can login <a href="#/login">here</a>' };
             }).error(function (data, status) {
                 if (status === 409) {
