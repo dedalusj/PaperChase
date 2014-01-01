@@ -40,7 +40,7 @@ Installation and requirements
 
 ### Install
 
-- [Mac OS X](webapp/docs/OS%20X%20Setup.md)
+To Be Completed
 
 TODO
 ----
