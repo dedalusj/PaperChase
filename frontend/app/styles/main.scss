@@ -3,78 +3,399 @@
 $fa-font-path: '/bower_components/font-awesome/fonts';
 @import 'font-awesome/scss/font-awesome';
 
-/*General Colors*/
+/* Bootstrap buttons sizes */
+$bootstrap-btn-height: $line-height-computed + 2 * $padding-base-vertical + 2px; // the 2px are for the border
+
+/* General Colors */
 $blue-hint: #428bca;
 $red-hint: #D43F3F;
-$border-color: #bbb;
-$background-color: #eee;
-$journal-color: #666;
+$lightest-gray: #eee;
 $light-gray: #999;
+$darkest-gray: #111;
+$text-gray: #555;
+$text-gray-background: #ddd;
+$border-color: #bbb;
 $selected-color: #4A9CE3;
 $selected-body-color: rgba(255, 255, 255, 0.8);
-$text-color: #444;
 
-/*General font sizes*/
-$base-font-size: 13px;
-$time-font-size: $base-font-size - 1px;
-$title-font-size: $base-font-size + 2px;
-$line-height: 1.35;
+/* Basic sizes */
+$borders-width: 1px;
+$favicon-size: 16px;
+$favicon-padding: 2px;
+$favicon-wrap-size: $favicon-size + 2 * $favicon-padding;
 
-/*Navbar*/
-$navbar-height: 50px;
-$navbar-top-color: #333;
-$border-top-width: 3px;
-$border-bottom-width: 1px;
-$separator-height: 30px;
-$controls-hor-padding: 10px;
-$filters-hor-margin: 3px; 
-$frame-top: $navbar-height - 1px;
+/* General font sizes */
+// overwriting bootstrap fontsizes
+$font-size-base: 14px;
+$font-size-large: floor($font-size-base * 1.2); // ~16px
+$font-size-small: ceil($font-size-base * 0.9); // ~13px
 
-/*Spacing for the link bar chrome shows*/
-$bottom-link-bar: 10px;
+/* Basic buttons styles */
+$button-horizontal-padding: 30px;
+$button-vertical-padding: 5px;
+$button-border-radius: 5px;
+$button-font-size: $font-size-base;
+$button-header-multipier: 1.25;
+
+/* Home page styles */
+$homepage-header-height: 50px;
+$homepage-name-size: 0.8 * $homepage-header-height;
+$header-horizontal-padding: 80px;
+
+/* Form Box Style */
+$form-box-vertical-padding: 5px;
+$form-box-horizontal-padding: 20px;
+
+/* Login and register pages style */
+$logo-size: 100px;
 
 /*Papers column*/
 $papers-column-width: 400px;
-$vertical-padding: 6px;
-$horizontal-padding: 35px;
-$paper-margins: 5px;
 $actions-height: 80px;
+$bottom-link-bar: 10px; // spacing for the link bar chrome shows
+$paper-vertical-padding: 6px;
+$paper-horizontal-padding: 30px;
+$paper-margins: 5px;
+$time-font-size: $font-size-small;
+$journal-font-size: $font-size-small;
+$title-font-size: $font-size-large;
 
-/*Content style*/
+/* Navbar Style */
+$navbar-height: 50px;
+$navbar-top-border-width: 3px;
+$navbar-controls-height: 30px;
+$navbar-font-size: 14px;
+$controls-horizontal-padding: 10px;
+$filters-horizontal-margin: 3px; 
+$frame-top: $navbar-height - 1px;
+
+/* Content style */
 $content-width: 600px;
 $toolbar-height: 36px;
 $toolbar-title-height: 16px;
+$toolbar-horizontal-padding: 10px;
 $background-image-size: 250px;
 
-/*Other pages margins*/
-$subscriptions-margins: 30px;
+// /*Other pages margins*/
+// $subscriptions-margins: 30px;
 
-/*Subscriotions style*/
-$active-indicator-width: 6px;
+/* Subscriotions style */
+$filters-vertical-padding: 10px;
+$filters-bar-height: $bootstrap-btn-height + 2 * $filters-vertical-padding;
+// $active-indicator-width: 6px;
 
-/*Login page style*/
-$logo-size: 100px;
-$logo-color: fade($red-hint, 95%);
-
-/*Home page styles*/
-$hp-logo-size: 50px;
-$hp-name-size: 40px;
-
-.logo-path {
-    fill: $border-color - #222;
+/* helper classes */
+.vertical-center {
+    margin-top: auto;
+    margin-bottom: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
 }
 
+.full-height {
+    height: 100%;
+}
+
+.rel-pos {
+    position: relative;
+}
+
+/* Basic buttons styles */
+.button {
+    display: block;
+    height: floor($line-height-base * $button-font-size);
+    a {
+        padding-left: $button-horizontal-padding;
+        padding-right: $button-horizontal-padding;
+        padding-top: $button-vertical-padding;
+        padding-bottom: $button-vertical-padding;
+        border-radius: $button-border-radius;
+        color: $red-hint;
+        font-weight: bold;
+        border: $borders-width solid $red-hint;
+        font-size: $button-font-size;
+        &:hover, &:focus {
+            text-decoration: none;
+            background-color: $red-hint;
+            color:  #fff;
+        }
+        &.active {
+            background-color: $red-hint;
+            color: #fff;
+        }
+        &.inactive {
+            border: $borders-width solid $light-gray;
+            color: $light-gray;
+            &:hover, &:focus {
+                border: $borders-width solid $red-hint;
+                background-color: transparent;
+                color: $red-hint;
+            }
+        }
+    }
+}
+
+// Replicate the button style but for a form button using an input tag
+.form-button {
+    padding-left: $button-horizontal-padding;
+    padding-right: $button-horizontal-padding;
+    padding-top: $button-vertical-padding;
+    padding-bottom: $button-vertical-padding;
+    border-radius: $button-border-radius;
+    color: $red-hint;
+    font-weight: bold;
+    border: $borders-width solid $red-hint;
+    font-size: $button-font-size;
+    line-height: floor($line-height-base * $button-font-size);;
+    background-color: #fff;
+    &:hover, &:focus {
+        background-color: $red-hint;
+        color:  #fff;
+    }
+}
+
+input[disabled] {
+    border: $borders-width solid $light-gray;
+    color: $light-gray;
+    opacity: 0.5;
+    &:hover, &:focus {
+        background-color: $light-gray;
+        color:  #fff;
+    }
+}
+
+/* SVG images basic coloring */
+a {
+    .logo-path {
+        fill: $light-gray;
+    }
+    &:hover {
+        .logo-path {
+            fill: $red-hint;
+        }
+    }
+}
+
+/* Home page styles */
+.header {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding-left: $header-horizontal-padding;
+    padding-right: $header-horizontal-padding;
+    height: $homepage-header-height;
+    position: relative;
+    .button {
+        right: $header-horizontal-padding;
+        margin-right: 0px;
+        height: floor($line-height-base * $button-font-size * $button-header-multipier);
+        a {
+            font-size: $button-font-size * $button-header-multipier;
+        }
+    }
+}
+
+.home-page {
+    .logo {
+        float: left;
+        a {
+            text-decoration: none;
+            color: $darkest-gray; 
+            font-weight: bold;
+            width: 400px;
+            svg {
+                width: $homepage-header-height;
+                height: $homepage-header-height;
+                vertical-align: middle;
+            }
+            h1 {
+                display: inline; 
+                padding-left: 10px;
+                font-size: $homepage-name-size;
+                vertical-align: middle;
+            }
+            .logo-path {
+                fill: $darkest-gray;
+            }
+            &:hover {
+                .logo-path {
+                    fill: $darkest-gray;
+                }
+            }
+        }
+    }
+}
+
+.description {
+    margin-left: 90px;
+    margin-right: 90px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    font-size: 55px;
+    font-weight: normal;
+    text-align: center;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+}
+
+.screenshot {
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: $lightest-gray;
+    border-bottom: $borders-width solid $red-hint;
+    border-top: $borders-width solid $red-hint;
+    img {
+        width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        border-radius: 4px;
+    }
+}
+
+.icon{
+    display:inline-block;
+    font-size: 50px;
+    line-height: 55px;
+    width: 100%;
+    height: 55px;
+    text-align: center;
+    vertical-align: bottom;
+    color: $red-hint;
+}
+
+.specs {
+    p {
+        color: $text-gray;
+    }
+    strong {
+        color: $darkest-gray;
+    }
+    .row {
+        margin-bottom: 35px;
+    }
+}
+
+.blurb {
+    background-color: $text-gray-background;
+    padding-top: 20px;
+    padding-bottom: 5px;
+    font-size: $font-size-small;
+    font-weight: 200;
+    .left {
+        padding-left: 0px;
+    }
+    .right {
+        margin-top: -7px;
+        border-color: $red-hint;
+        p {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 25px;
+    .row {
+        text-align: center; 
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+    a {
+        color: #fff;
+        &:hover, &:focus {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+}
+
+/* Form Box Style */
+.form-box {
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    margin-top: 30px;
+    border: $borders-width solid $border-color;
+    border-radius: 4px;
+    padding-right: $form-box-horizontal-padding;
+    padding-left: $form-box-horizontal-padding;
+    padding-top: $form-box-vertical-padding;
+    padding-bottom: $form-box-vertical-padding;
+    background-color: #fff;
+    h2 {
+        margin-top: 5px;
+        margin-bottom: 20px;
+        font-weight: normal;
+        border-bottom: 2px solid $red-hint;
+        line-height: 40px;
+    }
+    .form-group {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+}
+
+/* Login and register pages style */
+.credential-page {
+    background-color: rgb(245, 245, 245);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    padding-top: 50px;
+    .logo {
+        margin-left: auto;
+        margin-right: auto;
+        width: $logo-size;
+        svg {
+            width: $logo-size;
+            height: $logo-size;
+        }
+        a {
+            .logo-path {
+                fill: $darkest-gray;
+            }
+            &:hover {
+                .logo-path {
+                    fill: $darkest-gray;
+                }
+            }
+        }
+    }
+    .form-box {
+        width: 500px;
+        .form-button {
+            float: right;
+        }
+    }
+}
+
+.register-label {
+    h4 {
+        text-align: center;
+        font-weight: normal;
+        color: $text-gray;
+    }
+}
+
+/* Navbar Style */
 .bar {
     margin-bottom: 0px;
-    position: absolute;
     height: $navbar-height;
-    top: 0;
     width: 100%;
+    position: absolute;
+    top: 0;
     left: 0;
-    border-top: $border-top-width solid $navbar-top-color;
-    border-bottom: $border-bottom-width solid $border-color;
+    border-top: $navbar-top-border-width solid $darkest-gray;
+    border-bottom: $borders-width solid $darkest-gray;
     border-radius: 0;
     background-color: #fff;
+    font-weight: bold;
+    line-height: $navbar-controls-height;
     ul {  
         padding: 0;  
         margin: 0;  
@@ -85,77 +406,56 @@ $hp-name-size: 40px;
             a {  
                 text-decoration: none;  
                 display: inline-block;  
-                float: left;    
-                height: $separator-height;
-                margin-bottom: ($navbar-height - $separator-height)/2 - $border-bottom-width;
-                margin-top: ($navbar-height - $separator-height)/2 - $border-top-width; 
-                line-height: $separator-height; 
+                float: left;
+                margin-bottom: ($navbar-height - $navbar-controls-height)/2 - $borders-width;
+                margin-top: ($navbar-height - $navbar-controls-height)/2 - $navbar-top-border-width; 
                 text-align: center; 
-                font-weight: bold;
+                font-size: $navbar-font-size;
             }
-        } 
-        &.filters {
-            background-color: $light-gray;
-            li {
-                a {
-                    width: $papers-column-width / 2 - 2 * $filters-hor-margin;
-                    border-radius: 4px;
-                    margin-left: $filters-hor-margin;
-                    margin-right: $filters-hor-margin;
-                    color: $border-color;
-                    &.active {
-                        background-color: $red-hint;
-                        color: #fff;
-                        &:hover, &:focus {
-                            border: 0;
-                            color: #fff;
-                            line-height: $separator-height;
-                        }
-                    }
-                    &:hover, &:focus {
-                        color: $red-hint;
-                        border: 1px solid $red-hint;
-                        line-height: $separator-height - 2px;
-                    }
-                }
-            }
-        } 
-        &.buttons {
-            li {
-                a {
-                    padding-left: $controls-hor-padding;
-                    padding-right: $controls-hor-padding;
-                    border-right: 1px solid $border-color;
-                    color: $border-color - #222;
-                    &:hover, &:focus {
-                        color: $red-hint;
-                    }
-                }
-                &:last-child a {  
-                    border-right: none;
-                }   
-            }
-        }
-        &.controls {
-            float: right;
-            padding-right: 5px;
-        }
+        }  
         &.logo-link {
-            svg {
-                width: $separator-height;
-                height: $separator-height;
-            }
             a {
-               &:hover {
-                  .logo-path {
-                      fill: $red-hint;
-                  }
-               }    
+                padding-left: 10px;
+            }
+            svg {
+                width: $navbar-controls-height;
+                height: $navbar-controls-height;
             }
         }
-    } 
+    }
 }
 
+.filters {
+    a {
+        width: $papers-column-width / 2 - 2 * $filters-horizontal-margin;
+        margin-left: $filters-horizontal-margin;
+        margin-right: $filters-horizontal-margin;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
+.controls {
+    float: right;
+    padding-right: 5px;
+    li {
+        display: inline;
+        a {
+            padding-left: $controls-horizontal-padding;
+            padding-right: $controls-horizontal-padding;
+            border-right: $borders-width solid $border-color;
+            color: $light-gray;
+            &:hover, &:focus {
+                color: $red-hint;
+            }
+        }
+        &:last-child a {  
+            border-right: none;
+        }   
+    }
+}
+
+/* Styles for the main frame below the navbar */
 .main-frame {
     height: auto;
     width: 100%;
@@ -170,6 +470,7 @@ $hp-name-size: 40px;
     width: 100%;
 }
 
+/* Articles page style */
 .app-panel {
     vertical-align: top;
     display: table-cell;
@@ -178,24 +479,18 @@ $hp-name-size: 40px;
     border-top: 2px solid rgba(0,0,0,0);
 }
 
-.full-height {
-    height: 100%;
+// put a red thick border on top of the active column
+.active-column {
+    border-top: 2px solid $red-hint;
 }
 
-.papers-wrap {
-    position: relative;
-}
-
+/* Papers column styles */
 .papers-column {
     position: relative;
     width: $papers-column-width;
     border-collapse: collapse;
-    border-right: 1px solid $border-color;
+    border-right: $borders-width solid $border-color;
     padding: 0;
-}
-
-.active-column {
-    border-top: 2px solid $red-hint;
 }
 
 .papers {
@@ -219,59 +514,82 @@ $hp-name-size: 40px;
         list-style-image: none;
         list-style-position: outside;
         list-style-type: none;
-        .favicon-wrap {
-            top: 21px;
-            left: 7px;
-            text-align: center;   
+    }
+}
+
+.favicon-wrap {
+    border-radius: 2px;
+    z-index: 0;
+    padding: $favicon-padding;
+    display: block;
+    height: $favicon-wrap-size;
+    width: $favicon-wrap-size;
+    position: absolute;
+    background-color: #fff;
+    i {
+        position: absolute;
+        top: $favicon-padding;
+        left: $favicon-padding;
+        font-size: 16px;
+    }
+    img {
+        position: absolute;
+        top: $favicon-padding;
+        left: $favicon-padding;
+    }
+}
+
+.paper {
+    margin-right: -1px;
+    a {
+        text-decoration: none;
+        color: $text-color;
+        font-size: $font-size-base;
+        line-height: floor($line-height-base * $font-size-base);
+        border-bottom: $borders-width solid $border-color;
+        box-sizing: border-box;
+        position: relative;
+        display: block;
+        margin-bottom: -1px;
+        padding-bottom: $paper-vertical-padding;
+        padding-top: $paper-vertical-padding;
+        padding-right: 8px;
+        padding-left: $paper-horizontal-padding;
+        &:hover, &:focus {
+            text-decoration: none;
+            color: $text-color;
         }
-        &.paper {
-            margin-right: -1px;
-            a {
-                text-decoration: none;
-                color: $text-color;
-                font-size: $base-font-size;
-                line-height: $line-height * $base-font-size;
-                border-bottom: 1px solid $border-color;
-                box-sizing: border-box;
-                position: relative;
-                display: block;
-                margin-bottom: -1px;
-                padding-bottom: $vertical-padding;
-                padding-top: $vertical-padding;
-                padding-right: 8px;
-                padding-left: $horizontal-padding;
-                &:hover, &:focus {
-                    text-decoration: none;
-                    color: $text-color;
-                }
-            }
-            time {
-                font-size: $time-font-size;
-                color: $light-gray;
-            }
-            .title {
-                font-weight: bold;
-                margin-top: 0;
-                margin-bottom: $paper-margins;
-                font-size: $title-font-size;
-                line-height: $line-height * $title-font-size;
-            }
-            .journal {
-                color: $journal-color;
-                font-size: $time-font-size;
-            }
-            .body {
-                color: rgb(140, 140, 140);
-            }
-            p {
-                margin-bottom: $paper-margins;
-            }
-        }
-        &.read {
-            .title {
-                color: #999;
-            }
-        }
+    }
+    time {
+        font-size: $time-font-size;
+        color: $light-gray;
+    }
+    .title {
+        font-weight: bold;
+        margin-top: 0;
+        margin-bottom: $paper-margins;
+        font-size: $title-font-size;
+        line-height: $line-height-base * $title-font-size;
+    }
+    .journal {
+        color: $text-gray;
+        font-size: $journal-font-size;
+    }
+    .body {
+        color: rgb(140, 140, 140);
+    }
+    p {
+        margin-bottom: $paper-margins;
+    }
+    .favicon-wrap {
+        left: 8px;
+        top: 6px;
+    }
+}
+
+.read {
+    .title {
+        color: $light-gray;
     }
 }
 
@@ -282,7 +600,7 @@ $hp-name-size: 40px;
             color: $selected-body-color !important; 
         }
         .title {
-            color: rgb(255, 255, 255) !important;
+            color: #fff !important;
         }
         .journal {
             color: $selected-body-color;
@@ -293,15 +611,15 @@ $hp-name-size: 40px;
 .actions {
     width: 100%;
     height: 70px;
-    background-color: $background-color - #111;
-    border-top: 1px solid $border-color;
+    background-color: $text-gray-background;
+    border-top: $borders-width solid $border-color;
     bottom: 0;
     position: absolute;
-    font-size: 12px;
+    font-size: $font-size-small;
 }
 
 .toolbar-button {
-    color: $border-color - #222;
+    color: $text-gray;
     text-decoration: none;
     -webkit-appearance: none;
     display: inline-block;
@@ -333,55 +651,32 @@ $hp-name-size: 40px;
     }
 }
 
-.favicon-wrap {
-    border-radius: 2px;
-    z-index: 0;
-    padding: 2px;
-    display: block;
-    height: 20px;
-    width: 20px;
-    position: absolute;
-    left: 8px;
-    top: 3px;
-    background-color: #fff;
-    i {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-        font-size: 16px;
-    }
-    img {
-        position: absolute;
-        top: 2px;
-        left: 2px;
-    }
-}
-
 .paper-wrap {
     position: relative;
-    background-color: $background-color;
+    background-color: $text-gray-background;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGlkPSJMYXllcl8xIiB4PSIwIiB5PSIwIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDUxMiA1MTIiIHhtbDpzcGFjZT0icHJlc2VydmUiPgogIDxwYXRoIGNsYXNzPSJsb2dvLXBhdGgiIGZpbGw9IiM5OTk5OTkiIGQ9Ik0yOTIuMTQgMTIxLjY1Yy0xMC41Ny02LTIyLjU3LTkuMDEtMzYuMDItOS4wMSAtOC4xNiAwLTE4LjY1IDEuNTItMzEuNDYgNC41NnYxMzUuNDNjOC40OCAxLjYgMTYuMDEgMi44IDIyLjU3IDMuNiA2LjU2IDAuOCAxMi4xNiAxLjIgMTYuODEgMS4yIDE2LjY1IDAgMzEuMDEtNi40NCA0My4xLTE5LjMzIDEyLjA5LTEyLjg4IDE4LjEzLTI5LjU3IDE4LjEzLTUwLjA3IDAtMTQuMDgtMi44OC0yNy4xNy04LjY0LTM5LjI2QzMxMC44NyAxMzYuNyAzMDIuNyAxMjcuNjUgMjkyLjE0IDEyMS42NXoiLz4KICA8cGF0aCBjbGFzcz0ibG9nby1wYXRoIiBmaWxsPSIjOTk5OTk5IiBkPSJNNDYwLjE2IDE0LjA0SDUxLjg1Yy0yMC44OCAwLTM3LjgxIDE2LjkzLTM3LjgxIDM3LjgxdjQwOC4zMWMwIDIwLjg4IDE2LjkzIDM3LjgxIDM3LjgxIDM3LjgxaDQwOC4zMWMyMC44OCAwIDM3LjgxLTE2LjkzIDM3LjgxLTM3LjgxVjUxLjg1QzQ5Ny45NiAzMC45NyA0ODEuMDQgMTQuMDQgNDYwLjE2IDE0LjA0ek0zNTMuNzMgMjQ4LjA4Yy0xNy41MyAxNi42NS00Mi4zIDI0Ljk3LTc0LjMyIDI0Ljk3IC03Ljg1IDAtMTYuMzMtMC41Ni0yNS40NS0xLjY4IC05LjEyLTEuMTItMTguODktMi44LTI5LjI5LTUuMDR2OTQuODVjMCAyMC40OSAyLjI0IDMzLjIyIDYuNzIgMzguMTggNi4wOCA3LjA1IDE1LjI5IDEwLjU3IDI3LjYxIDEwLjU3aDEyLjQ5djguODlIMTMxLjk4di04Ljg4aDEyLjI1YzEzLjc3IDAgMjMuNjEtNC40OCAyOS41NC0xMy40NSAzLjItNC45NiA0LjgtMTYuNzMgNC44LTM1LjN2LTIxMC4zNWMwLTIwLjQ5LTIuMTYtMzMuMjItNi40OC0zOC4xOCAtNi4yNC03LjA0LTE1LjUzLTEwLjU3LTI3Ljg1LTEwLjU3aC0xMi4yNXYtOC44OGgxMTkuMzRjMjkuMTMgMCA1Mi4xMSAzIDY4LjkyIDkuMDEgMTYuODEgNiAzMC45OCAxNi4xMyA0Mi41IDMwLjM4IDExLjUzIDE0LjI1IDE3LjI5IDMxLjE0IDE3LjI5IDUwLjY3QzM4MC4wMyAyMDkuODIgMzcxLjI2IDIzMS40MyAzNTMuNzMgMjQ4LjA4eiIvPgo8L3N2Zz4=");
-    background-size:$background-image-size $background-image-size;
+    background-size: $background-image-size $background-image-size;
     background-position: 50% 50%;
     background-repeat: no-repeat;
 }
 
-.paper-content-wrap {
-    position: relative;
-}
-
 .paper-toolbar {
-    background-color: #FFF;
+    background-color: #fff;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: $toolbar-height;
-    border-bottom: 1px solid #CCC;
+    border-bottom: $borders-width solid $border-color;
+    padding-left: $toolbar-horizontal-padding;
+    padding-right: $toolbar-horizontal-padding;
+    .journal {
+        margin-left: $toolbar-horizontal-padding + $favicon-wrap-size;
+        font-weight: bold;
+    }
     a {
-        margin-top: 0.5*($toolbar-height - $toolbar-title-height);
-        margin-left: 40px;
-        color: $journal-color;
+        margin-top: 0.5 * ($toolbar-height - $toolbar-title-height);
+        color: $text-gray;
         text-decoration: none;
         line-height: $toolbar-height;
         &:hover, &:focus {
@@ -393,49 +688,16 @@ $hp-name-size: 40px;
         margin: 0;  
         height: $toolbar-height;
         display: inline;
-        &.buttons {
-            li {
-                display: inline;    
-                a {
-                    padding-left: $controls-hor-padding;
-                    padding-right: $controls-hor-padding;
-                    text-decoration: none;  
-                    margin-left: 0px;
-                    color: $border-color - #222;
-                    // .logo-path {
-                    //     fill: $border-color - #222;
-                    // }
-                    // &:hover, &:focus {
-                    //     color: $border-color - #222;
-                    // }
-                    svg {
-                        width: 18px;
-                        height: 18px;
-                        margin-bottom: -3px;
-                    }
-                }
-                &:nth-last-child(2) a {  
-                    border-right: 1px solid $border-color;
-                }
-                i {
-                    line-height: $toolbar-height;
-                    color: $border-color - #222;
-                }   
-            }
+        svg {
+            width: 18px;
+            height: 18px;
+            margin-bottom: -3px;
         }
-        &.controls {
-            float: right;
-            padding-right: 5px;
-        }
-    }
-    .favicon-wrap {
-        top: 8px;
-        left: 13px;
     }
 }
 
 .paper-content {
-    background-color: #FFF;
+    background-color: #fff;
     display: block;
     position: absolute;
     height: auto;
@@ -461,34 +723,45 @@ $hp-name-size: 40px;
     }
     .journal, time {
         color: $light-gray;
-        font-size: $base-font-size + 1px;
+        font-size: $font-size-large;
         margin-bottom: $paper-margins;
     }
     .body {
         margin-top: 15px;
-        line-height: 25px;
+        line-height: 23px;
     }
 }
 
-tr.subscription-headers {
-    height: 45px;
-    th {
-        padding-top: 10px;
-        h4 {
-            border-bottom: 2px solid $red-hint;
-            margin: 0;
-            padding-top: 10px;
-            padding-bottom: 10px;
-        }
+/* Subscription page styles */
+.filters-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: $filters-bar-height;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: $lightest-gray;
+    .filter {
+        display: inline-block;
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+    button {
+        width: 130px;
     }
 }
 
 .subscription-column {
+    display: block;
+    position: absolute;
+    height: auto;
+    bottom: 0;
+    top: $filters-bar-height;
+    left: 0;
     width: 50%;
-    .overflow {
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
+    overflow-x: hidden;
+    overflow-y: auto;
     ul {
         list-style-image: none;
         list-style-position: outside;
@@ -499,11 +772,11 @@ tr.subscription-headers {
         list-style-image: none;
         list-style-position: outside;
         list-style-type: none;
-        border-bottom: 1px solid $border-color + #222;
+        border-bottom: $borders-width solid $border-color;
         a {
             line-height: 50px;
             padding-left: 30px;
-            color: $journal-color - #111;
+            color: $text-gray;
             display: block;
             &:hover, &:focus {
                 text-decoration: none;
@@ -516,262 +789,15 @@ tr.subscription-headers {
     }
 }
 
-.filters {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    background-color: #eee;
-    .filter {
-        display: inline-block;
-        margin-left: 5px;
-        margin-right: 20px;
-    }
-    button {
-        width: 130px;
-    }
-}
-
 .suggestion-wrap {
-    margin-top: 25px;
-    table {
-        margin-left: 50px;
-        margin-right: 50px;
-        tr td {
-            width: 50%;
-            margin-left: 20px;
-            margin-right: 20px; 
-            vertical-align: top; 
-            .submit-button {
-                position: relative;
-                bottom: 0;
-                margin-right: 15px;
-            }
-        }
-    }
-    #blurb {
-        color: $journal-color;
-    }
-}
-
-.sign-page {
-    background-color: rgb(245, 245, 245);
-    width: 100%;
     height: 100%;
-    position: absolute;
-    padding-top: 50px;
-    #logo {
-        margin-left: auto;
-        margin-right: auto;
-        width: $logo-size;
+    margin-top: 25px;
+    #blurb {
+        color: $text-gray;
     }
-    svg {
-        width: $logo-size;
-        height: $logo-size;
-    }
-    a {    
-       .logo-path {
-           fill: $logo-color;
-       }    
-    }
-    .form-box {
-        width: 500px;
-        height: auto;
-        margin-left: auto;
-        margin-right: auto;
-        margin-bottom: 15px;
-        margin-top: 30px;
-        border: 1px solid $border-color;
-        border-radius: 4px;
-        padding-right: 20px;
-        padding-left: 20px;
-        padding-top: 5px;
-        padding-bottom: 5px;
-        background-color: #fff;
-        h2 {
-            margin-top: 5px;
-            margin-bottom: 20px;
-            font-weight: normal;
-            border-bottom: 2px solid $red-hint;
-            line-height: 40px;
-        }
-        .form-group {
-            margin-left: 0 !important;
-            margin-right: 0 !important;
-        }
-    }
-    .register-label {
-        h4 {
-            text-align: center;
-            font-weight: normal;
-            color: $journal-color;
-        }
-    }
-}
-
-.submit-button {
-    float: right;
-    color: #fff;
-    background-color: $red-hint;
-    border-radius: 4px;
-    border: 1px solid $red-hint;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 0px;
-    margin-left: 0px;
-    margin-right: 0px;
-    margin-top: 0px;
-    padding-bottom: 6px;
-    padding-left: 15px;
-    padding-right: 15px;
-    padding-top: 6px;
-    cursor: pointer;
-    &:hover, &:focus {
-        padding-bottom: 6px + 3px;
-        padding-left: 15px + 3px;
-        padding-right: 15px + 3px;
-        padding-top: 6px + 3px;
-        margin-bottom: -3px;
-        margin-top: -3px;
-        margin-right: -3px;
-        margin-left: -3px;
-    }
-    &.disabled {
-        background-color: $light-gray;
-        border: 1px solid $light-gray;
-        opacity: 0.3;
-    }
-}
-
-.home-page {
-    .header {
-        margin-top: 30px;
-        margin-bottom: 50px;
-    }
-    .logo {
-        float: left;
-        svg {
-            width: $hp-logo-size;
-            height: $hp-logo-size;
-            margin-bottom: -10px;
-        }
-        a {    
-           .logo-path {
-               fill: #111;
-           }
-           text-decoration: none;
-           color: #111; 
-           font-weight: bold;
-           width: 400px;
-           h1 {
-               display: inline; 
-               padding-left: 10px;
-               font-size: $hp-name-size;
-           }
-        }
-    }
-    .login-button {
+    .form-button {
         float: right;
-        display: block;
-        margin-top: 6px;
-        a {
-            padding-left: 30px;
-            padding-right: 30px;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            border-radius: 5px;
-            color: $red-hint;
-            font-weight: bold;
-            border: 1px solid $red-hint;
-            font-size: 20px;
-            &:hover, &:focus {
-                text-decoration: none;
-                background-color: $red-hint;
-                color:  #fff;
-            }
-        }
-    }
-    .title {
-        margin: 90px;
-        margin-bottom: 70px;
-        h2 {
-            font-size: 55px;
-            font-weight: normal;
-            text-align: center;
-            font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        }
-    }
-    .screenshot {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        background-color: #eee;
-        border-bottom: 1px solid $red-hint;
-        border-top: 1px solid $red-hint;
-        margin-bottom: 20px;
-        img {
-            width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
-            border-radius: 4px;
-        }
-    }
-    .specs {
-        p {
-            color: $journal-color + #111;
-        }
-        .spec-icon{
-            display:inline-block;
-            font-size: 50px;
-            line-height: 55px;
-            width: 100%;
-            height: 55px;
-            text-align: center;
-            vertical-align: bottom;
-            color: $red-hint;
-        }
-        strong {
-            color: #111;
-        }
-        .row {
-            margin-bottom: 35px;
-        }
-    }
-}
-
-.blurb {
-    background-color: rgb(220, 220, 220);
-    padding-top: 20px;
-    padding-bottom: 5px;
-    font-size: 18px;
-    font-weight: 200;
-    line-height: 26px;
-    .left-blurb {
-        padding-left: 0px;
-    }
-    .right-blurb {
-        margin-top: -7px;
-        border-color: $red-hint;
-        p {
-            margin-bottom: 0px;
-        }
-    }
-}
-
-.footer {
-    background-color: rgb(51, 51, 51);
-    color: #fff;
-    padding-top: 10px;
-    padding-bottom: 25px;
-    .row {
-        text-align: center; 
-        padding-top: 15px;
-        padding-bottom: 15px;
-    }
-    a {
-        color: #fff;
-        &:hover, &:focus {
-            color: #fff;
-            text-decoration: none;
-        }
+        margin-top: 30px;
+        margin-right: 15px;
     }
 }

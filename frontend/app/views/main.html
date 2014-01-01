@@ -3,31 +3,28 @@
       <div class="container">
         <a href="https://github.com/dedalusj/PaperChase"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
         
-        <div class="col-md-10 col-md-offset-1 header">
-        <div class="logo">
-          <a href="#/"><span ng-include="'images/logo.svg'"></span><h1>Paperchase</h1></a>
+        <div class="header">
+          <div class="logo">
+            <a href="#/"><span ng-include="'images/logo.svg'"></span><h1>Paperchase</h1></a>
+          </div>
+          <div class="button vertical-center">
+            <a href="#/login">Login</a>
+          </div>
         </div>
-        <div class="login-button">
-          <a href="#/login">Login</a>
-        </div>
-        </div>
-        
-        <div class="title">
-          <h2>The easiest way to keep up with</h2>
-          <h2>academic papers.</h2>
-        </div>
+
+        <h2 class="description">The easiest way to keep up with academic papers.</h2>
      </div>
      <div class="screenshot">
-       <img src="images/screenshot.png" class="img-rounded"/>
+       <img src="images/screenshot.png"/>
      </div>
      <div class="container">
         <div class="specs">
           <div class="row">
-            <div class="col-md-4 col-md-offset-2"><div class="spec-icon"><i class="fa fa-file-text"></i></div><p class="text-center lead">Paperchase collects newly published papers from hundreds of different academic journals and serves them in <strong>one convenient place</strong>.</p></div>
-            <div class="col-md-4"><div class="spec-icon"><i class="fa fa-sort-numeric-desc"></i></div><p class="text-center lead">Paperchase ranks every new paper based on <strong>your interests</strong> so you see the most interesting papers first.</p></div>
+            <div class="col-md-4 col-md-offset-2"><div class="icon"><i class="fa fa-file-text"></i></div><p class="text-center lead">Paperchase collects newly published papers from hundreds of different academic journals and serves them in <strong>one convenient place</strong>.</p></div>
+            <div class="col-md-4"><div class="icon"><i class="fa fa-sort-numeric-desc"></i></div><p class="text-center lead">Paperchase ranks every new paper based on <strong>your interests</strong> so you see the most interesting papers first.</p></div>
           </div>
           <div class="row">
-            <div class="col-md-4 col-md-offset-4"><div class="spec-icon"><i class="fa fa-share-square"></i></div><p class="text-center lead"><strong>Share</strong> interesting papers with your colleagues or add them to your <a href="http://www.papersapp.com">Papers</a> and <a href="http://www.mendeley.com/">Mendeley</a> collections.</p></div>
+            <div class="col-md-4 col-md-offset-4"><div class="icon"><i class="fa fa-share-square"></i></div><p class="text-center lead"><strong>Share</strong> interesting papers with your colleagues or add them to your <a href="http://www.papersapp.com">Papers</a> and <a href="http://www.mendeley.com/">Mendeley</a> collections.</p></div>
           </div>
         </div>
       </div>
@@ -37,10 +34,10 @@
             <div class="col-md-8 col-md-offset-2">
               <p>Paperchase was created by Jacopo Sabbatini using <a href="http://www.python.org/">Python</a>, with <a href="http://flask.pocoo.org/">Flask</a> and <a href="http://www.sqlalchemy.org/">SQLAlchemy</a>, and Javascript with <a href="http://angularjs.org/">AngularJS</a>.</p>
               
-              <div class="col-md-6 left-blurb">
+              <div class="col-md-6 left">
                 <p>Paperchase is his first attempt at building a web application. It's both a learning exercise and an attempt at building a tool useful to the academic community.</p>
               </div>
-              <div class="panel panel-default col-md-6 right-blurb">
+              <div class="panel panel-default col-md-6 right">
                 <div class="panel-body">
                   <p>If you appreciate Paperchase please consider giving back by sending feedback, suggestions, or <a href="https://github.com/dedalusj/PaperChase">code</a>.</p>
                 </div>
@@ -70,10 +67,10 @@
 <div ng-if="isLogged()">
 <nav class="bar">  
     <ul class="filters">  
-        <li><a href="#/" ng-class="{active: !unreadFilter}" ng-click="toggleUnread()">All</a></li>  
-        <li><a href="#/" ng-class="{active: unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
+        <li class="button"><a href="#/" ng-class="{active: !unreadFilter, inactive: unreadFilter}" ng-click="toggleUnread()">All</a></li>  
+        <li class="button"><a href="#/" ng-class="{active: unreadFilter, inactive: !unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
-    <ul class="controls buttons">
+    <ul class="controls">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
         <li><a href="" ng-click="logoutPC()">Logout</a></li>  
     </ul>  
@@ -85,7 +82,7 @@
   <tbody>
     <tr>
       <td class="papers-column app-panel" ng-class="{'active-column': papersActive}">
-        <div class="full-height papers-wrap">
+        <div class="full-height rel-pos">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
         <ul>
           <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}" id="paper{{paper.id}}">
@@ -115,14 +112,14 @@
       </td>
       <td class="paper-column app-panel" ng-class="{'active-column': !papersActive}">
         <div class="full-height paper-wrap">
-        <div ng-if="papers.selected" class="paper-content-wrap full-height">
+        <div ng-if="papers.selected" class="rel-pos full-height">
           <div class="paper-toolbar">
-            <span class="favicon-wrap">
+            <span class="favicon-wrap vertical-center">
                 <img ng-if="papers.selected.journal.favicon != null" ng-src="{{ papers.selected.journal.favicon }}" height="16" width="16">
                 <i ng-if="papers.selected.journal.favicon == null" class="fa fa-flask"></i>
             </span>
             <a class="journal">{{ papers.selected.journal.title }}</a>
-            <ul class="controls buttons" id="paper-controls">
+            <ul class="controls" id="paper-controls">
               <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'images/papers-logo.svg'"></span></a></li>
               <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
               <li>
@@ -133,7 +130,7 @@
               </li>
             </ul>
           </div>
-          <div class="paper-content">
+           <div class="paper-content">
             <div class="paper-inner">
               <a href="{{ papers.selected.url }}" target="_blank"><h2 class="title">{{ papers.selected.title }}</h2></a>
               <p class="journal">{{ papers.selected.journal.title }}</p>
