@@ -23,8 +23,19 @@ angular.module('paperchaseApp')
             }
         };
 
+        $scope.resetSubcategory = function () {
+            $scope.subcategory = {name: 'All', id: undefined};
+        };
+        $scope.resetSubcategory();
+
+        $scope.selectCategory = function (cat) {
+            $scope.category = cat;
+            $scope.resetSubcategory();
+        };
+
         $scope.resetCategory = function () {
             $scope.category = {name: 'All', id: undefined, subcategories: []};
+            $scope.resetSubcategory();
         };
         $scope.resetCategory();
 

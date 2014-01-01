@@ -20,7 +20,7 @@ angular.module('paperchaseApp')
 
             var filteredJournals = [];
             angular.forEach(journals, function (journal) {
-                if (subcategory) {
+                if (subcategory.id) {
                     // if subcategory is defined then we filter on that and forget everything else
                     if (belongsTo(subcategory.id, journal.categories)) {
                         filteredJournals.push(journal);
