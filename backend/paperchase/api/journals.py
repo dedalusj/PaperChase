@@ -35,6 +35,8 @@ category_fields = {
 journal_fields = {
     'title': fields.String,
     'id': fields.Integer,
+    'subscribed': fields.Boolean,
+    'favicon': fields.String,
     'categories': DictList(fields.Integer(attribute='id'))
 }
 
@@ -67,19 +69,9 @@ class JournalListAPI(Resource):
 
     decorators = [auth.login_required]
 
-    def __init__(self):
-        self.parser = reqparse.RequestParser()
-        self.parser.add_argument('subscribed', type=bool, default=False)
-        super(JournalListAPI, self).__init__()
-
     def get(self):
-        args = self.parser.parse_args()
-        if args.subscribed is False:
-            return map(lambda j: marshal(j, journal_fields), journals.all())
-        extended_fields = journal_fields.copy()
-        extended_fields.update({'subscribed': fields.Boolean})
-        journalList = journals.all(user=g.user)
-        return map(lambda j: marshal(j, extended_fields), journalList)
+        journalList = journals.all(g.user)
+        return map(lambda j: marshal(j, journal_fields), journalList)
 
 
 class JournalAPI(Resource):

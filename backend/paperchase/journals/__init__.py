@@ -36,15 +36,13 @@ class JournalsService(Service):
             kwargs['categories'] = self.categories.get_all(*categories)
         return kwargs
 
-    def all(self, user=None):
+    def all(self, user):
 
         """
         Retrieve all the journals in the database. If a user is provided it appends a
         `subscribed` flag attribute to every journal to mark the user subscriptions.
         """
 
-        if user is None:
-            return super(JournalsService, self).all()
         journals = self.__model__.query.order_by(self.__model__.id).all()
         subscriptions = user.subscriptions.order_by(self.__model__.id).all()
         sub_index = 0

@@ -14,17 +14,12 @@ class Ellipsis(fields.Raw):
     def format(self, value):
         return smart_truncate(value)
 
-journal_fields = {
-    'title': fields.String,
-    'favicon': fields.String,
-    'id': fields.Integer
-}
 
 common_paper_fields = {
     'title': fields.String(attribute='paper.title'),
     'id': fields.Integer(attribute='paper.id'),
     'authors': fields.String(attribute='paper.authors'),
-    'journal': fields.Nested(journal_fields, attribute='paper.journal'),
+    'journalId': fields.Integer(attribute='paper.journal.id'),
     'score': fields.Integer,
     'created': fields.DateTime,
     'readAt': fields.DateTime(attribute='read_at')

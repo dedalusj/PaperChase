@@ -6,7 +6,8 @@ from ..core import auth
 
 journal_fields = {
     'title': fields.String,
-    'id': fields.Integer
+    'id': fields.Integer,
+    'favicon': fields.String
 }
 
 
