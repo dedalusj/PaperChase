@@ -1,6 +1,17 @@
 {
   "name": "paperchase",
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Paperchase front-end.",
+  "homepage": "https://github.com/dedalusj/PaperChase",
+  "license": "MIT",
+  "author": {
+    "name": "Jacopo Sabbatini",
+    "email": "dedalusj@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dedalusj/PaperChase.git"
+  },
   "dependencies": {},
   "devDependencies": {
     "grunt": "~0.4.1",
