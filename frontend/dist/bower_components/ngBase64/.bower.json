@@ -1,0 +1,26 @@
+{
+  "name": "ngBase64",
+  "version": "2.0.0",
+  "main": [
+    "ngBase64.js",
+    "ngBase64.min.js"
+  ],
+  "ignore": [
+    "package.json",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+    "angular": ">= 1.0.8"
+  },
+  "homepage": "https://github.com/ninjatronic/ngBase64",
+  "_release": "2.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v2.0.0",
+    "commit": "1c18ee270ff4d1edca54be0080cce7781414646f"
+  },
+  "_source": "git://github.com/ninjatronic/ngBase64.git",
+  "_target": "~2.0.0",
+  "_originalSource": "ngBase64",
+  "_direct": true
+}

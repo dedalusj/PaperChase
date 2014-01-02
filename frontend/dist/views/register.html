@@ -1,0 +1,45 @@
+<div class="credential-page">
+
+<div class="logo">
+  <a href="#/home">
+    <span ng-include="'images/logo.svg'"></span>
+  </a>
+</div>
+
+<div class="form-box">
+<h2>Sign up</h2>
+<alert ng-if="alert" type="alert.type" close="closeAlert()"><span ng-bind-html="alert.msg"></span></alert>
+    <form class="form-horizontal" role="form" ng-submit="registerPC()" name="register" novalidate="">
+
+      <div class="form-group" ng-class="{'has-error': register.email.$dirty && register.email.$invalid, 'has-success': register.email.$dirty && register.email.$valid}">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon">@</span>
+          <input type="email" class="form-control" ng-model="email" name="email" placeholder="Email Address" required="">
+        </div>
+        <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.required">Please enter your email</p>
+        <p class="help-block error" ng-show="register.email.$dirty && register.email.$error.email">Please enter a valid email address</p>
+      </div>
+        
+      <div class="form-group" ng-class="{'has-error': register.password.$dirty && register.password.$invalid, 'has-success': register.password.$dirty && register.password.$valid}">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="fa fa-key"></i> </span>
+          <input type="password" class="form-control" ng-model="password" name="password" placeholder="Password" required="">
+        </div>
+        <p class="help-block error" ng-show="register.password.$dirty && register.password.$error.required">Please enter your password</p>
+      </div>
+      
+      <div class="form-group" ng-class="{'has-error': register.confirmPassword.$dirty && register.confirmPassword.$invalid, 'has-success': register.confirmPassword.$dirty && register.confirmPassword.$valid}">
+        <div class="input-group input-group-lg">
+          <span class="input-group-addon"><i class="fa fa-key"></i> </span>
+          <input type="password" class="form-control" ng-model="confirmPassword" name="confirmPassword" placeholder="Confirm Password" pw-check="password" required="">
+        </div>
+        <p class="help-block error" ng-show="register.confirmPassword.$dirty && register.confirmPassword.$error.pwmatch">Passwords don't match.</p>
+      </div>  
+   
+      <div class="form-group">
+        <input class="form-button" name="commit" tabindex="3" type="submit" value="Register" ng-disabled="!register.$valid">
+      </div>      
+   
+    </form> 
+  </div>
+</div>
