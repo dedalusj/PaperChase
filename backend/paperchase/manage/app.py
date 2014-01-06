@@ -20,4 +20,4 @@ class Run(Command):
         application = DispatcherMiddleware(
             Flask('dummy_app'), {'/api': api.create_app()})
         run_simple(host, port, application,
-                   use_reloader=True, use_debugger=True)
+                   use_reloader=True, use_debugger=False)
