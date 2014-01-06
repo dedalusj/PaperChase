@@ -1,18 +1,18 @@
 'use strict';
 
-describe('Service: Base64', function () {
+describe('Service: Journals', function () {
 
   // load the service's module
   beforeEach(module('paperchaseApp'));
 
   // instantiate service
-  var Base64;
-  beforeEach(inject(function (_Base64_) {
-    Base64 = _Base64_;
+  var Journals;
+  beforeEach(inject(function (_Journals_) {
+    Journals = _Journals_;
   }));
 
   it('should do something', function () {
-    expect(!!Base64).toBe(true);
+    expect(!!Journals).toBe(true);
   });
 
 });

@@ -2,11 +2,13 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('SubscriptionsCtrl', ['$scope', 'CategoryAPI', 'SubscriptionAPI', 'JournalAPI', function ($scope, CategoryAPI, SubscriptionAPI, JournalAPI) {
+    .controller('SubscriptionsCtrl', ['$scope', 'Journals', 'CategoryAPI', function ($scope, Journals, CategoryAPI) {
+        
+        $scope.journals = new Journals();
+        // Start by grabbing the list of journals
+        $scope.journals.getJournals();
         
         $scope.categories = CategoryAPI.getCategories();
-        $scope.journals = JournalAPI.getJournalsWithSubscriptions();
-        
         $scope.subscribed = {name: 'All', value: undefined};
         $scope.subscriptionFilter = function (status) {
             $scope.subscribed.value = status;
@@ -40,29 +42,9 @@ angular.module('paperchaseApp')
         $scope.resetCategory();
 
         $scope.subscribe = function ($event, journalId) {
-            var newSubscription = new SubscriptionAPI({'journalId': journalId}),
-                journal = $scope.findJournal(journalId);
-            newSubscription.$save();
-            if (journal) {
-                journal.subscribed = true;
-            }
+            $scope.journals.toggleSubscriptions(journalId, true);
         };
         $scope.unsubscribe = function ($event, journalId) {
-            SubscriptionAPI.remove({'journalId': journalId});
-            var journal = $scope.findJournal(journalId);
-            if (journal) {
-                journal.subscribed = false;
-            }
-        };
-        $scope.findJournal = function (journalId) {
-            var i = 0, journal;
-            while (i < $scope.journals.length) {
-                if ($scope.journals[i].id === journalId) {
-                    journal = $scope.journals[i];
-                    break;
-                }
-                i += 1;
-            }
-            return journal;
+            $scope.journals.toggleSubscriptions(journalId, false);
         };
     }]);

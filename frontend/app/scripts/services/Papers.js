@@ -13,7 +13,9 @@ Paper.prototype.init = function () {
 };
 
 angular.module('paperchaseApp')
-    .factory('Papers', ['PaperAPI', '$http', '$injector', function (PaperAPI, $https, $injector) {
+    .factory('Papers', ['PaperAPI', 'Journals', '$injector', '$q', function (PaperAPI, Journals, $injector, $q) {
+
+        var journals = new Journals();
 
         var Papers = function (unread, since) {
             this.items = [];
@@ -50,13 +52,21 @@ angular.module('paperchaseApp')
             if (this.since !== undefined) {
                 requestParam.since = this.since;
             }
-            PaperAPI.getPapers(requestParam, function (papers) {
+
+            var papers = PaperAPI.getPapers(requestParam);
+            var subscriptions = journals.subscriptions;
+            $q.all([
+                papers.$promise,
+                subscriptions.$promise
+            ]).then(function() {
                 var i, paper;
                 for (i = papers.length - 1; i >= 0; i -= 1) {
                     paper = new Paper(papers[i]);
                     if (paper.read === true) {
                         this.readCount += 1;
                     }
+                    paper.journal = journals.findSubscription(paper.journalId);
+                    delete paper.journalId;
                     this.items.push(paper);
                 }
                 this.page = this.page + 1;
@@ -82,8 +92,15 @@ angular.module('paperchaseApp')
             var i = 0,
                 rootScope = $injector.get('$rootScope');
 
-            PaperAPI.getPaper({'paperId': paperId}, function (paper) {
+            var paper = PaperAPI.getPaper({'paperId': paperId});
+            var subscriptions = journals.subscriptions;
+            $q.all([
+                paper.$promise,
+                subscriptions.$promise
+            ]).then(function() {
                 this.selected = new Paper(paper);
+                this.selected.journal = journals.findSubscription(this.selected.journalId);
+                delete this.selected.journalId;
                 if (!this.selected.read) {
                     this.toggleRead();
                 }
@@ -146,5 +163,6 @@ angular.module('paperchaseApp')
         Papers.prototype.markAllRead = function () {
             PaperAPI.markAllRead();
         };
+
         return Papers;
     }]);

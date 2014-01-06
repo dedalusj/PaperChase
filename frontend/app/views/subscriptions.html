@@ -57,7 +57,7 @@
     </div>
     <div class="subscription-column">
       <ul>
-        <li ng-repeat="journal in journals | filter:{subscribed: subscribed.value} | categoryFilter:category:subcategory">
+        <li ng-repeat="journal in journals.journals | filter:{subscribed: subscribed.value} | categoryFilter:category:subcategory">
           <a href="#/subscriptions">
             <button ng-show="!journal.subscribed" type="button" class="btn btn-sm btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
             <button ng-show="journal.subscribed" type="button" class="btn btn-sm btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
