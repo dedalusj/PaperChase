@@ -21,6 +21,7 @@ angular.module('paperchaseApp')
             this.items = [];
             this.busy = false;
             this.page = 1;
+            this.numberOfPages = 1;
             this.readCount = 0;
             this.selected = null;
             this.selectedId = -1;
@@ -40,7 +41,7 @@ angular.module('paperchaseApp')
         };
 
         Papers.prototype.nextPage = function () {
-            if (this.busy) {
+            if (this.busy || (this.page > this.numberOfPages)) {
                 return;
             }
             this.busy = true;
@@ -53,7 +54,9 @@ angular.module('paperchaseApp')
                 requestParam.since = this.since;
             }
 
-            var papers = PaperAPI.getPapers(requestParam);
+            var papers = PaperAPI.getPapers(requestParam, function(data, headers) {
+                this.numberOfPages = headers()['last-page'];
+            }.bind(this));
             var subscriptions = journals.subscriptions;
             $q.all([
                 papers.$promise,
