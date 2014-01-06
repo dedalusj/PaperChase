@@ -65,7 +65,8 @@ class PaperListAPI(Resource):
 
         paperList = paperList.order_by(user_papers.model().created.desc())
         paperList = paperList.paginate(args['page'], per_page=args['per_page'])
-        return map(lambda p: marshal(p, paper_fields), paperList.items)
+        return map(lambda p: marshal(p, paper_fields), paperList.items), 200, \
+            {'Last-Page': str(paperList.pages)}
 
 
 full_paper_fields = dict(common_paper_fields)
