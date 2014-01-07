@@ -28,24 +28,25 @@ def create_app(settings_override=None):
     api = Api(app)
 
     # API endpoints connected to the Journal model
-    api.add_resource(CategoryListAPI, '/categories')
-    api.add_resource(CategoryAPI, '/categories/<int:id>')
-    api.add_resource(JournalListAPI, '/journals')
-    api.add_resource(JournalAPI, '/journals/<int:id>')
-    api.add_resource(SuggestionAPI, '/suggestion')
+    api.add_resource(CategoryListAPI, '/categories', endpoint='categories')
+    api.add_resource(CategoryAPI, '/categories/<int:id>', endpoint='category')
+    api.add_resource(JournalListAPI, '/journals', endpoint='journals')
+    api.add_resource(JournalAPI, '/journals/<int:id>', endpoint='journal')
+    api.add_resource(SuggestionAPI, '/suggestion', endpoint='suggestion')
 
     # API endpoints connected to the User model
-    api.add_resource(UserAPI, '/users')
-    api.add_resource(UserToken, '/users/token')
-    api.add_resource(RegisterAPI, '/register')
-    api.add_resource(SubscriptionListAPI, '/subscriptions')
-    api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
+    api.add_resource(UserAPI, '/users', endpoint='users')
+    api.add_resource(UserToken, '/users/token', endpoint='token')
+    api.add_resource(RegisterAPI, '/register', endpoint='register')
+    api.add_resource(SubscriptionListAPI, '/subscriptions', endpoint='subscriptions')
+    api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>', endpoint='subscription')
 
     # API endpoints connected to the Paper model
-    api.add_resource(PaperListAPI, '/papers', '/journals/<int:journal_id>/papers')
-    api.add_resource(PaperAPI, '/papers/<int:id>')
-    api.add_resource(UnreadPapersAPI, '/unread_papers')
-    api.add_resource(ReadPapersAPI, '/read_papers')
-    api.add_resource(MarkAllPapersAPI, '/read_papers/mark_all_read')
+    api.add_resource(PaperListAPI, '/papers', '/journals/<int:journal_id>/papers',
+                     endpoint='papers')
+    api.add_resource(PaperAPI, '/papers/<int:id>', endpoint='paper')
+    api.add_resource(UnreadPapersAPI, '/unread_papers', endpoint='unread_papers')
+    api.add_resource(ReadPapersAPI, '/read_papers', endpoint='read_papers')
+    api.add_resource(MarkAllPapersAPI, '/read_papers/mark_all_read', endpoint='mark_all_read')
 
     return app
