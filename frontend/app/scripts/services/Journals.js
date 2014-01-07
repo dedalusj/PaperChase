@@ -78,5 +78,5 @@ angular.module('paperchaseApp')
             }
         };
 
-        return Journals;
+        return new Journals();
     }]);

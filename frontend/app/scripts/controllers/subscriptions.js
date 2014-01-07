@@ -4,7 +4,7 @@
 angular.module('paperchaseApp')
     .controller('SubscriptionsCtrl', ['$scope', 'Journals', 'CategoryAPI', function ($scope, Journals, CategoryAPI) {
         
-        $scope.journals = new Journals();
+        $scope.journals = Journals;
         // Start by grabbing the list of journals
         $scope.journals.getJournals();
         

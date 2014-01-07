@@ -15,7 +15,7 @@ Paper.prototype.init = function () {
 angular.module('paperchaseApp')
     .factory('Papers', ['PaperAPI', 'Journals', '$injector', '$q', function (PaperAPI, Journals, $injector, $q) {
 
-        var journals = new Journals();
+        var journals = Journals;
 
         var Papers = function (unread, since) {
             this.items = [];
