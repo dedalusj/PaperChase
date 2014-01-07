@@ -21,31 +21,58 @@ angular.module('paperchaseApp')
             this.items = [];
             this.busy = false;
             this.page = 1;
-            this.numberOfPages = 1;
-            this.readCount = 0;
-            this.selected = null;
-            this.selectedId = -1;
-            this.unread = unread !== undefined ? unread : true;
-            this.since = since;
-        };
 
-        Papers.prototype.resetPapers = function () {
-            this.items = [];
-            this.busy = false;
-            this.page = 1;
+            // we set the number of pages to 1 because we always assume to be at least a page
+            // if simply there are no results we would get a 404 error that is ingored by the browser
+            this.numberOfPages = 1;
+            
             this.readCount = 0;
             this.selected = null;
             this.selectedId = -1;
-            this.unread = true;
-            this.since = undefined;
+            this.since = since;
+
+            // true is the default for a new Papers object
+            var _unread = unread !== undefined ? unread : true;
+            this.__defineGetter__('unread', function(){
+                return _unread;
+            });
+
+            // reset a Papers object
+            // restFilter: is a Boolean switch signalling to the method wheter it should
+            //            reset the filters applied to Papers or not. Default: false.
+            this.resetPapers = function (resetFilters) {
+                this.items = [];
+                this.busy = false;
+                this.page = 1;
+                this.numberOfPages = 1;
+                this.readCount = 0;
+                this.selected = null;
+                this.selectedId = -1;
+                this.since = undefined;
+                
+                if (resetFilters === true) {
+                    // in here we reset all the filters applied to Papers
+                    // This might subsequently include since
+                    _unread = true;
+                }
+            };
+
+            this.toggleUnreadFilter = function () {
+                // save the current unread filter state
+                this.resetPapers();
+                _unread = !_unread;
+                this.nextPage();
+            };
         };
 
         Papers.prototype.nextPage = function () {
+            // return if we are already retrieving stuff or we fetched the last page already
             if (this.busy || (this.page > this.numberOfPages)) {
                 return;
             }
             this.busy = true;
 
+            // Compose the dictionary with the request parameters
             var requestParam = {page : this.page};
             if (this.unread === true) {
                 requestParam.unread = true;
@@ -151,20 +178,10 @@ angular.module('paperchaseApp')
             this.items[this.selectedId].read = !this.items[this.selectedId].read;
         };
 
-        Papers.prototype.showAll = function () {
-            this.resetPapers();
-            this.unread = false;
-            this.nextPage();
-        };
-
-        Papers.prototype.showUnread = function () {
-            this.resetPapers();
-            this.unread = true;
-            this.nextPage();
-        };
-
         Papers.prototype.markAllRead = function () {
             PaperAPI.markAllRead();
+            this.resetPapers();
+            this.nextPage();
         };
 
         return Papers;

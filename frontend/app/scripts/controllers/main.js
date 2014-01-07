@@ -3,23 +3,26 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('MainCtrl', ['$scope', 'Papers', '$window', function ($scope, Papers, $window) {
+    .controller('MainCtrl', ['$scope', 'Papers', 'Journals', '$window', function ($scope, Papers, Journals, $window) {
 
         $scope.papers = new Papers();
+        $scope.journals = Journals;
 
-        $scope.unreadFilter = true;
+        $scope.showSubscriptions = false;
+        $scope.toggleShowSubscriptions = function () {
+            $scope.showSubscriptions = !$scope.showSubscriptions;
+        };
+
+        $scope.unreadFilter = function () {
+            return $scope.papers.unread;
+        };
+
         $scope.toggleUnread = function () {
-            $scope.unreadFilter = !$scope.unreadFilter;
-            if ($scope.unreadFilter === true) {
-                $scope.papers.showUnread();
-            } else {
-                $scope.papers.showAll();
-            }
+            $scope.papers.toggleUnreadFilter();
         };
 
         $scope.markAllRead = function () {
             $scope.papers.markAllRead();
-            $scope.papers.resetPapers();
         };
 
         $scope.toggleReadSelected = function () {

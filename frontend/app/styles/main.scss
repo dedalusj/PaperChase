@@ -49,7 +49,7 @@ $form-box-horizontal-padding: 20px;
 /* Login and register pages style */
 $logo-size: 100px;
 
-/*Papers column*/
+/* Papers column */
 $papers-column-width: 400px;
 $actions-height: 80px;
 $bottom-link-bar: 10px; // spacing for the link bar chrome shows
@@ -59,6 +59,9 @@ $paper-margins: 5px;
 $time-font-size: $font-size-small;
 $journal-font-size: $font-size-small;
 $title-font-size: $font-size-large;
+
+/* Subscriptions column */
+$subscriptions-column-width: 250px;
 
 /* Navbar Style */
 $navbar-height: 50px;
@@ -91,6 +94,14 @@ $filters-bar-height: $bootstrap-btn-height + 2 * $filters-vertical-padding;
     position: absolute;
     top: 0;
     bottom: 0;
+}
+
+.horizontal-center {
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    left: 0;
+    right: 0;
 }
 
 .full-height {
@@ -484,7 +495,14 @@ a {
     border-top: 2px solid $red-hint;
 }
 
-/* Papers column styles */
+.subscriptions-column {
+    position: relative;
+    width: $subscriptions-column-width;
+    border-collapse: collapse;
+    border-right: $borders-width solid $border-color;
+    padding: 0;
+}
+
 .papers-column {
     position: relative;
     width: $papers-column-width;
@@ -625,13 +643,7 @@ a {
     display: inline-block;
     border: none;
     background: none;
-    margin: auto;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    width: 85px;
+    width: 45px;
     height: 51px;
     cursor: pointer;
     text-align: center;
@@ -649,6 +661,10 @@ a {
     &:hover, &:focus {
         color: $red-hint;
     }
+}
+
+.toolbar-button-text {
+    width: 85px;
 }
 
 .paper-wrap {

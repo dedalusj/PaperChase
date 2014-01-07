@@ -67,8 +67,8 @@
 <div ng-if="isLogged()">
 <nav class="bar">  
     <ul class="filters">  
-        <li class="button"><a href="#/" ng-class="{active: !unreadFilter, inactive: unreadFilter}" ng-click="toggleUnread()">All</a></li>  
-        <li class="button"><a href="#/" ng-class="{active: unreadFilter, inactive: !unreadFilter}" ng-click="toggleUnread()">Unread</a></li>    
+        <li class="button"><a href="#/" ng-class="{active: !unreadFilter(), inactive: unreadFilter()}" ng-click="toggleUnread()">All</a></li>  
+        <li class="button"><a href="#/" ng-class="{active: unreadFilter(), inactive: !unreadFilter()}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
     <ul class="controls">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
@@ -81,27 +81,41 @@
 <table class="app-wrap"> 
   <tbody>
     <tr>
+      <td ng-if="showSubscriptions" class="subscriptions-column app-panel">
+        <div class="full-height rel-pos">
+          <ul>
+            <li ng-repeat="journal in journals.subscriptions">
+              {{ journal.title }}
+            </li>
+          </ul>
+        </div>
+      </td>
       <td class="papers-column app-panel" ng-class="{'active-column': papersActive}">
         <div class="full-height rel-pos">
           <div class="papers" infinite-scroll='papers.nextPage()' infinite-scroll-disabled='papers.busy' infinite-scroll-distance='1'>
-        <ul>
-          <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}" id="paper{{paper.id}}">
-            <a href="#/" ng-click="papers.selectItem(paper.id)">
-              <span class="favicon-wrap">
-                  <img ng-if="paper.journal.favicon != null" ng-src="{{ paper.journal.favicon }}" height="16" width="16">
-                  <i ng-if="paper.journal.favicon == null" class="fa fa-flask"></i>
-              </span>
-              <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
-              <h4 class="title">{{ paper.title }}</h4>
-              <p class="journal">{{ paper.journal.title }}</p>
-              <p class="body">{{ paper.abstract | htmlToPlainText }}</p>
-            </a>
-          </li>
-          <li ng-show='papers.busy'><i class="fa fa-spinner fa-spin"></i></li>
-        </ul>
+            <ul>
+              <li class="paper" ng-repeat="paper in papers.items" ng-class="{selected: paper.selected, read: paper.read}" id="paper{{paper.id}}">
+                <a href="#/" ng-click="papers.selectItem(paper.id)">
+                  <span class="favicon-wrap">
+                      <img ng-if="paper.journal.favicon != null" ng-src="{{ paper.journal.favicon }}" height="16" width="16">
+                      <i ng-if="paper.journal.favicon == null" class="fa fa-flask"></i>
+                  </span>
+                  <time>{{ paper.created | date:'dd MMMM yyyy, h:mm a'}}</time>
+                  <h4 class="title">{{ paper.title }}</h4>
+                  <p class="journal">{{ paper.journal.title }}</p>
+                  <p class="body">{{ paper.abstract | htmlToPlainText }}</p>
+                </a>
+              </li>
+              <li ng-show='papers.busy'><i class="fa fa-spinner fa-spin"></i></li>
+            </ul>
           </div>
           <div class="actions">
-            <div class="toolbar-button" ng-click="markAllRead()">
+            <div class="toolbar-button vertical-center" ng-click="toggleShowSubscriptions()">
+              <div class="inner">
+                <i class="fa fa-bars fa-3x"></i>
+              </div>
+            </div>
+            <div class="toolbar-button toolbar-button-text vertical-center horizontal-center" ng-click="markAllRead()">
               <div class="inner">
                 <i class="fa fa-check-square fa-3x"></i>
               </div>  
