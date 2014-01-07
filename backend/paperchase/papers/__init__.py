@@ -6,6 +6,7 @@
     paperchase papers package
 """
 import datetime
+from dateutil.parser import parse
 from flask import current_app
 
 from ..core import Service, db
@@ -78,9 +79,23 @@ class UserPapersService(Service):
                   .delete(synchronize_session='fetch')
         self.commit_changes()
 
-        # TODO: we should be able to do a batch delete from the query wihtout
-        # looping through all the results
-        # papers = db.session.query(UserPaper).join(Paper, (UserPaper.paper_id == Paper.id)).filter(
-        #     UserPaper.user_id == user.id, Paper.journal_id == journal.id)
-        # for paper in papers:
-        #     self.delete(paper)
+    def grab_papers(self, user, journal_id=None, unread=True, ids=None, since=None):
+        paperList = user.papers
+
+        if unread is True:
+            paperList = paperList.filter(self.__model__.read_at == None)
+
+        if ids is not None:
+            ids = [int(id) for id in ids.split(',')]
+            paperList = paperList.filter(self.__model__.paper_id.in_(ids))
+
+        if since is not None:
+            since = parse(since)
+            since = since.replace(tzinfo=None)
+            paperList = paperList.filter(self.__model__.created >= since)
+
+        if journal_id is not None:
+            paperQuery = db.session.query(Paper.id).filter(Paper.journal_id == journal_id)
+            paperList = paperList.filter(UserPaper.paper_id.in_(paperQuery.subquery()))
+
+        return paperList

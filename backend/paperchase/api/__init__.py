@@ -42,7 +42,7 @@ def create_app(settings_override=None):
     api.add_resource(SubscriptionAPI, '/subscriptions/<int:id>')
 
     # API endpoints connected to the Paper model
-    api.add_resource(PaperListAPI, '/papers')
+    api.add_resource(PaperListAPI, '/papers', '/journals/<int:journal_id>/papers')
     api.add_resource(PaperAPI, '/papers/<int:id>')
     api.add_resource(UnreadPapersAPI, '/unread_papers')
     api.add_resource(ReadPapersAPI, '/read_papers')

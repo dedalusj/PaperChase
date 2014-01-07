@@ -1,4 +1,3 @@
-from dateutil.parser import *
 from datetime import *
 
 from flask.ext.restful import Resource, fields, marshal, reqparse
@@ -41,27 +40,17 @@ class PaperListAPI(Resource):
     def __init__(self):
         self.parser = reqparse.RequestParser()
         self.parser.add_argument('page', type=int, default=1)
-        self.parser.add_argument('per_page', type=int, default=10)
+        self.parser.add_argument('per_page', type=int, default=50)
         self.parser.add_argument('unread', type=bool, default=False)
         self.parser.add_argument('since', type=str)
         self.parser.add_argument('ids', type=str)
         super(PaperListAPI, self).__init__()
 
-    def get(self):
+    def get(self, journal_id=None):
         args = self.parser.parse_args()
         user = g.user
-        paperList = user.papers
-
-        if args['unread'] is True:
-            paperList = paperList.filter(
-                user_papers.model().read_at == None)
-        if args['ids'] is not None:
-            ids = [int(id) for id in args['ids'].split(',')]
-            paperList = paperList.filter(user_papers.model().paper_id.in_(ids))
-        if args['since'] is not None:
-            since = parse(args['since'])
-            since = since.replace(tzinfo=None)
-            paperList = paperList.filter(user_papers.model().created >= since)
+        paperList = user_papers.grab_papers(user, journal_id, args['unread'],
+                                            args['ids'], args['since'])
 
         paperList = paperList.order_by(user_papers.model().created.desc())
         paperList = paperList.paginate(args['page'], per_page=args['per_page'])
