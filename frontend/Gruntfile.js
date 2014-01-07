@@ -80,7 +80,10 @@ module.exports = function (grunt) {
                     port: 5000,
                     https: false,
                     changeOrigin: false,
-                    xforward: false
+                    xforward: false,
+                    rewrite: {
+                        '^/api': ''
+                    }
                 }
             ],
             livereload: {
