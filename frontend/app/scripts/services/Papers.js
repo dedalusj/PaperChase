@@ -20,16 +20,15 @@ angular.module('paperchaseApp')
         var Papers = function (unread, since) {
             this.items = [];
             this.busy = false;
+            this.readCount = 0;
+            this.selected = null;
+            this.selectedId = -1;
+            this.since = since;
             this.page = 1;
 
             // we set the number of pages to 1 because we always assume to be at least a page
             // if simply there are no results we would get a 404 error that is ingored by the browser
             this.numberOfPages = 1;
-            
-            this.readCount = 0;
-            this.selected = null;
-            this.selectedId = -1;
-            this.since = since;
 
             // true is the default for a new Papers object
             var _unread = unread !== undefined ? unread : true;
