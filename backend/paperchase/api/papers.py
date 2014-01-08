@@ -1,11 +1,12 @@
 from datetime import *
 
 from flask.ext.restful import Resource, fields, marshal, reqparse
-from flask import request, abort, g
+from flask import request, abort, g, url_for
 
 from ..services import user_papers
 from ..core import auth
 from ..helpers import smart_truncate
+from ..helpers.linkheader import composeLinkHeader
 
 
 class Ellipsis(fields.Raw):
@@ -54,28 +55,24 @@ class PaperListAPI(Resource):
 
         paperList = paperList.order_by(user_papers.model().created.desc())
         paperList = paperList.paginate(args['page'], per_page=args['per_page'])
-        return map(lambda p: marshal(p, paper_fields), paperList.items), 200, \
-            {'Last-Page': str(paperList.pages)}
+        numberOfPages = paperList.pages
 
-        # All the commented code is an attempt to implement HATEOAS for pagination but
-        # it is not currently used
-        #
-        # from flask import url_for
-        # numberOfPages = paperList.pages
-        # pageNavigationLinks = dict()
-        # if args['page'] < numberOfPages:
-        #     pageNavigationLinks['last'] = url_for('papers', _external=True,
-        #                                           per_page=args['per_page'], page=numberOfPages)
-        # if args['page'] < numberOfPages-1:
-        #     pageNavigationLinks['next'] = url_for('papers', _external=True,
-        #                                           per_page=args['per_page'], page=args['page']+1)
-        # if args['page'] > 1:
-        #     pageNavigationLinks['first'] = url_for('papers', _external=True,
-        #                                            per_page=args['per_page'], page=1)
-        # if args['page'] > 2:
-        #     pageNavigationLinks['prev'] = url_for('papers', _external=True,
-        #                                           per_page=args['per_page'], page=args['page']-1)
-        # print pageNavigationLinks
+        pageNavigationLinks = {}
+        if args['page'] < numberOfPages:
+            pageNavigationLinks['last'] = url_for('papers', _external=True,
+                                                  per_page=args['per_page'], page=numberOfPages)
+        if args['page'] < numberOfPages-1:
+            pageNavigationLinks['next'] = url_for('papers', _external=True,
+                                                  per_page=args['per_page'], page=args['page']+1)
+        if args['page'] > 1:
+            pageNavigationLinks['first'] = url_for('papers', _external=True,
+                                                   per_page=args['per_page'], page=1)
+        if args['page'] > 2:
+            pageNavigationLinks['prev'] = url_for('papers', _external=True,
+                                                  per_page=args['per_page'], page=args['page']-1)
+
+        return map(lambda p: marshal(p, paper_fields), paperList.items), 200, \
+            {'X-Total-Count': str(paperList.pages), 'Link': composeLinkHeader(pageNavigationLinks)}
 
 
 full_paper_fields = dict(common_paper_fields)

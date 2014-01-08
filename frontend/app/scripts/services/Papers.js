@@ -81,7 +81,7 @@ angular.module('paperchaseApp')
             }
 
             var papers = PaperAPI.getPapers(requestParam, function(data, headers) {
-                this.numberOfPages = headers()['last-page'];
+                this.numberOfPages = headers()['x-total-count'];
             }.bind(this));
             var subscriptions = journals.subscriptions;
             $q.all([
