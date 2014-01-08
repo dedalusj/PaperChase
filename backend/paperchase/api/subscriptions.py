@@ -27,7 +27,7 @@ class SubscriptionListAPI(Resource):
         user = g.user
         users.subscribe(user, journal)
         user_papers.user_subscribed(user, journal)
-        journal.subscribed = True
+        journal.subscribed = users.is_subscribed(user, journal)
         return marshal(journal, full_journal_fields), 201
 
 
