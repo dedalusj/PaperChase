@@ -11,11 +11,9 @@ from flask.ext.restful import Api
 from .. import factory
 
 from .journals import CategoryAPI, CategoryListAPI, JournalListAPI, JournalAPI, SuggestionAPI
-# SubcategoryListAPI, CategoryJournalsAPI
 from .users import UserAPI, RegisterAPI, UserToken
 from .subscriptions import SubscriptionListAPI, SubscriptionAPI
-from .papers import PaperListAPI, PaperAPI, UnreadPapersAPI,\
-    ReadPapersAPI, MarkAllPapersAPI
+from .papers import PaperListAPI, PaperAPI, UnreadPapersAPI, ReadPapersAPI, MarkAllPapersAPI
 
 
 def create_app(settings_override=None):

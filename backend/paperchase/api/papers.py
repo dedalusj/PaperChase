@@ -1,33 +1,12 @@
 from datetime import *
 
-from flask.ext.restful import Resource, fields, marshal, reqparse
+from flask.ext.restful import Resource, marshal, reqparse
 from flask import request, abort, g, url_for
 
 from ..services import user_papers
 from ..core import auth
-from ..helpers import smart_truncate
 from ..helpers.linkheader import composeLinkHeader
-
-
-class Ellipsis(fields.Raw):
-
-    def format(self, value):
-        return smart_truncate(value)
-
-
-common_paper_fields = {
-    'title': fields.String(attribute='paper.title'),
-    'id': fields.Integer(attribute='paper.id'),
-    'authors': fields.String(attribute='paper.authors'),
-    'journalId': fields.Integer(attribute='paper.journal.id'),
-    'score': fields.Integer,
-    'created': fields.DateTime,
-    'readAt': fields.DateTime(attribute='read_at')
-}
-
-
-paper_fields = dict(common_paper_fields)
-paper_fields['abstract'] = Ellipsis(attribute='paper.abstract')
+from .fields import paper_fields, full_paper_fields
 
 
 class PaperListAPI(Resource):
@@ -73,13 +52,6 @@ class PaperListAPI(Resource):
 
         return map(lambda p: marshal(p, paper_fields), paperList.items), 200, \
             {'X-Total-Count': str(paperList.pages), 'Link': composeLinkHeader(pageNavigationLinks)}
-
-
-full_paper_fields = dict(common_paper_fields)
-full_paper_fields['abstract'] = fields.String(attribute='paper.abstract')
-full_paper_fields['url'] = fields.String(attribute='paper.url')
-full_paper_fields['reference'] = fields.String(attribute='paper.ref')
-full_paper_fields['doi'] = fields.String(attribute='paper.doi')
 
 
 class PaperAPI(Resource):

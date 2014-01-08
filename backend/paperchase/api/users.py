@@ -1,16 +1,11 @@
 import datetime
-from flask.ext.restful import Resource, fields, marshal, abort
+from flask.ext.restful import Resource, marshal, abort
 from flask import request, current_app, g
 
 from ..services import users
 from ..core import auth
 from ..tasks import send_email
-
-user_fields = {
-    'email': fields.String,
-    'id': fields.Integer,
-    'registered_at': fields.DateTime
-}
+from .fields import user_fields
 
 
 class UserAPI(Resource):

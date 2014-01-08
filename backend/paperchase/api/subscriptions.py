@@ -1,14 +1,9 @@
-from flask.ext.restful import Resource, fields, marshal
+from flask.ext.restful import Resource, marshal
 from flask import request, g
 
 from ..services import users, journals, user_papers
 from ..core import auth
-
-journal_fields = {
-    'title': fields.String,
-    'id': fields.Integer,
-    'favicon': fields.String
-}
+from .fields import essential_journal_fields, full_journal_fields
 
 
 class SubscriptionListAPI(Resource):
@@ -22,19 +17,18 @@ class SubscriptionListAPI(Resource):
 
         user = g.user
         subscriptionsList = user.subscriptions.order_by(journals.__model__.id)
-        return map(lambda j: marshal(j, journal_fields), subscriptionsList)
+        return map(lambda j: marshal(j, essential_journal_fields), subscriptionsList)
 
     def post(self):
         """Post request with the journal id the user wants to subscribe to."""
-
+        # TODO: rather slow because of the import of the papers from a journal into a user
         journal_id = request.json['journalId']
         journal = journals.get_or_404(journal_id)
         user = g.user
         users.subscribe(user, journal)
-        # TODO: this should actually be in the subscribe method but it's a mess
-        #       with circular dependencies
         user_papers.user_subscribed(user, journal)
-        return '', 201
+        journal.subscribed = True
+        return marshal(journal, full_journal_fields), 201
 
 
 class SubscriptionAPI(Resource):
@@ -50,7 +44,5 @@ class SubscriptionAPI(Resource):
         journal = journals.get_or_404(id)
         user = g.user
         users.unsubscribe(user, journal)
-        # TODO: this should actually be in the unsubscribe method but it's a
-        #       mess with circular dependencies
         user_papers.user_unsubscribed(user, journal)
         return '', 204

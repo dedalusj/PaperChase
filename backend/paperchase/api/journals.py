@@ -1,44 +1,10 @@
 from flask import request, current_app, g
-from flask.ext.restful import Resource, fields, marshal, reqparse
+from flask.ext.restful import Resource, marshal
 
 from ..services import categories, journals
 from ..core import auth
 from ..tasks import send_email
-
-
-class DictList(fields.List):
-    def output(self, key, data):
-        value = fields.get_value(key if self.attribute is None else self.attribute, data)
-        # we cannot really test for external dict behavior
-        if fields.is_indexable_but_not_string(value) and not isinstance(value, dict):
-            # Convert all instances in typed list to container type
-            return [self.container.output(idx, val) for idx, val
-                    in enumerate(value)]
-
-        if value is None:
-            return self.default
-
-        return [marshal(value, self.container.nested)]
-
-
-subcategory_fields = {
-    'name': fields.String,
-    'id': fields.Integer
-}
-
-category_fields = {
-    'name': fields.String,
-    'id': fields.Integer,
-    'subcategories': fields.List(fields.Nested(subcategory_fields))
-}
-
-journal_fields = {
-    'title': fields.String,
-    'id': fields.Integer,
-    'subscribed': fields.Boolean,
-    'favicon': fields.String,
-    'categories': DictList(fields.Integer(attribute='id'))
-}
+from .fields import category_fields, full_journal_fields
 
 
 class CategoryListAPI(Resource):
@@ -71,7 +37,7 @@ class JournalListAPI(Resource):
 
     def get(self):
         journalList = journals.all(g.user)
-        return map(lambda j: marshal(j, journal_fields), journalList)
+        return map(lambda j: marshal(j, full_journal_fields), journalList)
 
 
 class JournalAPI(Resource):
@@ -82,7 +48,7 @@ class JournalAPI(Resource):
 
     def get(self, id):
         journal = journals.get_or_404(id)
-        return marshal(journal, journal_fields)
+        return marshal(journal, full_journal_fields)
 
 
 class SuggestionAPI(Resource):
