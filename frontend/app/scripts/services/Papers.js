@@ -17,51 +17,29 @@ angular.module('paperchaseApp')
 
         var journals = Journals;
 
+        // var Papers = function (unread, since) {
         var Papers = function (unread, since) {
             this.items = [];
             this.busy = false;
             this.readCount = 0;
             this.selected = null;
             this.selectedId = -1;
-            this.since = since;
             this.page = 1;
 
             // we set the number of pages to 1 because we always assume to be at least a page
             // if simply there are no results we would get a 404 error that is ingored by the browser
             this.numberOfPages = 1;
 
-            // true is the default for a new Papers object
-            var _unread = unread !== undefined ? unread : true;
-            this.__defineGetter__('unread', function(){
-                return _unread;
+            var _since = since;
+            this.__defineGetter__('since', function () {
+                return _since;
             });
 
-            // reset a Papers object
-            // restFilter: is a Boolean switch signalling to the method wheter it should
-            //            reset the filters applied to Papers or not. Default: false.
-            this.resetPapers = function (resetFilters) {
-                this.items = [];
-                this.busy = false;
-                this.page = 1;
-                this.numberOfPages = 1;
-                this.readCount = 0;
-                this.selected = null;
-                this.selectedId = -1;
-                this.since = undefined;
-                
-                if (resetFilters === true) {
-                    // in here we reset all the filters applied to Papers
-                    // This might subsequently include since
-                    _unread = true;
-                }
-            };
-
-            this.toggleUnreadFilter = function () {
-                // save the current unread filter state
-                this.resetPapers();
-                _unread = !_unread;
-                this.nextPage();
-            };
+            // true is the default for a new Papers object
+            var _unread = unread !== undefined ? unread : true;
+            this.__defineGetter__('unread', function (){
+                return _unread;
+            });
         };
 
         Papers.prototype.nextPage = function () {
@@ -179,8 +157,6 @@ angular.module('paperchaseApp')
 
         Papers.prototype.markAllRead = function () {
             PaperAPI.markAllRead();
-            this.resetPapers();
-            this.nextPage();
         };
 
         return Papers;

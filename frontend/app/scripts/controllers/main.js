@@ -18,11 +18,14 @@ angular.module('paperchaseApp')
         };
 
         $scope.toggleUnread = function () {
-            $scope.papers.toggleUnreadFilter();
+            $scope.papers = new Papers(!$scope.papers.unread,$scope.papers.since);
+            $scope.papers.nextPage();
         };
 
         $scope.markAllRead = function () {
             $scope.papers.markAllRead();
+            $scope.papers = new Papers($scope.papers.unread,$scope.papers.since);
+            $scope.papers.nextPage();
         };
 
         $scope.toggleReadSelected = function () {
