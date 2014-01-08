@@ -15,9 +15,6 @@ angular.module('paperchaseApp')
             UserServices.verifyCredentials($scope.email, $scope.password).
                 success(function () {
                     UserServices.setCredentials($scope.email, $scope.password);
-                    if (!UserServices.hasLoggedInBefore()) {
-                        $scope.firstLogin();
-                    }
                     $location.path('/home');
                 }).
                 error(function () {

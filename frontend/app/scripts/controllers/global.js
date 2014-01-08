@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .controller('GlobalCtrl', ['$scope', '$location', 'UserServices', '$modal', function ($scope, $location, UserServices, $modal) {
+    .controller('GlobalCtrl', ['$scope', '$location', 'UserServices', function ($scope, $location, UserServices) {
         $scope.isLogged = function () {
             return UserServices.isLogged();
         };
@@ -17,17 +17,17 @@ angular.module('paperchaseApp')
             $scope.$broadcast('keyPress', kind);
         };
 
-        $scope.firstLogin = function () {
-            var modalInstance = $modal.open({
-                templateUrl: 'views/firstlogin.html',
-                controller: 'ModalCtrl',
-                resolve: {}
-            });
-            modalInstance.result.then(function () {
-                //console.log("I'm done");
-                $location.path('/subscriptions');
-            }, function () {
-                //console.log("Dismissed");
-            });
-        };
+        // $scope.firstLogin = function () {
+        //     var modalInstance = $modal.open({
+        //         templateUrl: 'views/firstlogin.html',
+        //         controller: 'ModalCtrl',
+        //         resolve: {}
+        //     });
+        //     modalInstance.result.then(function () {
+        //         //console.log("I'm done");
+        //         $location.path('/subscriptions');
+        //     }, function () {
+        //         //console.log("Dismissed");
+        //     });
+        // };
     }]);

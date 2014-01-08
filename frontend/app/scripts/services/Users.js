@@ -2,19 +2,14 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .factory('UserServices', ['$http', '$cookieStore', '$base64', '$cookies', function ($http, $cookieStore, $base64, $cookies) {
-        var user = {isLogged: false, firstLogin: true },
-            authData = $cookieStore.get('authdata'),
-            firstLogin = $cookieStore.get('firstLogin');
+    .factory('UserServices', ['$http', 'localStorageService', '$base64', '$cookies', function ($http, localStorageService, $base64, $cookies) {
+        var user = {isLogged: false },
+            authData = localStorageService.get('authData');
 
         if (authData) {
             // initialize to whatever is in the cookie, if anything
             $http.defaults.headers.common.Authorization = 'Basic ' + authData;
             user.isLogged = true;
-        }
-
-        if (firstLogin !== undefined) {
-            user.firstLogin = false;
         }
 
         $http.defaults.headers.post['X-CSRFToken'] = $cookies['_csrf_token'];
@@ -34,11 +29,8 @@ angular.module('paperchaseApp')
                     encoded = $base64.encode(data.token + ':unused');
                     $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
                     user.isLogged = true;
-                    $cookieStore.put('authdata', encoded);
-                    $cookieStore.put('authexpire', data.duration);
-                    if (user.firstLogin === true) {
-                        $cookieStore.put('firstLogin', false);
-                    }
+                    localStorageService.set('authData', encoded);
+                    localStorageService.set('authExpire', data.duration);
                 }).
                 error();
             },
@@ -46,13 +38,10 @@ angular.module('paperchaseApp')
                 document.execCommand('ClearAuthenticationCache');
                 $http.defaults.headers.common.Authorization = 'Basic ';
                 user.isLogged = false;
-                $cookieStore.remove('authdata');
+                localStorageService.remove('authData');
             },
             isLogged: function () {
                 return user.isLogged;
-            },
-            hasLoggedInBefore: function () {
-                return !user.firstLogin;
             },
             register: function (username, password) {
                 var postData = {email: username, password: password};

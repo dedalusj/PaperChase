@@ -7,8 +7,12 @@ angular.module('paperchaseApp', [
     'ngRoute',
     'infinite-scroll',
     'ui.bootstrap',
-    'ngBase64'
+    'ngBase64',
+    'LocalStorageModule'
 ])
+.config(['localStorageServiceProvider', function(localStorageServiceProvider){
+    localStorageServiceProvider.setPrefix('paperchase');
+}])
 .config(['$routeProvider', '$locationProvider', '$httpProvider', '$compileProvider',
     function ($routeProvider, $locationProvider, $httpProvider, $compileProvider) {
         $routeProvider
