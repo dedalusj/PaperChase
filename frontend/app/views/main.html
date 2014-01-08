@@ -70,7 +70,7 @@
         <li class="button"><a href="#/" ng-class="{active: !papers.unread, inactive: papers.unread}" ng-click="toggleUnread()">All</a></li>  
         <li class="button"><a href="#/" ng-class="{active: papers.unread, inactive: !papers.unread}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
-    <ul class="controls">
+    <ul class="controls pull-right">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
         <li><a href="" ng-click="logoutPC()">Logout</a></li>  
     </ul>  
@@ -128,12 +128,19 @@
         <div class="full-height paper-wrap">
         <div ng-if="papers.selected" class="rel-pos full-height">
           <div class="paper-toolbar">
-            <span class="favicon-wrap vertical-center">
-                <img ng-if="papers.selected.journal.favicon != null" ng-src="{{ papers.selected.journal.favicon }}" height="16" width="16">
-                <i ng-if="papers.selected.journal.favicon == null" class="fa fa-flask"></i>
-            </span>
-            <a class="journal">{{ papers.selected.journal.title }}</a>
-            <ul class="controls" id="paper-controls">
+            <div class="pull-left title">
+              <span class="favicon-wrap vertical-center">
+                  <img ng-if="papers.selected.journal.favicon != null" ng-src="{{ papers.selected.journal.favicon }}" height="16" width="16">
+                  <i ng-if="papers.selected.journal.favicon == null" class="fa fa-flask"></i>
+              </span>
+              <a class="journal">{{ papers.selected.journal.title }}</a>
+              <ul class="controls unsubscribe">
+                <li>
+                  <a href="" title="Unsubscribe from journal" ng-click="unsubscribe()"><i class="fa fa-times-circle-o"></i></a>
+                </li>
+              </ul>
+            </div>
+            <ul class="controls pull-right" id="paper-controls">
               <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'images/papers-logo.svg'"></span></a></li>
               <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
               <li>

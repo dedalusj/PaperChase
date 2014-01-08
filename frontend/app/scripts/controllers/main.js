@@ -20,6 +20,12 @@ angular.module('paperchaseApp')
             $scope.papers.nextPage();
         };
 
+        $scope.unsubscribe = function () {
+            $scope.journals.toggleSubscriptions($scope.papers.selected.journal.id, false);
+            $scope.papers = new Papers($scope.papers.unread,$scope.papers.since);
+            $scope.papers.nextPage();
+        };
+
         $scope.$on('selected_new_item', function (event, message) {
             $scope.scrollInto('paper' + message);
         });

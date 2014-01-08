@@ -79,13 +79,22 @@ $toolbar-title-height: 16px;
 $toolbar-horizontal-padding: 10px;
 $background-image-size: 250px;
 
-// /*Other pages margins*/
-// $subscriptions-margins: 30px;
-
-/* Subscriotions style */
+/* Subscritions style */
 $filters-vertical-padding: 10px;
 $filters-bar-height: $bootstrap-btn-height + 2 * $filters-vertical-padding;
-// $active-indicator-width: 6px;
+
+/* Paper toolbar style */
+$fade-duration: 0.3s;
+
+/* Mixins */
+
+@mixin transition($duration) {
+    -webkit-transition: opacity $duration ease-in-out;
+       -moz-transition: opacity $duration ease-in-out;
+        -ms-transition: opacity $duration ease-in-out;
+         -o-transition: opacity $duration ease-in-out;
+            transition: opacity $duration ease-in-out;
+}
 
 /* helper classes */
 .vertical-center {
@@ -447,7 +456,6 @@ a {
 }
 
 .controls {
-    float: right;
     padding-right: 5px;
     li {
         display: inline;
@@ -689,6 +697,15 @@ a {
     .journal {
         margin-left: $toolbar-horizontal-padding + $favicon-wrap-size;
         font-weight: bold;
+    }
+    .title {
+        .unsubscribe {
+            opacity: 0;
+            @include transition($fade-duration);
+        }
+        &:hover > .unsubscribe {
+            opacity: 1;
+        }
     }
     a {
         margin-top: 0.5 * ($toolbar-height - $toolbar-title-height);
