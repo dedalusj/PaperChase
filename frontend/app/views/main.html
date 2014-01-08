@@ -67,8 +67,8 @@
 <div ng-if="isLogged()">
 <nav class="bar">  
     <ul class="filters">  
-        <li class="button"><a href="#/" ng-class="{active: !unreadFilter(), inactive: unreadFilter()}" ng-click="toggleUnread()">All</a></li>  
-        <li class="button"><a href="#/" ng-class="{active: unreadFilter(), inactive: !unreadFilter()}" ng-click="toggleUnread()">Unread</a></li>    
+        <li class="button"><a href="#/" ng-class="{active: !papers.unread, inactive: papers.unread}" ng-click="toggleUnread()">All</a></li>  
+        <li class="button"><a href="#/" ng-class="{active: papers.unread, inactive: !papers.unread}" ng-click="toggleUnread()">Unread</a></li>    
     </ul>
     <ul class="controls">
         <li><a href="#/subscriptions">Subscriptions</a></li>  
@@ -110,7 +110,7 @@
             </ul>
           </div>
           <div class="actions">
-            <div class="toolbar-button vertical-center" ng-click="toggleShowSubscriptions()">
+            <div class="toolbar-button vertical-center" ng-click="showSubscriptions = !showSubscriptions">
               <div class="inner">
                 <i class="fa fa-bars fa-3x"></i>
               </div>
@@ -137,7 +137,7 @@
               <li><a ng-href="papers://url/{{ papers.selected.url | escape }}" title="Add to Papers"><span ng-include="'images/papers-logo.svg'"></span></a></li>
               <li><a ng-href="mailto:?subject={{ papers.selected.title | escape }}&body={{ papers.selected.url | escape }}" title="Email"><i class="fa fa-envelope"></i></a></li>
               <li>
-                <a href="" title="Mark as read/unread" ng-click="toggleReadSelected()">
+                <a href="" title="Mark as read/unread" ng-click="papers.toggleRead()">
                   <i ng-if="!papers.selected.read" class="fa fa-square-o"></i>
                   <i ng-if="papers.selected.read" class="fa fa-check-square-o"></i>
                 </a>

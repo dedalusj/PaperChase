@@ -7,15 +7,7 @@ angular.module('paperchaseApp')
 
         $scope.papers = new Papers();
         $scope.journals = Journals;
-
         $scope.showSubscriptions = false;
-        $scope.toggleShowSubscriptions = function () {
-            $scope.showSubscriptions = !$scope.showSubscriptions;
-        };
-
-        $scope.unreadFilter = function () {
-            return $scope.papers.unread;
-        };
 
         $scope.toggleUnread = function () {
             $scope.papers = new Papers(!$scope.papers.unread,$scope.papers.since);
@@ -26,10 +18,6 @@ angular.module('paperchaseApp')
             $scope.papers.markAllRead();
             $scope.papers = new Papers($scope.papers.unread,$scope.papers.since);
             $scope.papers.nextPage();
-        };
-
-        $scope.toggleReadSelected = function () {
-            $scope.papers.toggleRead();
         };
 
         $scope.$on('selected_new_item', function (event, message) {
