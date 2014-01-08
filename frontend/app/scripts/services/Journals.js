@@ -2,7 +2,7 @@
 'use strict';
 
 angular.module('paperchaseApp')
-    .factory('Journals', ['SubscriptionAPI', 'JournalAPI', function (SubscriptionAPI, JournalAPI) {
+    .factory('Journals', ['SubscriptionAPI', 'JournalAPI', '$modal', '$location', function (SubscriptionAPI, JournalAPI, $modal, $location) {
         
         var findJournal = function (journalId, journalsArray) {
             var i = 0, journal;
@@ -14,6 +14,22 @@ angular.module('paperchaseApp')
                 i += 1;
             }
             return journal;
+        };
+
+        // Called when the number of subscriptions is zero
+        // If we are not on the subscriptions page already show a modal dialog
+        // and redirect the user to the subscription page
+        var emptySubscriptions = function () {
+            if ($location.path() !== '/subscriptions') {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/emptysubdialog.html',
+                    controller: 'ModalCtrl',
+                    resolve: {}
+                });
+                modalInstance.result.then(function () {
+                    $location.path('/subscriptions');
+                });
+            }
         };
 
         var Journals = function () {
@@ -28,7 +44,12 @@ angular.module('paperchaseApp')
                 // this.subscriptions.sort(function (a, b) {
                 //     return a.id < b.id ? -1 : 1;
                 // });
-                return SubscriptionAPI.getSubscribedJournals();
+                return SubscriptionAPI.getSubscribedJournals(function(data) {
+                    // Don't show the no subscription dialog if we are already on the page
+                    if (data.length === 0) {
+                        emptySubscriptions();
+                    }
+                });
             };
 
             this.__defineGetter__('subscriptions', function(){
@@ -59,23 +80,23 @@ angular.module('paperchaseApp')
         };
 
         Journals.prototype.toggleSubscriptions = function (journalId, subscribe) {
-            // hit the subscription API endpoint
-            if (subscribe === true) {
-                SubscriptionAPI.subscribe({'journalId': journalId});
-            } else {
-                SubscriptionAPI.unsubscribe({'journalId': journalId});
-            }
-
-            // update the list of journals we keep in memory
+            // find the journal we are about to update
             var journal = this.findJournal(journalId);
-            if (journal) {
-                journal.subscribed = subscribe;
+
+            // hit the subscription API endpoint and update the journal subscribe
+            // property when the response comes back
+            if (subscribe === true) {
+                SubscriptionAPI.subscribe({'journalId': journalId}, function (data) {
+                    journal.subscribed = data.subscribed;
+                });
+            } else {
+                SubscriptionAPI.unsubscribe({'journalId': journalId}, function (data) {
+                    journal.subscribed = data.subscribed;
+                });
             }
 
-            // if we grabbed the list of subscriptions before we need to refresh it
-            if (this._subscriptions !== undefined) {
-                this.refreshSubscriptions();
-            }
+            // finally refresh the subscriptions list since we change the state of a journal
+            this.refreshSubscriptions();
         };
 
         return new Journals();
