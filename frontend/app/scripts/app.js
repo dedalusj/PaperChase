@@ -22,7 +22,7 @@ angular.module('paperchaseApp', [
         })
         .when('/subscriptions', {
             templateUrl: 'views/subscriptions.html',
-            controller: 'SubscriptionsCtrl'
+            controller: 'SubscriptionpageCtrl'
         })
         .when('/login', {
             templateUrl: 'views/login.html',
@@ -31,10 +31,6 @@ angular.module('paperchaseApp', [
         .when('/register', {
             templateUrl: 'views/register.html',
             controller: 'RegisterCtrl'
-        })
-        .when('/suggestion', {
-            templateUrl: 'views/suggestion.html',
-            controller: 'SuggestionCtrl'
         })
         .otherwise({
             redirectTo: '/'

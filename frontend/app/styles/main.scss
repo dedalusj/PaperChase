@@ -80,21 +80,17 @@ $toolbar-horizontal-padding: 10px;
 $background-image-size: 250px;
 
 /* Subscritions style */
-$filters-vertical-padding: 10px;
-$filters-bar-height: $bootstrap-btn-height + 2 * $filters-vertical-padding;
+$subscriptions-vertical-padding: 10px;
+$subscriptions-horizontal-padding: 30px;
+$subscriptions-bar-height: $bootstrap-btn-height + 2 * $subscriptions-vertical-padding;
+$pick-a-journal-column-width: 50%;
+$filters-column-width: 15%;
+$subscirptions-column-width: $pick-a-journal-column-width - $filters-column-width;
+$filter-bottom-spacing: 30px;
+$filters-column-padding: 15px;
+$journal-cell-height: 50px;
 
-/* Paper toolbar style */
-$fade-duration: 0.3s;
-
-/* Mixins */
-
-@mixin transition($duration) {
-    -webkit-transition: opacity $duration ease-in-out;
-       -moz-transition: opacity $duration ease-in-out;
-        -ms-transition: opacity $duration ease-in-out;
-         -o-transition: opacity $duration ease-in-out;
-            transition: opacity $duration ease-in-out;
-}
+$dropdown-menus-max-height: 315px;
 
 /* helper classes */
 .vertical-center {
@@ -119,6 +115,10 @@ $fade-duration: 0.3s;
 
 .rel-pos {
     position: relative;
+}
+
+.gray-background {
+    background-color: $lightest-gray;
 }
 
 /* Basic buttons styles */
@@ -698,15 +698,6 @@ a {
         margin-left: $toolbar-horizontal-padding + $favicon-wrap-size;
         font-weight: bold;
     }
-    .title {
-        .unsubscribe {
-            opacity: 0;
-            @include transition($fade-duration);
-        }
-        &:hover > .unsubscribe {
-            opacity: 1;
-        }
-    }
     a {
         margin-top: 0.5 * ($toolbar-height - $toolbar-title-height);
         color: $text-gray;
@@ -766,22 +757,66 @@ a {
 }
 
 /* Subscription page styles */
-.filters-bar {
+.subscriptions-bar {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: $filters-bar-height;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    height: $subscriptions-bar-height;
+    padding-top: $subscriptions-vertical-padding;
+    padding-bottom: $subscriptions-vertical-padding;
+    padding-left: $subscriptions-horizontal-padding;
+    padding-right: $subscriptions-horizontal-padding;
     background-color: $lightest-gray;
+    border-bottom: $borders-width solid $border-color;
+    border-top: $borders-width solid $border-color;
+    h4 {
+        line-height: $bootstrap-btn-height;
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    a {
+        &.plain {
+            color: #000;
+            &:hover {
+                color: #000;
+                cursor: default;
+            }
+        }
+        &:hover {
+            color: $red-hint;
+        }
+    }
+}
+
+// TODO: revise the entire subscription page styles section
+.filters-column {
+    background-color: #1A364F;
+    width: $filters-column-width;
+    left: 0;
+    bottom: 0;
+    top: $subscriptions-bar-height;
+    display: block;
+    position: absolute;
+    border-right: $borders-width solid $border-color;
+    padding: $filters-column-padding;
+    p {
+        color: #fff;
+    }
     .filter {
         display: inline-block;
-        margin-left: 20px;
-        margin-right: 20px;
+        width: 100%;
+        padding-bottom: $filter-bottom-spacing;
+        .dropdown-menu {
+            max-height: $dropdown-menus-max-height;
+            overflow-y: auto;
+        }
+    }
+    .btn-group {
+        width: 100%;
     }
     button {
-        width: 130px;
+        width: 100%;
     }
 }
 
@@ -790,25 +825,34 @@ a {
     position: absolute;
     height: auto;
     bottom: 0;
-    top: $filters-bar-height;
-    left: 0;
-    width: 50%;
+    top: $subscriptions-bar-height;
+    left: $filters-column-width;
+    width: $subscirptions-column-width;
     overflow-x: hidden;
     overflow-y: auto;
+    border-right: $borders-width solid $border-color;
     ul {
         list-style-image: none;
         list-style-position: outside;
         list-style-type: none;
         padding-left: 0;
+        background-color: white;
+        margin-bottom: 0;
     }
     li {
         list-style-image: none;
         list-style-position: outside;
         list-style-type: none;
         border-bottom: $borders-width solid $border-color;
+        height: $journal-cell-height;
         a {
-            line-height: 50px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
+            overflow: hidden;
+            line-height: $journal-cell-height;
             padding-left: 30px;
+            padding-right: 5px;
             color: $text-gray;
             display: block;
             &:hover, &:focus {
@@ -819,6 +863,26 @@ a {
             width: 100px;
             margin-right: 20px;
         }
+        &:hover {
+            background-color: rgb(245, 245, 245);
+        }
+    }
+}
+
+.suggestion-column {
+    background-color: white;
+    border-left: $borders-width solid $border-color;
+    padding-top: 30px;
+    width: 100% - $pick-a-journal-column-width;
+    left: $pick-a-journal-column-width;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    top: $subscriptions-bar-height;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .form-button {
+        margin-right: 15px;
     }
 }
 

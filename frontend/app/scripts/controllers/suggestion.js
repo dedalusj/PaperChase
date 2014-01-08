@@ -14,10 +14,6 @@ angular.module('paperchaseApp')
         $scope.subcategories = [];
         $scope.subcategory = [];
 
-        $scope.updateSubcategories = function () {
-            $scope.subcategories = CategoryAPI.getSubcategories({'categoryId' : $scope.category.id});
-        };
-
         $scope.submitted = function () {
             $scope.alert = { type: 'success', msg: 'The developers will review the information in your email, add the journal and contact you. You can now return to the <a href="#/home">home page</a>' };
         };

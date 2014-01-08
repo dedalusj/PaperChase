@@ -112,7 +112,8 @@
           <div class="actions">
             <div class="toolbar-button vertical-center" ng-click="showSubscriptions = !showSubscriptions">
               <div class="inner">
-                <i class="fa fa-bars fa-3x"></i>
+                <i ng-if="!showSubscriptions" class="fa fa-caret-square-o-right fa-2x"></i>
+                <i ng-if="showSubscriptions" class="fa fa-caret-square-o-left fa-2x"></i>
               </div>
             </div>
             <div class="toolbar-button toolbar-button-text vertical-center horizontal-center" ng-click="markAllRead()">
