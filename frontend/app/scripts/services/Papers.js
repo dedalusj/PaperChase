@@ -18,7 +18,7 @@ angular.module('paperchaseApp')
         var journals = Journals;
 
         // var Papers = function (unread, since) {
-        var Papers = function (unread, since) {
+        var Papers = function (unread, since, journalId) {
             this.items = [];
             this.busy = false;
             this.readCount = 0;
@@ -40,6 +40,11 @@ angular.module('paperchaseApp')
             this.__defineGetter__('unread', function (){
                 return _unread;
             });
+
+            var _journalId = journalId;
+            this.__defineGetter__('journalFilter', function () {
+                return _journalId;
+            });
         };
 
         Papers.prototype.nextPage = function () {
@@ -58,10 +63,19 @@ angular.module('paperchaseApp')
                 requestParam.since = this.since;
             }
 
-            var papers = PaperAPI.getPapers(requestParam, function(data, headers) {
-                this.numberOfPages = headers()['x-total-count'];
-            }.bind(this));
-            var subscriptions = journals.subscriptions;
+            var subscriptions = journals.subscriptions,
+                papers;
+            if (this.journalFilter === undefined) {
+                papers = PaperAPI.getPapers(requestParam, function(data, headers) {
+                    this.numberOfPages = headers()['x-total-count'];
+                }.bind(this));
+            } else {
+                requestParam.journalId = this.journalFilter;
+                papers = PaperAPI.getPapersForJournal(requestParam, function(data, headers) {
+                    this.numberOfPages = headers()['x-total-count'];
+                }.bind(this));
+            }
+            
             $q.all([
                 papers.$promise,
                 subscriptions.$promise

@@ -26,6 +26,11 @@ angular.module('paperchaseApp')
             $scope.papers.nextPage();
         };
 
+        $scope.filterForJournal = function (journalId) {
+            $scope.papers = new Papers($scope.papers.unread,$scope.papers.since,journalId);
+            $scope.papers.nextPage();
+        };
+
         $scope.$on('selected_new_item', function (event, message) {
             $scope.scrollInto('paper' + message);
         });

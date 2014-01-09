@@ -62,6 +62,11 @@ $title-font-size: $font-size-large;
 
 /* Subscriptions column */
 $subscriptions-column-width: 250px;
+$subscriptions-height: 26px;
+$subscriptions-column-vertical-padding: 10px;
+$subscriptions-column-background-color: $text-gray-background;
+$subscriptions-column-text-color: $text-gray;
+$subscriptions-column-hover-color: $lightest-gray;
 
 /* Navbar Style */
 $navbar-height: 50px;
@@ -508,7 +513,48 @@ a {
     width: $subscriptions-column-width;
     border-collapse: collapse;
     border-right: $borders-width solid $border-color;
-    padding: 0;
+    padding-top: $subscriptions-column-vertical-padding;
+    padding-bottom: $subscriptions-column-vertical-padding;
+    background-color: $subscriptions-column-background-color;
+    ul {
+        list-style-image: none;
+        list-style-position: outside;
+        list-style-type: none;
+        margin-bottom: 0;
+        padding-left: 0;
+    }
+    li {
+        list-style-image: none;
+        list-style-position: outside;
+        list-style-type: none;
+    }
+    .subscription-cell {
+        height: $subscriptions-height;
+        width: 100%;
+        position: relative;
+        padding-left: 10px;
+    }
+    a {
+        display: block;
+        color: $subscriptions-column-text-color;
+        &:hover {
+            background-color: $subscriptions-column-hover-color;
+            color: $subscriptions-column-text-color;
+            text-decoration: none;
+        }
+        &.selected {
+            background-color: #fff;
+        }
+        p {
+            line-height: $subscriptions-height;
+            margin-left: $favicon-wrap-size + 7px;
+            margin-bottom: 0;
+            font-weight: bold;
+        }
+        .favicon-wrap {
+            top: floor(($subscriptions-height - $favicon-wrap-size)/2);
+        }
+    }
 }
 
 .papers-column {
@@ -886,15 +932,15 @@ a {
     }
 }
 
-.suggestion-wrap {
-    height: 100%;
-    margin-top: 25px;
-    #blurb {
-        color: $text-gray;
-    }
-    .form-button {
-        float: right;
-        margin-top: 30px;
-        margin-right: 15px;
-    }
-}
+// .suggestion-wrap {
+//     height: 100%;
+//     margin-top: 25px;
+//     #blurb {
+//         color: $text-gray;
+//     }
+//     .form-button {
+//         float: right;
+//         margin-top: 30px;
+//         margin-right: 15px;
+//     }
+// }

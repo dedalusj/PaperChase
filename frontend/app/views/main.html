@@ -84,8 +84,22 @@
       <td ng-if="showSubscriptions" class="subscriptions-column app-panel">
         <div class="full-height rel-pos">
           <ul>
+            <li>
+              <a class="subscription-cell" ng-click="filterForJournal()" ng-class="{'selected' : !papers.journalFilter}">
+                <span class="favicon-wrap">
+                    <i class="fa fa-flask"></i>
+                </span>
+                <p class="journal">All</p>
+              </a>
+            </li>
             <li ng-repeat="journal in journals.subscriptions">
-              {{ journal.title }}
+              <a class="subscription-cell" ng-click="filterForJournal(journal.id)" ng-class="{'selected': journal.id === papers.journalFilter}">
+                <span class="favicon-wrap">
+                    <img ng-if="journal.favicon != null" ng-src="{{ journal.favicon }}" height="16" width="16">
+                    <i ng-if="journal.favicon == null" class="fa fa-flask"></i>
+                </span>
+                <p class="journal">{{ journal.title }}</p>
+              </a>
             </li>
           </ul>
         </div>
