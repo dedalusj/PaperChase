@@ -42,7 +42,7 @@ angular.module('paperchaseApp')
             });
 
             var _journalId = journalId;
-            this.__defineGetter__('journalFilter', function () {
+            this.__defineGetter__('journalId', function () {
                 return _journalId;
             });
         };
@@ -65,12 +65,12 @@ angular.module('paperchaseApp')
 
             var subscriptions = journals.subscriptions,
                 papers;
-            if (this.journalFilter === undefined) {
+            if (this.journalId === undefined) {
                 papers = PaperAPI.getPapers(requestParam, function(data, headers) {
                     this.numberOfPages = headers()['x-total-count'];
                 }.bind(this));
             } else {
-                requestParam.journalId = this.journalFilter;
+                requestParam.journalId = this.journalId;
                 papers = PaperAPI.getPapersForJournal(requestParam, function(data, headers) {
                     this.numberOfPages = headers()['x-total-count'];
                 }.bind(this));

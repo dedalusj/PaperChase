@@ -85,7 +85,7 @@
         <div class="full-height rel-pos">
           <ul>
             <li>
-              <a class="subscription-cell" ng-click="filterForJournal()" ng-class="{'selected' : !papers.journalFilter}">
+              <a class="subscription-cell" ng-click="filterForJournal()" ng-class="{'selected' : !papers.journalId}">
                 <span class="favicon-wrap">
                     <i class="fa fa-flask"></i>
                 </span>
@@ -93,7 +93,7 @@
               </a>
             </li>
             <li ng-repeat="journal in journals.subscriptions">
-              <a class="subscription-cell" ng-click="filterForJournal(journal.id)" ng-class="{'selected': journal.id === papers.journalFilter}">
+              <a class="subscription-cell" ng-click="filterForJournal(journal.id)" ng-class="{'selected': journal.id === papers.journalId}">
                 <span class="favicon-wrap">
                     <img ng-if="journal.favicon != null" ng-src="{{ journal.favicon }}" height="16" width="16">
                     <i ng-if="journal.favicon == null" class="fa fa-flask"></i>
