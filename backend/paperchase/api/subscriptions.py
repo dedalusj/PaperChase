@@ -1,5 +1,5 @@
 from flask.ext.restful import Resource, marshal
-from flask import request, g
+from flask import request, g, url_for
 
 from ..services import users, journals, user_papers
 from ..core import auth
@@ -28,7 +28,8 @@ class SubscriptionListAPI(Resource):
         users.subscribe(user, journal)
         user_papers.user_subscribed(user, journal)
         journal.subscribed = users.is_subscribed(user, journal)
-        return marshal(journal, full_journal_fields), 201
+        return marshal(journal, full_journal_fields), 201,\
+            {'Location': url_for('journal', _external=True, id=journal.id)}
 
 
 class SubscriptionAPI(Resource):
