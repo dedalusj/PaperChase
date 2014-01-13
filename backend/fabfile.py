@@ -60,8 +60,8 @@ def setup_repo():
     with cd(env.repo_path):
         run("git clone {0} .".format(MAIN_REPO))
         run("mkdir log")  # create the main log dir
-    with cd(env.backend_path):
-        run("mkdir log")  # create the backend log dir
+    # with cd(env.backend_path):
+    #     run("mkdir log")  # create the backend log dir
 
 
 def update_repo():
@@ -177,13 +177,11 @@ def initial_setup(local_data='False'):
     setup_repo()
     setup_venv()
     compile_settings()
-
-    # update_database()
-    # if local_data == 'True':
-    #     copy_local_database()
-    # else:
-    #     copy_repo_database()
-
+    update_database()
+    if local_data == 'True':
+        copy_local_database()
+    else:
+        copy_repo_database()
     setup_supervisor()
 
 
