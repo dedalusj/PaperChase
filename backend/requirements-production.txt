@@ -4,7 +4,7 @@ flask-sqlalchemy
 celery
 flower
 Flask-Mail
-MySQL-python
+pymysql
 feedparser
 redis
 pytz>=2013b

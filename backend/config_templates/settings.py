@@ -25,7 +25,7 @@ DEBUG = True
 CSRF_ENABLED = True
 SECRET_KEY = '{{ secret_key }}'
 
-SQLALCHEMY_DATABASE_URI = 'mysql://{{ db_username }}:{{ db_password }}'\
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{{ db_username }}:{{ db_password }}'\
                           '@localhost:3306/{{ database }}?charset=utf8'
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
