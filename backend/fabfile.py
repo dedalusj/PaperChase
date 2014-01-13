@@ -9,15 +9,16 @@ from jinja2 import Environment, FileSystemLoader
 
 # Global settings variables
 SUPERVISOR_CONF_FILE = 'supervisord.conf'
-HOST_CONF_FILE = 'nginx.conf'
 SETTINGS_FILE = 'settings.py'
 ADMIN_EMAIL = 'paperchase.app@gmail.com'
 MAIN_REPO = 'https://github.com/dedalusj/PaperChase.git'
-REMOTE_NGINX_PATH = '/usr/local/etc/nginx/nginx.conf'
+
+# HOST_CONF_FILE = 'nginx.conf'
+# REMOTE_NGINX_PATH = '/usr/local/etc/nginx/nginx.conf'
 
 env.user = 'paperchase'
 env.repo_path = 'PaperChase'
-env.web_app_path = env.repo_path + '/webapp'
+env.backend_path = env.repo_path + '/backend'
 env.db_username = 'paperchase'
 env.database = 'paperchase_production'
 env.local_database = 'development'
@@ -32,9 +33,14 @@ env.app_name = 'paperchase'
 
 
 # Settings specific to the deploy environment
-def vm():
+def macVM():
     env.hosts = ['paperchasevm.local']
     env.app_path = '/Users/' + env.user + '/' + env.repo_path
+
+
+def cubietruck():
+    env.hosts = ['192.168.1.5']
+    env.app_path = '/home/' + env.user + '/' + env.repo_path
 
 
 # Utility method to render the configuration file templates
@@ -53,9 +59,9 @@ def setup_repo():
     """Original clone of the repo"""
     with cd(env.repo_path):
         run("git clone {0} .".format(MAIN_REPO))
-        run("mkdir log")
-        with cd('webapp'):
-            run("mkdir log")
+        run("mkdir log")  # create the main log dir
+    with cd(env.backend_path):
+        run("mkdir log")  # create the backend log dir
 
 
 def update_repo():
@@ -65,16 +71,18 @@ def update_repo():
 
 
 def setup_venv():
-    with cd(env.web_app_path):
-        run("curl -O https://raw.github.com/pypa/virtualenv/" +
-            "1.9.X/virtualenv.py")
-        run("python virtualenv.py {0}".format(env.virtual_env))
-        run("{0}/bin/pip install -r requirements.txt".format(env.virtual_env))
+    """Setup the python virtual environment"""
+    with cd(env.backend_path):
+        # run("curl -O https://raw.github.com/pypa/virtualenv/" +
+        # "1.9.X/virtualenv.py")
+        run("virtualenv {0}".format(env.virtual_env))
+        run("{0}/bin/pip install -r requirements-production.txt".format(env.virtual_env))
     fix_feedparser()
 
 
 def fix_feedparser():
-    with cd(env.web_app_path + "/" + env.virtual_env + "lib/python2.7/" +
+    """Download a patch for feedparser that fix a bug with parsing authors"""
+    with cd(env.backend_path + "/" + env.virtual_env + "/lib/python2.7/" +
             "site-packages/"):
         run("curl -O https://raw.github.com/dedalusj/feedparser/master/" +
             "feedparser/feedparser.py")
@@ -89,9 +97,9 @@ def prompt_for_settings():
     env.mail_password = mail_pass
 
 
-def setup_settings():
+def compile_settings():
     prompt_for_settings()
-    path = env.web_app_path + "/paperchase"
+    path = env.backend_path + "/paperchase"
     with cd(path):
         chars = string.letters + string.digits
         length = 10
@@ -105,37 +113,34 @@ def setup_settings():
 
 
 def update_database():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run("{0}/bin/alembic upgrade head".format(env.virtual_env))
 
 
 def copy_local_database():
+    """
+    Dump the database state from the development environment and load it onto
+    the production environment.
+    """
     local('mysqldump -u {0} -p {1} > database_copy.sql'.format(
         env.db_username, env.local_database))
-    put('database_copy.sql', env.web_app_path)
-    with cd(env.web_app_path):
-        run("mysql --host=localhost --port=3306 --user={0} -p --reconnect {1}" +te
+    put('database_copy.sql', env.backend_path)
+    with cd(env.backend_path):
+        run("mysql --host=localhost --port=3306 --user={0} -p --reconnect {1}"
             " < database_copy.sql".format(
             env, db_username, env.database))
 
 
 def copy_repo_database():
-    with cd(env.web_app_path):
+    """Load the minimal database file from the repository into the production database"""
+    with cd(env.backend_path):
         run("mysql --host=localhost --port=3306 --user={0} -p --reconnect {1}" +
             " < database_bootstrap.sql".format(
             env.db_username, env.database))
 
 
-def setup_host():
-    sudo('nginx -s stop')
-    host_conf = StringIO.StringIO()
-    host_conf.write(_render_template(HOST_CONF_FILE, env))
-    put(host_conf, REMOTE_NGINX_PATH, use_sudo=True)
-    sudo('nginx')
-
-
 def setup_supervisor():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         supervisor_conf = StringIO.StringIO()
         supervisor_conf.write(_render_template(SUPERVISOR_CONF_FILE, env))
         put(supervisor_conf, SUPERVISOR_CONF_FILE)
@@ -143,32 +148,27 @@ def setup_supervisor():
 
 
 def reload_supervisor():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run('{0}/bin/supervisorctl update'.format(env.virtual_env))
 
 
 def start_worker():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run("{0}/bin/supervisorctl start celeryworker".format(env.virtual_env))
 
 
 def stop_worker():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run("{0}/bin/supervisorctl stop celeryworker".format(env.virtual_env))
 
 
-def run_redis():
-    with settings(warn_only=True):
-        run('redis-server')
-
-
 def start_app():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run("{0}/bin/supervisorctl start paperchase".format(env.virtual_env))
 
 
 def stop_app():
-    with cd(env.web_app_path):
+    with cd(env.backend_path):
         run("{0}/bin/supervisorctl stop paperchase".format(env.virtual_env))
 
 
@@ -176,26 +176,22 @@ def initial_setup(local_data='False'):
     make_dir()
     setup_repo()
     setup_venv()
-    setup_settings()
+    compile_settings()
 
-    update_database()
-    if local_data == 'True':
-        copy_local_database()
-    else:
-        copy_repo_database()
+    # update_database()
+    # if local_data == 'True':
+    #     copy_local_database()
+    # else:
+    #     copy_repo_database()
 
-    run_redis()
-    setup_host()
     setup_supervisor()
-    start_worker()
-    start_app()
 
 
 def update_app():
     stop_worker()
     stop_app()
     update_repo()
-    setup_settings()
+    compile_settings()
     update_database()
     reload_supervisor()
     start_worker()

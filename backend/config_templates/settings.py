@@ -21,8 +21,6 @@ scraper_config = {
     "log_level": logging.WARNING,
 }
 
-DEBUG = True
-CSRF_ENABLED = True
 SECRET_KEY = '{{ secret_key }}'
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{{ db_username }}:{{ db_password }}'\

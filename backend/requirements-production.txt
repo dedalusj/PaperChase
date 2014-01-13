@@ -17,7 +17,6 @@ flask-httpauth
 passlib
 py-bcrypt
 cssmin
-fabric
 python-dateutil
 beautifulsoup4
 supervisor
