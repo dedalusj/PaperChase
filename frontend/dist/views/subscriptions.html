@@ -6,65 +6,138 @@
       </a>
     </li>  
   </ul> 
-  <ul class="controls">
-    <li><a href="#/suggestion">Journal Suggestions</a></li>  
+  <ul class="controls pull-right">
     <li><a href="" ng-click="logoutPC()">Logout</a></li>  
   </ul>  
 </nav>
 
 <div class="main-frame">
-  <div class="app-wrap full-height"> 
-    <div class="filters-bar">
-      <div class="filter">
-        Status:
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            {{ subscribed.name }} <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li ng-click="subscriptionFilter(true)"><a>Subscribed</a></li>
-            <li ng-click="subscriptionFilter(false)"><a>Unsubscribed</a></li>
-            <li ng-click="subscriptionFilter(undefined)"><a>All</a></li>
-          </ul>
+  <div class="app-wrap full-height gray-background"> 
+    <div class="subscriptions-bar">
+      <a href="" ng-click="showLeftSide = !showLeftSide" ng-class="{'plain': showLeftSide}"><h4 class="pull-left">Choose your journals</h4></a>
+      <a href="" ng-click="showLeftSide = !showLeftSide" ng-class="{'plain': !showLeftSide}"><h4 class="pull-right">or suggest a new one</h4></a>
+    </div>
+
+    <div ng-controller="SubscriptionsCtrl" ng-if="showLeftSide">
+      <div class="filters-column">
+        <div class="filter">
+          <p>Status</p>
+          <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ subscribed.name }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+              <li ng-click="subscriptionFilter(true)"><a>Subscribed</a></li>
+              <li ng-click="subscriptionFilter(false)"><a>Unsubscribed</a></li>
+              <li ng-click="subscriptionFilter(undefined)"><a>All</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="filter">
+          <p>Category</p>
+          <div class="dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ category.name }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li ng-click="resetCategory()"><a>All</a></li>
+              <li class="divider"></li>
+              <li ng-repeat="cat in categories" ng-click="selectCategory(cat)"><a>{{ cat.name }}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="filter" ng-show="category.subcategories.length">
+          <p>Subcategory</p>
+          <div class="dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+              {{ subcategory.name }} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li ng-click="resetSubcategory()"><a>All</a></li>
+              <li class="divider"></li>
+              <li ng-repeat="sub_cat in category.subcategories" ng-click="$parent.subcategory = sub_cat"><a>{{ sub_cat.name }}</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="filter">
-        Category:
-        <div class="dropdown filter">
-          <a class="dropdown-toggle">
-            {{ category.name }} <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li ng-click="resetCategory()"><a>All</a></li>
-            <li class="divider"></li>
-            <li ng-repeat="cat in categories" ng-click="selectCategory(cat)"><a>{{ cat.name }}</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="filter" ng-show="category.subcategories.length">
-        Subcategory:
-        <div class="dropdown filter">
-          <a class="dropdown-toggle">
-            {{ subcategory.name }} <span class="caret"></span>
-          </a>
-          <ul class="dropdown-menu">
-            <li ng-click="resetSubcategory()"><a>All</a></li>
-            <li class="divider"></li>
-            <li ng-repeat="sub_cat in category.subcategories" ng-click="$parent.subcategory = sub_cat"><a>{{ sub_cat.name }}</a></li>
-          </ul>
-        </div>
+      <div class="subscription-column">
+        <ul>
+          <li ng-repeat="journal in journals.journals | filter:{subscribed: subscribed.value} | categoryFilter:category:subcategory">
+            <a href="#/subscriptions">
+              <button ng-show="!journal.subscribed" type="button" class="btn btn-sm btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
+              <button ng-show="journal.subscribed" type="button" class="btn btn-sm btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
+              {{ journal.title }}
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="subscription-column">
-      <ul>
-        <li ng-repeat="journal in journals | filter:{subscribed: subscribed.value} | categoryFilter:category:subcategory">
-          <a href="#/subscriptions">
-            <button ng-show="!journal.subscribed" type="button" class="btn btn-sm btn-primary" ng-click="subscribe($event, journal.id)">Subscribe</button>
-            <button ng-show="journal.subscribed" type="button" class="btn btn-sm btn-danger" ng-click="unsubscribe($event, journal.id)">Unsubscribe</button>
-            {{ journal.title }}
-          </a>
-        </li>
-      </ul>
+
+    <div class="suggestion-column" ng-controller="SuggestionCtrl" ng-if="!showLeftSide">
+      <form class="form-horizontal" role="form" name="suggestion" ng-submit="submitted()" novalidate="" action="mailto:paperchase.app@gmail.com?subject=Journal Suggestion&body=Test" method="post" enctype="text/plain">
+        <div class="col-md-10 col-md-offset-1">
+          <div class="form-group" ng-class="{'has-error': suggestion.name.$dirty && suggestion.name.$invalid, 'has-success': suggestion.name.$dirty && suggestion.name.$valid}">
+            <label class="col-lg-4 control-label">Name</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Journal name" ng-model="name" name="name" required="">
+              <p class="help-block error" ng-show="suggestion.name.$dirty && suggestion.name.$invalid">Please enter a name for the journal</p>
+            </div>
+          </div>
+          <div class="form-group" ng-class="{'has-error': suggestion.url.$dirty && suggestion.url.$invalid, 'has-success': suggestion.url.$dirty && suggestion.url.$valid}">
+            <label class="col-lg-4 control-label">URL</label>
+            <div class="col-lg-8">
+              <input type="url" class="form-control" placeholder="Feed URL" ng-model="url" name="url" required="">
+              <p class="help-block error" ng-show="suggestion.url.$dirty && suggestion.url.$invalid && !suggestion.url.$error.url">Please enter the url for the journal feed</p>
+              <p class="help-block error" ng-show="suggestion.url.$error.url">Please enter a valid url</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 control-label">Category</label>
+            <div class="col-lg-8">
+              <select class="form-control" ng-model="category" ng-options="cat.name for cat in categories" name="category">
+                <option value="">-- choose a category --</option>
+              </select>
+              <p class="help-block">or suggest one</p>
+              <input type="text" class="form-control" placeholder="Category name" ng-model="category.name" name="suggestedCategory">
+            </div>
+          </div>
+          <fieldset ng-disabled="category.name == undefined">
+            <div class="form-group">
+              <label class="col-lg-4 control-label">Subcategory</label>
+              <div class="col-lg-8">
+                <select class="form-control" ng-model="subcategory" ng-options="s.name for s in category.subcategories" name="subcategory" ng-disabled="!category.subcategories.length || suggestion.sSubcategory.$viewValue.length">
+                  <option value="">-- choose subcategory --</option>
+                </select>
+                <p class="help-block">or suggest one</p>
+                <input type="text" class="form-control" placeholder="Subcategory name" ng-model="subcategory.name" name="suggestedSubcategory">
+              </div>
+            </div>
+          </fieldset>
+          <div class="col-md-8 col-md-offset-4"><p id="blurb">You can help us speed up the process by extracting the <a href="http://en.wikipedia.org/wiki/XPath">XPath</a> of the following elements from the webpage the journal.</p></div>
+          <div class="form-group">
+            <label class="col-lg-4 control-label">Title</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Title" ng-model="title" name="title">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 control-label">Authors</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Authors" ng-model="authors" name="authors">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-lg-4 control-label">Abstract</label>
+            <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Abstract" ng-model="abstract" name="abstract">
+            </div>
+          </div>
+          <div class="form-group">
+            <input class="form-button pull-right" tabindex="3" type="submit" value="Submit" ng-disabled="!suggestion.$valid" ng-class="{'disabled': !suggestion.$valid}">
+          </div>
+        </div>
+      </form>
     </div>
+
   </div>
 </div>
